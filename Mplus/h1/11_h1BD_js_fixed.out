@@ -1,0 +1,1407 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   9:44 AM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus.dat";
+
+  VARIABLE:
+
+      NAMES =
+      group group_detail wh_group
+  dij_01 dij_02 dij_03 dij_04
+  apc_01 apc_02 apc_03 apc_04 apc_05
+  app_01 app_02 app_03 app_04 app_05
+  res_01 res_02 res_03
+  exh_01 exh_04 exh_08
+  jsa_01 jsa_02 jsa_03 jsa_04
+  in_ex inc_ins
+  ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          dij_01-dij_04
+          !apc_01-apc_05
+          !app_01-app_05
+          !res_01-res_03
+          !exh_01 exh_04 exh_08
+          jsa_01 jsa_02 jsa_03 jsa_04
+          wh_group
+          ;
+
+      categorical =
+          dij_01-jsa_04;
+
+      grouping = group (1 = perm, 2 = temp)
+
+  ANALYSIS:
+      estimator = WLSMV;
+      PARAMETERIZATION = THETA;
+      DIFFTEST=10_h1D_js_free.diff;
+
+  MODEL:
+
+      !! PERM
+
+          ! Factor loadings all fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          JSA by
+              jsa_01* (f_jsa_01)
+              jsa_02* (f_jsa_02)
+              jsa_03* (f_jsa_03)
+              jsa_04* (f_jsa_04)
+              ;
+
+
+          ! Item thresholds all free
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+
+          !JSA
+          [jsa_01$1*] (t1jsa_01);
+          [jsa_01$2*] (t2jsa_01);
+          [jsa_01$3*] (t3jsa_01);
+
+          [jsa_02$1*] (t1jsa_02);
+          [jsa_02$2*] (t2jsa_02);
+
+          [jsa_03$1*] (t1jsa_03);
+          [jsa_03$2*] (t2jsa_03);
+          [jsa_03$3*] (t3jsa_03);
+
+          [jsa_04$1*] (t1jsa_04);
+          [jsa_04$2*] (t2jsa_04);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-jsa_04@1;
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [JSA@0];
+
+          DIJ@1;
+          JSA@1;
+
+
+          ! hypothesis
+          JSA on
+              wh_group (wh_group)
+              DIJ (hypo)
+              ;
+
+
+
+  MODEL temp:
+
+          ! Factor loadings all fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          JSA by
+              jsa_01* (f_jsa_01)
+              jsa_02* (f_jsa_02)
+              jsa_03* (f_jsa_03)
+              jsa_04* (f_jsa_04)
+              ;
+
+
+          ! Item thresholds all free
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+
+          !JSA
+          [jsa_01$1*] (t1jsa_01);
+          [jsa_01$2*] (t2jsa_01);
+          [jsa_01$3*] (t3jsa_01);
+
+          [jsa_02$1*] (t1jsa_02);
+          [jsa_02$2*] (t2jsa_02);
+
+          [jsa_03$1*] (t1jsa_03);
+          [jsa_03$2*] (t2jsa_03);
+          [jsa_03$3*] (t3jsa_03);
+
+          [jsa_04$1*] (t1jsa_04);
+          [jsa_04$2*] (t2jsa_04);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-jsa_04@1;
+
+
+          ! Factors variance and mean free
+
+          [DIJ*];
+          [JSA*];
+
+          DIJ*;
+          JSA*;
+
+          ! hypothesis
+          JSA on
+              wh_group (wh_group)
+              DIJ (hypo)
+              ;
+
+  OUTPUT:
+  	tech1
+  	tech4
+  	stdyx
+  	;
+
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group PERM                                                  262
+   Group TEMP                                                  119
+   Total sample size                                           381
+
+Number of dependent variables                                    8
+Number of independent variables                                  1
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      JSA_01      JSA_02
+   JSA_03      JSA_04
+
+Observed independent variables
+   WH_GROUP
+
+Continuous latent variables
+   DIJ         JSA
+
+Variables with special functions
+
+  Grouping variable     GROUP
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Parameterization                                             THETA
+Link                                                        PROBIT
+
+Input data file(s)
+  ../../data/transforms/mplus.dat
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group PERM
+     Number of missing data patterns            13
+
+   Group TEMP
+     Number of missing data patterns            10
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR PERM
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.943         0.962
+ DIJ_03         0.935         0.935         0.950
+ DIJ_04         0.950         0.950         0.939         0.969
+ JSA_01         0.954         0.958         0.943         0.966         0.992
+ JSA_02         0.950         0.954         0.939         0.962         0.985
+ JSA_03         0.954         0.958         0.947         0.966         0.992
+ JSA_04         0.954         0.958         0.943         0.966         0.992
+
+
+           Covariance Coverage
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02         0.989
+ JSA_03         0.985         0.996
+ JSA_04         0.985         0.992         0.992
+
+
+     PROPORTION OF DATA PRESENT FOR TEMP
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.958         0.983
+ DIJ_03         0.941         0.958         0.958
+ DIJ_04         0.941         0.966         0.941         0.975
+ JSA_01         0.950         0.975         0.950         0.966         0.992
+ JSA_02         0.933         0.958         0.933         0.941         0.966
+ JSA_03         0.941         0.966         0.941         0.958         0.983
+ JSA_04         0.958         0.983         0.958         0.975         0.992
+
+
+           Covariance Coverage
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02         0.966
+ JSA_03         0.958         0.983
+ JSA_04         0.966         0.983         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+  Group PERM
+    DIJ_01
+      Category 1    0.048           12.000
+      Category 2    0.175           44.000
+      Category 3    0.255           64.000
+      Category 4    0.522          131.000
+    DIJ_02
+      Category 1    0.194           49.000
+      Category 2    0.210           53.000
+      Category 3    0.595          150.000
+    DIJ_03
+      Category 1    0.064           16.000
+      Category 2    0.181           45.000
+      Category 3    0.249           62.000
+      Category 4    0.506          126.000
+    DIJ_04
+      Category 1    0.059           15.000
+      Category 2    0.138           35.000
+      Category 3    0.244           62.000
+      Category 4    0.559          142.000
+    JSA_01
+      Category 1    0.054           14.000
+      Category 2    0.158           41.000
+      Category 3    0.596          155.000
+      Category 4    0.192           50.000
+    JSA_02
+      Category 1    0.332           86.000
+      Category 2    0.367           95.000
+      Category 3    0.301           78.000
+    JSA_03
+      Category 1    0.077           20.000
+      Category 2    0.272           71.000
+      Category 3    0.575          150.000
+      Category 4    0.077           20.000
+    JSA_04
+      Category 1    0.273           71.000
+      Category 2    0.631          164.000
+      Category 3    0.096           25.000
+
+  Group TEMP
+    DIJ_01
+      Category 1    0.333           38.000
+      Category 2    0.447           51.000
+      Category 3    0.105           12.000
+      Category 4    0.114           13.000
+    DIJ_02
+      Category 1    0.658           77.000
+      Category 2    0.188           22.000
+      Category 3    0.154           18.000
+    DIJ_03
+      Category 1    0.368           42.000
+      Category 2    0.412           47.000
+      Category 3    0.132           15.000
+      Category 4    0.088           10.000
+    DIJ_04
+      Category 1    0.293           34.000
+      Category 2    0.379           44.000
+      Category 3    0.147           17.000
+      Category 4    0.181           21.000
+    JSA_01
+      Category 1    0.102           12.000
+      Category 2    0.178           21.000
+      Category 3    0.593           70.000
+      Category 4    0.127           15.000
+    JSA_02
+      Category 1    0.235           27.000
+      Category 2    0.357           41.000
+      Category 3    0.409           47.000
+    JSA_03
+      Category 1    0.137           16.000
+      Category 2    0.274           32.000
+      Category 3    0.504           59.000
+      Category 4    0.085           10.000
+    JSA_04
+      Category 1    0.261           31.000
+      Category 2    0.655           78.000
+      Category 3    0.084           10.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR PERM
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              4.542      -1.568       2.000    2.29%       4.000      5.000      5.000
+             262.000       0.607       1.416       5.000   69.85%       5.000      5.000
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR TEMP
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              4.244      -1.463       1.000    5.04%       3.000      5.000      5.000
+             119.000       1.445       0.881       5.000   63.87%       5.000      5.000
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       35
+
+Chi-Square Test of Model Fit
+
+          Value                            101.487*
+          Degrees of Freedom                    79
+          P-Value                           0.0451
+
+Chi-Square Contribution From Each Group
+
+          PERM                              52.370
+          TEMP                              49.117
+
+Chi-Square Test for Difference Testing
+
+          Value                              3.799*
+          Degrees of Freedom                     1
+          P-Value                           0.0513
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.  The DIFFTEST
+    option assumes the models are nested.  The NESTED option can be used to verify
+    that the models are nested.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.039
+          90 Percent C.I.                    0.006  0.059
+          Probability RMSEA <= .05           0.803
+
+CFI/TLI
+
+          CFI                                0.995
+          TLI                                0.995
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           4359.981
+          Degrees of Freedom                    72
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.069
+
+Optimum Function Value for Weighted Least-Squares Estimator
+
+          Value                     0.10531415D+00
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             2.014      0.244      8.268      0.000
+    DIJ_02             1.770      0.176     10.071      0.000
+    DIJ_03             1.812      0.212      8.539      0.000
+    DIJ_04             1.252      0.117     10.656      0.000
+
+ JSA      BY
+    JSA_01             3.040      0.739      4.117      0.000
+    JSA_02             0.427      0.068      6.279      0.000
+    JSA_03             1.886      0.209      9.045      0.000
+    JSA_04             1.450      0.142     10.247      0.000
+
+ JSA      ON
+    DIJ               -0.259      0.069     -3.773      0.000
+
+ JSA      ON
+    WH_GROUP          -0.093      0.067     -1.390      0.164
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+
+ Intercepts
+    JSA                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -3.515      0.966     -3.639      0.000
+    DIJ_01$2          -1.263      0.934     -1.352      0.176
+    DIJ_01$3          -0.019      0.930     -0.020      0.984
+    DIJ_02$1          -1.900      0.917     -2.073      0.038
+    DIJ_02$2          -0.680      0.912     -0.745      0.456
+    DIJ_03$1          -2.583      0.901     -2.866      0.004
+    DIJ_03$2          -0.588      0.877     -0.670      0.503
+    DIJ_03$3           0.689      0.884      0.779      0.436
+    DIJ_04$1          -2.436      0.662     -3.678      0.000
+    DIJ_04$2          -1.071      0.657     -1.631      0.103
+    DIJ_04$3          -0.182      0.656     -0.278      0.781
+    JSA_01$1          -6.815      1.923     -3.545      0.000
+    JSA_01$2          -4.224      1.613     -2.618      0.009
+    JSA_01$3           1.708      1.351      1.265      0.206
+    JSA_02$1          -0.576      0.358     -1.610      0.107
+    JSA_02$2           0.484      0.359      1.350      0.177
+    JSA_03$1          -4.840      0.879     -5.507      0.000
+    JSA_03$2          -2.612      0.831     -3.142      0.002
+    JSA_03$3           1.357      0.799      1.698      0.089
+    JSA_04$1          -2.557      0.743     -3.442      0.001
+    JSA_04$2           1.120      0.723      1.549      0.121
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    JSA_01             1.000      0.000    999.000    999.000
+    JSA_02             1.000      0.000    999.000    999.000
+    JSA_03             1.000      0.000    999.000    999.000
+    JSA_04             1.000      0.000    999.000    999.000
+    JSA                1.000      0.000    999.000    999.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             2.014      0.244      8.268      0.000
+    DIJ_02             1.770      0.176     10.071      0.000
+    DIJ_03             1.812      0.212      8.539      0.000
+    DIJ_04             1.252      0.117     10.656      0.000
+
+ JSA      BY
+    JSA_01             3.040      0.739      4.117      0.000
+    JSA_02             0.427      0.068      6.279      0.000
+    JSA_03             1.886      0.209      9.045      0.000
+    JSA_04             1.450      0.142     10.247      0.000
+
+ JSA      ON
+    DIJ               -0.259      0.069     -3.773      0.000
+
+ JSA      ON
+    WH_GROUP          -0.093      0.067     -1.390      0.164
+
+ Means
+    DIJ               -1.300      0.582     -2.234      0.025
+
+ Intercepts
+    JSA               -1.137      0.588     -1.932      0.053
+
+ Thresholds
+    DIJ_01$1          -3.515      0.966     -3.639      0.000
+    DIJ_01$2          -1.263      0.934     -1.352      0.176
+    DIJ_01$3          -0.019      0.930     -0.020      0.984
+    DIJ_02$1          -1.900      0.917     -2.073      0.038
+    DIJ_02$2          -0.680      0.912     -0.745      0.456
+    DIJ_03$1          -2.583      0.901     -2.866      0.004
+    DIJ_03$2          -0.588      0.877     -0.670      0.503
+    DIJ_03$3           0.689      0.884      0.779      0.436
+    DIJ_04$1          -2.436      0.662     -3.678      0.000
+    DIJ_04$2          -1.071      0.657     -1.631      0.103
+    DIJ_04$3          -0.182      0.656     -0.278      0.781
+    JSA_01$1          -6.815      1.923     -3.545      0.000
+    JSA_01$2          -4.224      1.613     -2.618      0.009
+    JSA_01$3           1.708      1.351      1.265      0.206
+    JSA_02$1          -0.576      0.358     -1.610      0.107
+    JSA_02$2           0.484      0.359      1.350      0.177
+    JSA_03$1          -4.840      0.879     -5.507      0.000
+    JSA_03$2          -2.612      0.831     -3.142      0.002
+    JSA_03$3           1.357      0.799      1.698      0.089
+    JSA_04$1          -2.557      0.743     -3.442      0.001
+    JSA_04$2           1.120      0.723      1.549      0.121
+
+ Variances
+    DIJ                0.863      0.228      3.788      0.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    JSA_01             1.000      0.000    999.000    999.000
+    JSA_02             1.000      0.000    999.000    999.000
+    JSA_03             1.000      0.000    999.000    999.000
+    JSA_04             1.000      0.000    999.000    999.000
+    JSA                1.322      0.347      3.807      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.412E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             0.896      0.021     41.808      0.000
+    DIJ_02             0.871      0.021     41.629      0.000
+    DIJ_03             0.876      0.024     36.578      0.000
+    DIJ_04             0.781      0.029     27.354      0.000
+
+ JSA      BY
+    JSA_01             0.953      0.021     45.422      0.000
+    JSA_02             0.405      0.052      7.723      0.000
+    JSA_03             0.890      0.020     44.451      0.000
+    JSA_04             0.832      0.025     33.354      0.000
+
+ JSA      ON
+    DIJ               -0.250      0.062     -4.026      0.000
+
+ JSA      ON
+    WH_GROUP          -0.070      0.050     -1.395      0.163
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+
+ Intercepts
+    JSA                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -1.563      0.423     -3.694      0.000
+    DIJ_01$2          -0.562      0.414     -1.356      0.175
+    DIJ_01$3          -0.008      0.414     -0.020      0.984
+    DIJ_02$1          -0.935      0.447     -2.090      0.037
+    DIJ_02$2          -0.334      0.447     -0.748      0.455
+    DIJ_03$1          -1.248      0.436     -2.861      0.004
+    DIJ_03$2          -0.284      0.424     -0.670      0.503
+    DIJ_03$3           0.333      0.427      0.780      0.435
+    DIJ_04$1          -1.520      0.412     -3.689      0.000
+    DIJ_04$2          -0.669      0.409     -1.635      0.102
+    DIJ_04$3          -0.114      0.409     -0.279      0.781
+    JSA_01$1          -2.063      0.404     -5.107      0.000
+    JSA_01$2          -1.279      0.397     -3.223      0.001
+    JSA_01$3           0.517      0.401      1.289      0.197
+    JSA_02$1          -0.527      0.327     -1.611      0.107
+    JSA_02$2           0.443      0.329      1.348      0.178
+    JSA_03$1          -2.205      0.364     -6.054      0.000
+    JSA_03$2          -1.190      0.364     -3.272      0.001
+    JSA_03$3           0.618      0.368      1.683      0.092
+    JSA_04$1          -1.417      0.398     -3.558      0.000
+    JSA_04$2           0.621      0.404      1.538      0.124
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.198      0.038      5.153      0.000
+    DIJ_02             0.242      0.036      6.643      0.000
+    DIJ_03             0.233      0.042      5.570      0.000
+    DIJ_04             0.390      0.045      8.729      0.000
+    JSA_01             0.092      0.040      2.291      0.022
+    JSA_02             0.836      0.042     19.733      0.000
+    JSA_03             0.208      0.036      5.824      0.000
+    JSA_04             0.307      0.042      7.391      0.000
+    JSA                0.932      0.032     29.313      0.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             0.882      0.026     34.422      0.000
+    DIJ_02             0.854      0.033     25.600      0.000
+    DIJ_03             0.860      0.029     29.196      0.000
+    DIJ_04             0.758      0.043     17.612      0.000
+
+ JSA      BY
+    JSA_01             0.963      0.016     59.304      0.000
+    JSA_02             0.450      0.057      7.921      0.000
+    JSA_03             0.912      0.021     42.561      0.000
+    JSA_04             0.863      0.030     28.896      0.000
+
+ JSA      ON
+    DIJ               -0.204      0.055     -3.734      0.000
+
+ JSA      ON
+    WH_GROUP          -0.095      0.068     -1.391      0.164
+
+ Means
+    DIJ               -1.399      0.633     -2.211      0.027
+
+ Intercepts
+    JSA               -0.963      0.498     -1.936      0.053
+
+ Thresholds
+    DIJ_01$1          -1.657      0.457     -3.623      0.000
+    DIJ_01$2          -0.596      0.441     -1.350      0.177
+    DIJ_01$3          -0.009      0.439     -0.020      0.984
+    DIJ_02$1          -0.987      0.478     -2.066      0.039
+    DIJ_02$2          -0.353      0.474     -0.745      0.456
+    DIJ_03$1          -1.319      0.465     -2.838      0.005
+    DIJ_03$2          -0.300      0.449     -0.669      0.504
+    DIJ_03$3           0.352      0.451      0.780      0.436
+    DIJ_04$1          -1.588      0.437     -3.635      0.000
+    DIJ_04$2          -0.698      0.430     -1.625      0.104
+    DIJ_04$3          -0.119      0.428     -0.278      0.781
+    JSA_01$1          -1.830      0.378     -4.838      0.000
+    JSA_01$2          -1.134      0.360     -3.147      0.002
+    JSA_01$3           0.459      0.355      1.291      0.197
+    JSA_02$1          -0.514      0.320     -1.605      0.108
+    JSA_02$2           0.433      0.320      1.352      0.177
+    JSA_03$1          -1.984      0.345     -5.748      0.000
+    JSA_03$2          -1.071      0.332     -3.221      0.001
+    JSA_03$3           0.556      0.330      1.684      0.092
+    JSA_04$1          -1.290      0.371     -3.480      0.001
+    JSA_04$2           0.565      0.368      1.537      0.124
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.222      0.045      4.919      0.000
+    DIJ_02             0.270      0.057      4.736      0.000
+    DIJ_03             0.261      0.051      5.154      0.000
+    DIJ_04             0.425      0.065      6.515      0.000
+    JSA_01             0.072      0.031      2.304      0.021
+    JSA_02             0.797      0.051     15.593      0.000
+    JSA_03             0.168      0.039      4.296      0.000
+    JSA_04             0.255      0.052      4.933      0.000
+    JSA                0.949      0.026     36.808      0.000
+
+
+R-SQUARE
+
+Group PERM
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.802      0.038     20.904      0.000      0.445
+    DIJ_02             0.758      0.036     20.814      0.000      0.492
+    DIJ_03             0.767      0.042     18.289      0.000      0.483
+    DIJ_04             0.610      0.045     13.677      0.000      0.624
+    JSA_01             0.908      0.040     22.711      0.000      0.303
+    JSA_02             0.164      0.042      3.861      0.000      0.915
+    JSA_03             0.792      0.036     22.226      0.000      0.457
+    JSA_04             0.693      0.042     16.677      0.000      0.555
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    JSA                0.068      0.032      2.125      0.034
+
+Group TEMP
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.778      0.045     17.211      0.000      0.471
+    DIJ_02             0.730      0.057     12.800      0.000      0.520
+    DIJ_03             0.739      0.051     14.598      0.000      0.511
+    DIJ_04             0.575      0.065      8.806      0.000      0.652
+    JSA_01             0.928      0.031     29.652      0.000      0.270
+    JSA_02             0.203      0.051      3.960      0.000      0.894
+    JSA_03             0.832      0.039     21.280      0.000      0.411
+    JSA_04             0.745      0.052     14.448      0.000      0.506
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    JSA                0.051      0.026      1.965      0.049
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              JSA_04$2
+              ________
+                 21
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+                  0             0             0
+
+
+           LAMBDA
+              DIJ           JSA
+              ________      ________
+ DIJ_01            22             0
+ DIJ_02            23             0
+ DIJ_03            24             0
+ DIJ_04            25             0
+ JSA_01             0            26
+ JSA_02             0            27
+ JSA_03             0            28
+ JSA_04             0            29
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02             0
+ JSA_03             0             0
+ JSA_04             0             0             0
+
+
+           ALPHA
+              DIJ           JSA
+              ________      ________
+                  0             0
+
+
+           BETA
+              DIJ           JSA
+              ________      ________
+ DIJ                0             0
+ JSA               30             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ                0
+ JSA               31
+
+
+           PSI
+              DIJ           JSA
+              ________      ________
+ DIJ                0
+ JSA                0             0
+
+
+     PARAMETER SPECIFICATION FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              JSA_04$2
+              ________
+                 21
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+                  0             0             0
+
+
+           LAMBDA
+              DIJ           JSA
+              ________      ________
+ DIJ_01            22             0
+ DIJ_02            23             0
+ DIJ_03            24             0
+ DIJ_04            25             0
+ JSA_01             0            26
+ JSA_02             0            27
+ JSA_03             0            28
+ JSA_04             0            29
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02             0
+ JSA_03             0             0
+ JSA_04             0             0             0
+
+
+           ALPHA
+              DIJ           JSA
+              ________      ________
+                 32            33
+
+
+           BETA
+              DIJ           JSA
+              ________      ________
+ DIJ                0             0
+ JSA               30             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ                0
+ JSA               31
+
+
+           PSI
+              DIJ           JSA
+              ________      ________
+ DIJ               34
+ JSA                0            35
+
+
+     STARTING VALUES FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.666        -0.762        -0.055        -0.862        -0.241
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -1.520        -0.690        -0.015        -1.563        -0.853
+
+
+           TAU
+              DIJ_04$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+               -0.149        -1.609        -0.801         0.869        -0.434
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                0.521        -1.428        -0.389         1.428        -0.604
+
+
+           TAU
+              JSA_04$2
+              ________
+                1.304
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           JSA
+              ________      ________
+ DIJ_01         0.872         0.000
+ DIJ_02         0.885         0.000
+ DIJ_03         0.875         0.000
+ DIJ_04         0.813         0.000
+ JSA_01         0.000         0.948
+ JSA_02         0.000         0.387
+ JSA_03         0.000         0.890
+ JSA_04         0.000         0.829
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         1.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02         1.000
+ JSA_03         0.000         1.000
+ JSA_04         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           JSA
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000         0.000
+ JSA            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ JSA            0.000
+
+
+           PSI
+              DIJ           JSA
+              ________      ________
+ DIJ            1.000
+ JSA            0.000         1.000
+
+
+     STARTING VALUES FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.049         0.006         0.575        -0.227         0.390
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -0.928         0.042         0.670        -1.054        -0.203
+
+
+           TAU
+              DIJ_04$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+                0.381        -1.440        -0.692         1.005        -0.579
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                0.376        -1.262        -0.308         1.399        -0.623
+
+
+           TAU
+              JSA_04$2
+              ________
+                1.341
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+                0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           JSA
+              ________      ________
+ DIJ_01         0.913         0.000
+ DIJ_02         0.795         0.000
+ DIJ_03         0.881         0.000
+ DIJ_04         0.609         0.000
+ JSA_01         0.000         1.030
+ JSA_02         0.000         0.501
+ JSA_03         0.000         0.873
+ JSA_04         0.000         0.834
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        JSA_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         1.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02         1.000
+ JSA_03         0.000         1.000
+ JSA_04         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           JSA
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000         0.000
+ JSA            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ JSA            0.000
+
+
+           PSI
+              DIJ           JSA
+              ________      ________
+ DIJ            1.000
+ JSA            0.000         1.000
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                0.000        -0.421
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            1.000
+ JSA           -0.259         1.072
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            1.000
+ JSA           -0.250         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+               -1.300        -1.193
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.863
+ JSA           -0.224         1.392
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            1.000
+ JSA           -0.204         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                0.000         0.303
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                0.000        -1.390
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                1.000         0.164
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.069         0.037
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ      ***********
+ JSA           -3.773        29.313
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.000         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.062         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ          999.000
+ JSA           -4.026       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.000         0.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                0.582         0.679
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+               -2.234        -1.757
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+                0.025         0.079
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.228
+ JSA            0.074         0.355
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            3.788
+ JSA           -3.004         3.916
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.003         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.055         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ          999.000
+ JSA           -3.734       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           JSA
+              ________      ________
+ DIJ            0.000
+ JSA            0.000         0.000
+
+
+     Beginning Time:  09:44:39
+        Ending Time:  09:44:39
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen

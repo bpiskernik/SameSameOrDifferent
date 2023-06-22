@@ -1,0 +1,448 @@
+---
+title: "prepare data"
+author: "Bernhard Piskernik"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(MplusAutomation)
+```
+
+# Load data
+
+```{r}
+df_raw <- read_csv(here::here('data', 'data.csv'))
+```
+
+```{r}
+df_raw %>% skimr::skim()
+```
+
+categorical items
+
+```{r}
+item_names <- names(df_raw) %>% str_subset('^((dij)|(apc)|(app)|(res)|(exh)|jsa).*')
+item_names
+```
+
+
+
+# Check item response frequencies
+
+Set min count to 10 per group and response category
+
+```{r}
+minCount <- 10
+```
+
+
+```{r}
+# checks whether some responses are to rare in a group
+
+item_response_check <- function(df, grouping_var, item_vars, min_count=1){
+  group <- sym(grouping_var)
+  
+  df %>%
+    select(all_of(c(grouping_var, item_vars))) %>%
+    pivot_longer(cols = item_vars,
+                 names_to = 'item',
+                 values_to = 'value'
+                 ) %>%
+    group_by(!!group, item, value) %>%
+    count() %>%
+    ungroup() %>%
+    drop_na() %>%
+    group_by(item) %>%
+    complete(value, !!group,  fill = list(n = 0)) %>%
+    ungroup() %>%  
+    filter(n < min_count)
+  
+} 
+```
+
+
+```{r}
+item_response_check(
+  df_raw %>%
+    filter(!is.na(group))
+  , 'group'
+  , item_names
+  , minCount
+)
+```
+
+
+```{r}
+item_response_distribution <- function(df, grouping_var, item_vars){
+  df %>%
+    select(all_of(c(grouping_var, item_vars))) %>%
+    pivot_longer(cols = item_vars,
+                 names_to = 'item',
+                 values_to = 'value'
+                 ) %>%
+    group_by(across(all_of(grouping_var)), item, value) %>%
+    count() %>%
+    drop_na() %>%
+    ggplot(aes(x=value, y=n, fill=.data[[grouping_var]])) +
+      geom_bar(stat = 'identity', position = position_dodge()) +
+      facet_wrap(vars(item)) +
+      theme_minimal()
+} 
+```
+
+```{r, fig.height = 12, fig.width = 16}
+item_response_distribution(
+  df_raw %>%
+    filter(!is.na(group))
+  , 'group'
+  , item_names
+)
+```
+
+
+
+
+```{r}
+# collapses adjacent categories to satisfy min_count criterium
+
+item_response_collapse <- function(df, grouping_var, item_vars, min_count=1){
+
+  group <- sym(grouping_var)
+  
+  df_comp <- df %>%
+    select(all_of(c(grouping_var, item_vars))) %>%
+    pivot_longer(cols = item_vars,
+                 names_to = 'item',
+                 values_to = 'value'
+                 ) %>%
+    group_by(!!group, item, value) %>%
+    count() %>%
+    ungroup() %>%
+    drop_na() %>%
+    group_by(item) %>%
+    complete(value, !!group,  fill = list(n = 0)) %>%
+    ungroup() %>%
+    group_by(item, value) %>%
+    summarize(
+      n_min = min(n),
+      n_total = sum(n)
+    )
+  
+  
+  df_issues <- df_comp %>%
+    filter(n_min < min_count)
+  
+  
+  df_neighbours <- df_issues %>%
+    group_by(item) %>%
+    mutate(
+      a = value-lag(value),
+      b = lead(value)-value
+    ) %>%
+    rowwise() %>%
+    mutate(
+      dist = max(c(a,b), na.rm=T)) %>%
+    filter(dist==1) %>%
+    ungroup() %>%
+    group_by(item) %>%
+    mutate(new_value = min(value)) %>%
+    select(item, value, new_value)
+  
+  
+  
+  # use names to avoid problems with empty df, switch to index to be able to pull out single values
+  df_res <- df
+  counter <- 0
+  for( i in rownames(df_neighbours) ){
+     counter %<>% +1
+     item_to_change <-sym(df_neighbours[[counter, 'item']])
+     df_res %<>%
+      mutate(
+        !!item_to_change := replace(!!item_to_change, !!item_to_change ==  df_neighbours[[counter, 'value']], df_neighbours[[counter, 'new_value']])
+      )
+  }
+  
+  df_res %<>% mutate(
+    across(
+      item_vars,
+      dense_rank
+    )
+  )
+  
+   
+ 
+  df_comp2 <- df_res %>%
+    select(all_of(c(grouping_var, item_vars))) %>%
+    pivot_longer(cols = item_vars,
+                 names_to = 'item',
+                 values_to = 'value'
+                 ) %>%
+    group_by(!!group, item, value) %>%
+    count() %>%
+    ungroup() %>%
+    drop_na() %>%
+    group_by(item) %>%
+    complete(value, !!group,  fill = list(n = 0)) %>%
+    ungroup() %>%
+    group_by(item, value) %>%
+    summarize(
+      n_min = min(n),
+      n_total = sum(n)
+    )
+  
+
+  df_ok <- df_comp2 %>%
+    filter(n_min >= min_count) %>%
+    ungroup()
+  
+
+  df_issues2 <- df_comp2 %>%
+    filter(n_min < min_count)
+
+
+
+  df_solution <- df_issues2 %>%
+    select(item, value) %>%
+    left_join(
+    df_ok %>%
+      rename(new_value = value)
+    ) %>%
+    mutate(
+      dist = abs(value - new_value)
+    ) %>%
+    group_by(item, value) %>%
+    # put in nearest (with fewest cases in case of ties)
+    arrange(dist, n_total) %>%
+    slice(1) %>%
+    ungroup() 
+  
+ 
+  # use names to avoid problems with empty df, switch to index to be able to pull out single values
+  counter <- 0
+  for( i in rownames(df_solution) ){
+    counter %<>% +1
+    item_to_change <-sym(df_solution[[counter, 'item']])
+    df_res %<>%
+      mutate(
+        !!item_to_change := replace(!!item_to_change, !!item_to_change ==  df_solution[[counter, 'value']], df_solution[[counter, 'new_value']])
+      )
+  }
+  
+  df_res %<>% mutate(
+    across(
+      item_vars,
+      dense_rank
+    )
+  )
+    
+  return(df_res)
+ 
+} 
+```
+
+
+iteratively collapse until min count is satisfied
+
+```{r, warning=FALSE}
+df <- df_raw
+
+for (i in 1:minCount){
+  df %<>%
+  item_response_collapse(
+    'group',
+    item_names,
+    min_count = i
+  )
+}
+```
+
+check numerically
+
+
+```{r}
+df %>%
+  item_response_check(
+    'group',
+    item_names,
+    min_count = minCount
+  )
+```
+
+check graphically
+
+```{r, fig.height = 12, fig.width = 16}
+df %>%
+  item_response_distribution(
+    'group',
+    item_names
+  )
+```
+
+-> all have at least `r minCount`` entries
+
+
+# export data for MPlus analyses
+
+```{r}
+prepareMplusData(
+  df %>% select(group : inc_ins),
+  here::here("data", "transforms", paste0('mplus','.dat'))
+)
+```
+
+
+# Descriptives
+
+## sample
+
+```{r}
+df %>%
+  pull(dem_gender) %>% 
+  DescTools::PercTable()
+```
+
+```{r}
+# income-expenditures ratio / scaled to single household
+
+df %>% 
+  summarize(
+    mean = mean(in_ex, na.rm=T),
+    sd = sd(in_ex, na.rm=T),
+    min = min(in_ex, na.rm=T),
+    max = max(in_ex, na.rm=T)
+  )
+```
+
+
+```{r}
+# income insufficiency
+
+df %>% 
+  summarize(
+    mean = mean(inc_ins, na.rm=T),
+    sd = sd(inc_ins, na.rm=T),
+    min = min(inc_ins, na.rm=T),
+    max = max(inc_ins, na.rm=T)
+  )
+```
+
+```{r}
+df %>%
+  pull(inc_ins) %>% 
+  DescTools::PercTable()
+```
+
+
+```{r}
+# Age in years
+
+df %>% 
+  summarize(
+    mean = mean(dem_age, na.rm=T),
+    sd = sd(dem_age, na.rm=T),
+    min = min(dem_age, na.rm=T),
+    max = max(dem_age, na.rm=T)
+  )
+```
+
+```{r}
+df %>%
+  pull(dem_relationship_status) %>% 
+  DescTools::PercTable()
+```
+
+
+```{r}
+df %>%
+  pull(dem_living_arrangement) %>% 
+  DescTools::PercTable()
+```
+
+```{r}
+df %>%
+  mutate(
+    married_or_cohabiting = if_else((dem_relationship_status == 2) | (dem_living_arrangement == 1), TRUE, FALSE)
+  ) %>%
+  pull(married_or_cohabiting) %>%
+  DescTools::PercTable()
+```
+
+```{r}
+df$dem_children %>% table()
+```
+
+
+```{r}
+df %>%
+  summarize(
+    mean = mean(dem_children, na.rm=T),
+    sd = sd(dem_children, na.rm=T),
+    min = min(dem_children, na.rm=T),
+    max = max(dem_children, na.rm=T)
+  )
+```
+
+```{r}
+df %>%
+  pull(occ_qualification) %>% 
+  DescTools::PercTable()
+```
+
+```{r}
+df %>% 
+  summarize(
+    mean = mean(occ_expierence_years, na.rm=T),
+    sd = sd(occ_expierence_years, na.rm=T),
+    min = min(occ_expierence_years, na.rm=T),
+    max = max(occ_expierence_years, na.rm=T)
+  )
+```
+
+## scales
+
+
+```{r}
+df %>% 
+  dplyr::select(starts_with('dij')) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```
+
+```{r}
+df %>% 
+  dplyr::select(starts_with('apc')) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```
+
+```{r}
+df %>% 
+  dplyr::select(starts_with('app')) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```
+
+
+```{r}
+df %>% 
+  dplyr::select(starts_with('res')) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```
+
+```{r}
+df %>% 
+  mutate(exh_01r = exh_01*-1) %>%
+  dplyr::select(exh_01r, exh_04, exh_08) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```
+
+
+```{r}
+df %>% 
+  dplyr::select(starts_with('jsa')) %>%
+  ltm::cronbach.alpha(na.rm = T)
+```

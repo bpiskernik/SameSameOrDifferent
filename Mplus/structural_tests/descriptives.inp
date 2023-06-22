@@ -1,0 +1,448 @@
+DATA: FILE = "../../data/transforms/mplus.dat";
+
+VARIABLE: 
+ 
+    NAMES = 
+    group group_detail wh_group 
+    dij_01 dij_02 dij_03 dij_04
+    apc_01 apc_02 apc_03 apc_04 apc_05
+    app_01 app_02 app_03 app_04 app_05
+    res_01 res_02 res_03
+    exh_01 exh_04 exh_08
+    jsa_01 jsa_02 jsa_03 jsa_04
+    in_ex inc_ins
+    ; 
+
+    MISSING = .;
+
+    USEVARIABLES =
+        wh_group
+        dij_01-dij_04
+        apc_01-apc_05
+        app_01-app_05
+        res_01 res_02 res_03
+        exh_01 exh_04 exh_08
+        jsa_01-jsa_04
+        in_ex inc_ins
+        ;
+
+
+    categorical =
+        dij_01-jsa_04;
+
+    grouping = group (1 = perm, 2 = temp)
+
+ANALYSIS:
+    estimator = WLSMV;
+    PARAMETERIZATION = THETA;
+    STARTS = 20
+    
+MODEL:
+
+    ! Factor loadings fixed
+        DIJ by
+            dij_01* (f_dij_01) 
+            dij_02* (f_dij_02)  
+            dij_03* (f_dij_03) 
+            dij_04* (f_dij_04)
+            ;
+
+        APC by
+            apc_01* (f_apc_01) 
+            apc_02* (f_apc_02) 
+            apc_03* (f_apc_03) 
+            apc_04* (f_apc_04) 
+            apc_05* (f_apc_05)
+            ;
+
+        APP by
+            app_01* (f_app_01) 
+            app_02* (f_app_02) 
+            app_03* (f_app_03) 
+            app_04* (f_app_04) 
+            app_05* (f_app_05)
+            ;
+
+        RES by
+            res_01* (f_res_01) 
+            res_02* (f_res_02) 
+            res_03* (f_res_03)
+            ;
+
+        EXH by
+            exh_01*-1 (f_exh_01) 
+            exh_04* (f_exh_04) 
+            exh_08* (f_exh_08)
+            ;
+        
+        JSA by
+            jsa_01* (f_jsa_01) 
+            jsa_02* (f_jsa_02)  
+            jsa_03* (f_jsa_03) 
+            jsa_04* (f_jsa_04)
+            ;
+        
+
+        ! Item thresholds are fix
+
+        !DIJ
+        [dij_01$1*] (t1dij_01);
+        [dij_01$2*] (t2dij_01);
+        [dij_01$3*] (t3dij_01);
+
+        [dij_02$1*] (t1dij_02);
+        [dij_02$2*] (t2dij_02);
+
+        [dij_03$1*] (t1dij_03);
+        [dij_03$2*] (t2dij_03);
+        [dij_03$3*] (t3dij_03);
+
+        [dij_04$1*] (t1dij_04);
+        [dij_04$2*] (t2dij_04);
+        [dij_04$3*] (t3dij_04);
+
+        !APC
+        [apc_01$1*] (t1apc_01);
+        [apc_01$2*] (t2apc_01);
+
+        [apc_02$1*] (t1apc_02);
+        [apc_02$2*] (t2apc_02);
+
+        [apc_03$1*] (t1apc_03);
+        [apc_03$2*] (t2apc_03);
+
+        [apc_04$1*] (t1apc_04);
+        [apc_04$2*] (t2apc_04);
+
+        [apc_05$1*] (t1apc_05);
+        [apc_05$2*] (t2apc_05);
+
+        !APP
+        [app_01$1*] (t1app_01);
+        [app_01$2*] (t2app_01);
+        [app_01$3*] (t3app_01);
+
+        [app_02$1*] (t1app_02);
+        [app_02$2*] (t2app_02);
+
+        [app_03$1*] (t1app_03);
+        [app_03$2*] (t2app_03);
+        [app_03$3*] (t3app_03);
+        [app_03$4*] (t4app_03);
+
+        [app_04$1*] (t1app_04);
+        [app_04$2*] (t2app_04);
+        [app_04$3*] (t3app_04);
+
+        [app_05$1*] (t1app_05);
+        [app_05$2*] (t2app_05);
+        [app_05$3*] (t3app_05);
+
+        !RES
+        [res_01$1*] (t1res_01);
+        [res_01$2*] (t2res_01);
+
+        [res_02$1*] (t1res_02);
+        [res_02$2*] (t2res_02);
+
+        [res_03$1*] (t1res_03);
+        [res_03$2*] (t2res_03);
+        
+        !EXH
+        [exh_01$1*] (t1exh_01);
+        [exh_01$2*] (t2exh_01);
+
+        [exh_04$1*] (t1exh_04);
+        [exh_04$2*] (t2exh_04);
+        [exh_04$3*] (t3exh_04);
+
+        [exh_08$1*] (t1exh_08);
+        [exh_08$2*] (t2exh_08);
+        [exh_08$3*] (t3exh_08);
+
+
+        !JSA
+        [jsa_01$1*] (t1jsa_01);
+        [jsa_01$2*] (t2jsa_01);
+        [jsa_01$3*] (t3jsa_01);
+
+        [jsa_02$1*] (t1jsa_02);
+        [jsa_02$2*] (t2jsa_02);
+
+        [jsa_03$1*] (t1jsa_03);
+        [jsa_03$2*] (t2jsa_03);
+        [jsa_03$3*] (t3jsa_03);
+
+        [jsa_04$1*] (t1jsa_04);
+        [jsa_04$2*] (t2jsa_04);
+
+
+        ! Item residual variances all fixed=1
+        dij_01-jsa_04@1;
+
+
+        ! Factors mean=0 and variance=1 for identification
+
+        [DIJ@0];
+        [APC@0];
+        [APP@0];
+        [RES@0];
+        [JSA@0];
+        [EXH@0];
+
+        DIJ@1;
+        APC@1;
+        APP@1;
+        RES@1;
+        JSA@1;
+        EXH@1;
+
+        ! estimate manifest vars
+        [wh_group*];
+        [inc_ins*];
+        [in_ex*];
+
+
+        wh_group*;
+        inc_ins*;
+        in_ex*;
+
+        ! correlations
+
+        wh_group with
+            inc_ins
+            in_ex
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+        inc_ins with
+            in_ex 
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+        in_ex with 
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+MODEL temp:
+
+        ! Factor loadings
+        DIJ by
+            dij_01* (f_dij_01) 
+            dij_02* (f_dij_02)  
+            dij_03* (f_dij_03) 
+            dij_04* (f_dij_04)
+            ;
+
+        APC by
+            apc_01* (f_apc_01) 
+            apc_02* (f_apc_02) 
+            apc_03* (f_apc_03) 
+            apc_04* (f_apc_04) 
+            apc_05* (f_apc_05)
+            ;
+
+        APP by
+            app_01* (f_app_01) 
+            app_02* (f_app_02) 
+            app_03* (f_app_03) 
+            app_04* (f_app_04) 
+            app_05* (f_app_05)
+            ;
+
+        RES by
+            res_01* (f_res_01) 
+            res_02* (f_res_02) 
+            res_03* (f_res_03)
+            ;
+
+        EXH by
+            exh_01*-1 (f_exh_01) 
+            exh_04* (f_exh_04) 
+            exh_08* (f_exh_08)
+            ;
+        
+        JSA by
+            jsa_01* (f_jsa_01) 
+            jsa_02* (f_jsa_02)  
+            jsa_03* (f_jsa_03) 
+            jsa_04* (f_jsa_04)
+            ;
+        
+
+        ! Item thresholds are fix
+
+        !DIJ
+        [dij_01$1*] (t1dij_01);
+        [dij_01$2*] (t2dij_01);
+        [dij_01$3*] (t3dij_01);
+
+        [dij_02$1*] (t1dij_02);
+        [dij_02$2*] (t2dij_02);
+
+        [dij_03$1*] (t1dij_03);
+        [dij_03$2*] (t2dij_03);
+        [dij_03$3*] (t3dij_03);
+
+        [dij_04$1*] (t1dij_04);
+        [dij_04$2*] (t2dij_04);
+        [dij_04$3*] (t3dij_04);
+
+        !APC
+        [apc_01$1*] (t1apc_01);
+        [apc_01$2*] (t2apc_01);
+
+        [apc_02$1*] (t1apc_02);
+        [apc_02$2*] (t2apc_02);
+
+        [apc_03$1*] (t1apc_03);
+        [apc_03$2*] (t2apc_03);
+
+        [apc_04$1*] (t1apc_04);
+        [apc_04$2*] (t2apc_04);
+
+        [apc_05$1*] (t1apc_05);
+        [apc_05$2*] (t2apc_05);
+
+        !APP
+        [app_01$1*] (t1app_01);
+        [app_01$2*] (t2app_01);
+        [app_01$3*] (t3app_01);
+
+        [app_02$1*] (t1app_02);
+        [app_02$2*] (t2app_02);
+
+        [app_03$1*] (t1app_03);
+        [app_03$2*] (t2app_03);
+        [app_03$3*] (t3app_03);
+        [app_03$4*] (t4app_03);
+
+        [app_04$1*] (t1app_04);
+        [app_04$2*] (t2app_04);
+        [app_04$3*] (t3app_04);
+
+        [app_05$1*] (t1app_05);
+        [app_05$2*] (t2app_05);
+        [app_05$3*] (t3app_05);
+
+        !RES
+        [res_01$1*] (t1res_01);
+        [res_01$2*] (t2res_01);
+
+        [res_02$1*] (t1res_02);
+        [res_02$2*] (t2res_02);
+
+        [res_03$1*] (t1res_03);
+        [res_03$2*] (t2res_03);
+        
+        !EXH
+        [exh_01$1*] (t1exh_01);
+        [exh_01$2*] (t2exh_01);
+
+        [exh_04$1*] (t1exh_04);
+        [exh_04$2*] (t2exh_04);
+        [exh_04$3*] (t3exh_04);
+
+        [exh_08$1*] (t1exh_08);
+        [exh_08$2*] (t2exh_08);
+        [exh_08$3*] (t3exh_08);
+
+
+        !JSA
+        [jsa_01$1*] (t1jsa_01);
+        [jsa_01$2*] (t2jsa_01);
+        [jsa_01$3*] (t3jsa_01);
+
+        [jsa_02$1*] (t1jsa_02);
+        [jsa_02$2*] (t2jsa_02);
+
+        [jsa_03$1*] (t1jsa_03);
+        [jsa_03$2*] (t2jsa_03);
+        [jsa_03$3*] (t3jsa_03);
+
+        [jsa_04$1*] (t1jsa_04);
+        [jsa_04$2*] (t2jsa_04);
+
+
+        ! Item residual variances all fixed=1
+        dij_01-jsa_04@1;
+
+
+        ! Factors mean free
+
+        [DIJ*];
+        [APC*];
+        [APP*];
+        [RES*];
+        [JSA*];
+        [EXH*];
+
+        ! variance free 
+        DIJ*;
+        APC*;
+        APP*;
+        RES*;
+        JSA*;
+        EXH*;
+
+        ! estimate manifest vars
+        [wh_group*];
+        [inc_ins*];
+        [in_ex*];
+
+
+        wh_group*;
+        inc_ins*;
+        in_ex*;
+
+        ! correlations
+
+        wh_group with
+            inc_ins
+            in_ex
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+        inc_ins with
+            in_ex 
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+        in_ex with 
+            DIJ
+            APC
+            APP
+            RES
+            JSA
+            EXH
+            ;
+
+
+OUTPUT:
+	stdyx
+	;

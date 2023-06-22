@@ -1,0 +1,3381 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   9:41 AM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus.dat";
+
+  VARIABLE:
+
+      NAMES =
+      group group_detail wh_group
+  dij_01 dij_02 dij_03 dij_04
+  apc_01 apc_02 apc_03 apc_04 apc_05
+  app_01 app_02 app_03 app_04 app_05
+  res_01 res_02 res_03
+  exh_01 exh_04 exh_08
+  jsa_01 jsa_02 jsa_03 jsa_04
+  in_ex inc_ins
+  ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          dij_01-dij_04
+          apc_01-apc_05
+          app_01-app_05
+          res_01-res_03
+          exh_01 exh_04 exh_08
+          jsa_01 jsa_02 jsa_03 jsa_04
+          ;
+
+
+      categorical =
+          dij_01-jsa_04;
+
+      grouping = group (1 = perm, 2 = temp)
+
+  ANALYSIS:
+      estimator = WLSMV;
+      PARAMETERIZATION = THETA;
+      STARTS=20;
+      DIFFTEST=01_metric.diff;
+
+  MODEL:
+
+      !! PERM
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APC by
+              apc_01* (f_apc_01)
+              apc_02* (f_apc_02)
+              apc_03* (f_apc_03)
+              apc_04* (f_apc_04)
+              apc_05* (f_apc_05)
+              ;
+
+          APP by
+              app_01* (f_app_01)
+              app_02* (f_app_02)
+              app_03* (f_app_03)
+              app_04* (f_app_04)
+              app_05* (f_app_05)
+              ;
+
+          RES by
+              res_01* (f_res_01)
+              res_02* (f_res_02)
+              res_03* (f_res_03)
+              ;
+
+          EXH by
+              exh_01*-1 (f_exh_01)
+              exh_04* (f_exh_04)
+              exh_08* (f_exh_08)
+              ;
+
+          JSA by
+              jsa_01* (f_jsa_01)
+              jsa_02* (f_jsa_02)
+              jsa_03* (f_jsa_03)
+              jsa_04* (f_jsa_04)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !APC
+          [apc_01$1*] (t1apc_01);
+          [apc_01$2*] (t2apc_01);
+
+          [apc_02$1*] (t1apc_02);
+          [apc_02$2*] (t2apc_02);
+
+          [apc_03$1*] (t1apc_03);
+          [apc_03$2*] (t2apc_03);
+
+          [apc_04$1*] (t1apc_04);
+          [apc_04$2*] (t2apc_04);
+
+          [apc_05$1*] (t1apc_05);
+          [apc_05$2*] (t2apc_05);
+
+          !APP
+          [app_01$1*] (t1app_01);
+          [app_01$2*] (t2app_01);
+          [app_01$3*] (t3app_01);
+
+          [app_02$1*] (t1app_02);
+          [app_02$2*] (t2app_02);
+
+          [app_03$1*] (t1app_03);
+          [app_03$2*] (t2app_03);
+          [app_03$3*] (t3app_03);
+          [app_03$4*] (t4app_03);
+
+          [app_04$1*] (t1app_04);
+          [app_04$2*] (t2app_04);
+          [app_04$3*] (t3app_04);
+
+          [app_05$1*] (t1app_05);
+          [app_05$2*] (t2app_05);
+          [app_05$3*] (t3app_05);
+
+          !RES
+          [res_01$1*] (t1res_01);
+          [res_01$2*] (t2res_01);
+
+          [res_02$1*] (t1res_02);
+          [res_02$2*] (t2res_02);
+
+          [res_03$1*] (t1res_03);
+          [res_03$2*] (t2res_03);
+
+          !EXH
+          [exh_01$1*] (t1exh_01);
+          [exh_01$2*] (t2exh_01);
+
+          [exh_04$1*] (t1exh_04);
+          [exh_04$2*] (t2exh_04);
+          [exh_04$3*] (t3exh_04);
+
+          [exh_08$1*] (t1exh_08);
+          [exh_08$2*] (t2exh_08);
+          [exh_08$3*] (t3exh_08);
+
+
+          !JSA
+          [jsa_01$1*] (t1jsa_01);
+          [jsa_01$2*] (t2jsa_01);
+          [jsa_01$3*] (t3jsa_01);
+
+          [jsa_02$1*] (t1jsa_02);
+          [jsa_02$2*] (t2jsa_02);
+
+          [jsa_03$1*] (t1jsa_03);
+          [jsa_03$2*] (t2jsa_03);
+          [jsa_03$3*] (t3jsa_03);
+
+          [jsa_04$1*] (t1jsa_04);
+          [jsa_04$2*] (t2jsa_04);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-jsa_04@1;
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [APC@0];
+          [APP@0];
+          [RES@0];
+          [JSA@0];
+          [EXH@0];
+
+          DIJ@1;
+          APC@1;
+          APP@1;
+          RES@1;
+          JSA@1;
+          EXH@1;
+
+  MODEL temp:
+
+          ! Factor loadings
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APC by
+              apc_01* (f_apc_01)
+              apc_02* (f_apc_02)
+              apc_03* (f_apc_03)
+              apc_04* (f_apc_04)
+              apc_05* (f_apc_05)
+              ;
+
+          APP by
+              app_01* (f_app_01)
+              app_02* (f_app_02)
+              app_03* (f_app_03)
+              app_04* (f_app_04)
+              app_05* (f_app_05)
+              ;
+
+          RES by
+              res_01* (f_res_01)
+              res_02* (f_res_02)
+              res_03* (f_res_03)
+              ;
+
+          EXH by
+              exh_01*-1 (f_exh_01)
+              exh_04* (f_exh_04)
+              exh_08* (f_exh_08)
+              ;
+
+          JSA by
+              jsa_01* (f_jsa_01)
+              jsa_02* (f_jsa_02)
+              jsa_03* (f_jsa_03)
+              jsa_04* (f_jsa_04)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !APC
+          [apc_01$1*] (t1apc_01);
+          [apc_01$2*] (t2apc_01);
+
+          [apc_02$1*] (t1apc_02);
+          [apc_02$2*] (t2apc_02);
+
+          [apc_03$1*] (t1apc_03);
+          [apc_03$2*] (t2apc_03);
+
+          [apc_04$1*] (t1apc_04);
+          [apc_04$2*] (t2apc_04);
+
+          [apc_05$1*] (t1apc_05);
+          [apc_05$2*] (t2apc_05);
+
+          !APP
+          [app_01$1*] (t1app_01);
+          [app_01$2*] (t2app_01);
+          [app_01$3*] (t3app_01);
+
+          [app_02$1*] (t1app_02);
+          [app_02$2*] (t2app_02);
+
+          [app_03$1*] (t1app_03);
+          [app_03$2*] (t2app_03);
+          [app_03$3*] (t3app_03);
+          [app_03$4*] (t4app_03);
+
+          [app_04$1*] (t1app_04);
+          [app_04$2*] (t2app_04);
+          [app_04$3*] (t3app_04);
+
+          [app_05$1*] (t1app_05);
+          [app_05$2*] (t2app_05);
+          [app_05$3*] (t3app_05);
+
+          !RES
+          [res_01$1*] (t1res_01);
+          [res_01$2*] (t2res_01);
+
+          [res_02$1*] (t1res_02);
+          [res_02$2*] (t2res_02);
+
+          [res_03$1*] (t1res_03);
+          [res_03$2*] (t2res_03);
+
+          !EXH
+          [exh_01$1*] (t1exh_01);
+          [exh_01$2*] (t2exh_01);
+
+          [exh_04$1*] (t1exh_04);
+          [exh_04$2*] (t2exh_04);
+          [exh_04$3*] (t3exh_04);
+
+          [exh_08$1*] (t1exh_08);
+          [exh_08$2*] (t2exh_08);
+          [exh_08$3*] (t3exh_08);
+
+
+          !JSA
+          [jsa_01$1*] (t1jsa_01);
+          [jsa_01$2*] (t2jsa_01);
+          [jsa_01$3*] (t3jsa_01);
+
+          [jsa_02$1*] (t1jsa_02);
+          [jsa_02$2*] (t2jsa_02);
+
+          [jsa_03$1*] (t1jsa_03);
+          [jsa_03$2*] (t2jsa_03);
+          [jsa_03$3*] (t3jsa_03);
+
+          [jsa_04$1*] (t1jsa_04);
+          [jsa_04$2*] (t2jsa_04);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-jsa_04@1;
+
+
+          ! Factors mean free
+
+          [DIJ*];
+          [APC*];
+          [APP*];
+          [RES*];
+          [JSA*];
+          [EXH*];
+
+          ! variance free
+          DIJ*;
+          APC*;
+          APP*;
+          RES*;
+          JSA*;
+          EXH*;
+
+  OUTPUT:
+  	tech1
+  	tech4
+  	stdyx
+  	mod(10)
+  	;
+
+  SAVEDATA: DIFFTEST=02_scalar.diff;
+
+
+
+INPUT READING TERMINATED NORMALLY
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group PERM                                                  262
+   Group TEMP                                                  120
+   Total sample size                                           382
+
+Number of dependent variables                                   24
+Number of independent variables                                  0
+Number of continuous latent variables                            6
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      APC_01      APC_02
+   APC_03      APC_04      APC_05      APP_01      APP_02      APP_03
+   APP_04      APP_05      RES_01      RES_02      RES_03      EXH_01
+   EXH_04      EXH_08      JSA_01      JSA_02      JSA_03      JSA_04
+
+Continuous latent variables
+   DIJ         APC         APP         RES         EXH         JSA
+
+Variables with special functions
+
+  Grouping variable     GROUP
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Random Starts Specifications
+  Number of random starts                                       20
+  Random starts scale                                    0.500D+01
+Parameterization                                             THETA
+Link                                                        PROBIT
+
+Input data file(s)
+  ../../data/transforms/mplus.dat
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group PERM
+     Number of missing data patterns            30
+
+   Group TEMP
+     Number of missing data patterns            14
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR PERM
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.943         0.962
+ DIJ_03         0.935         0.935         0.950
+ DIJ_04         0.950         0.950         0.939         0.969
+ APC_01         0.958         0.962         0.950         0.969         1.000
+ APC_02         0.950         0.954         0.943         0.962         0.992
+ APC_03         0.958         0.962         0.950         0.969         1.000
+ APC_04         0.954         0.958         0.947         0.966         0.996
+ APC_05         0.958         0.962         0.950         0.969         1.000
+ APP_01         0.947         0.950         0.939         0.958         0.985
+ APP_02         0.935         0.939         0.927         0.947         0.973
+ APP_03         0.939         0.939         0.931         0.950         0.969
+ APP_04         0.939         0.943         0.931         0.947         0.973
+ APP_05         0.924         0.927         0.916         0.931         0.954
+ RES_01         0.958         0.962         0.950         0.969         1.000
+ RES_02         0.958         0.962         0.950         0.969         1.000
+ RES_03         0.954         0.958         0.947         0.966         0.996
+ EXH_01         0.954         0.958         0.947         0.966         0.996
+ EXH_04         0.958         0.962         0.950         0.969         1.000
+ EXH_08         0.954         0.958         0.947         0.966         0.996
+ JSA_01         0.954         0.958         0.943         0.966         0.992
+ JSA_02         0.950         0.954         0.939         0.962         0.989
+ JSA_03         0.954         0.958         0.947         0.966         0.996
+ JSA_04         0.954         0.958         0.943         0.966         0.992
+
+
+           Covariance Coverage
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02         0.992
+ APC_03         0.992         1.000
+ APC_04         0.989         0.996         0.996
+ APC_05         0.992         1.000         0.996         1.000
+ APP_01         0.977         0.985         0.981         0.985         0.985
+ APP_02         0.966         0.973         0.973         0.973         0.969
+ APP_03         0.962         0.969         0.969         0.969         0.966
+ APP_04         0.966         0.973         0.973         0.973         0.966
+ APP_05         0.947         0.954         0.954         0.954         0.954
+ RES_01         0.992         1.000         0.996         1.000         0.985
+ RES_02         0.992         1.000         0.996         1.000         0.985
+ RES_03         0.989         0.996         0.992         0.996         0.981
+ EXH_01         0.989         0.996         0.992         0.996         0.981
+ EXH_04         0.992         1.000         0.996         1.000         0.985
+ EXH_08         0.989         0.996         0.992         0.996         0.981
+ JSA_01         0.985         0.992         0.989         0.992         0.977
+ JSA_02         0.981         0.989         0.985         0.989         0.973
+ JSA_03         0.989         0.996         0.992         0.996         0.981
+ JSA_04         0.985         0.992         0.989         0.992         0.977
+
+
+           Covariance Coverage
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02         0.973
+ APP_03         0.962         0.969
+ APP_04         0.962         0.958         0.973
+ APP_05         0.947         0.943         0.947         0.954
+ RES_01         0.973         0.969         0.973         0.954         1.000
+ RES_02         0.973         0.969         0.973         0.954         1.000
+ RES_03         0.969         0.966         0.969         0.950         0.996
+ EXH_01         0.969         0.966         0.969         0.950         0.996
+ EXH_04         0.973         0.969         0.973         0.954         1.000
+ EXH_08         0.969         0.966         0.969         0.954         0.996
+ JSA_01         0.966         0.962         0.966         0.947         0.992
+ JSA_02         0.962         0.958         0.962         0.947         0.989
+ JSA_03         0.969         0.966         0.969         0.950         0.996
+ JSA_04         0.966         0.962         0.966         0.947         0.992
+
+
+           Covariance Coverage
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02         1.000
+ RES_03         0.996         0.996
+ EXH_01         0.996         0.992         0.996
+ EXH_04         1.000         0.996         0.996         1.000
+ EXH_08         0.996         0.992         0.992         0.996         0.996
+ JSA_01         0.992         0.989         0.989         0.992         0.989
+ JSA_02         0.989         0.985         0.985         0.989         0.985
+ JSA_03         0.996         0.992         0.992         0.996         0.992
+ JSA_04         0.992         0.989         0.989         0.992         0.989
+
+
+           Covariance Coverage
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01         0.992
+ JSA_02         0.985         0.989
+ JSA_03         0.992         0.985         0.996
+ JSA_04         0.992         0.985         0.992         0.992
+
+
+     PROPORTION OF DATA PRESENT FOR TEMP
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.958         0.983
+ DIJ_03         0.942         0.958         0.958
+ DIJ_04         0.942         0.967         0.942         0.975
+ APC_01         0.950         0.975         0.950         0.967         0.992
+ APC_02         0.958         0.983         0.958         0.975         0.992
+ APC_03         0.958         0.983         0.958         0.975         0.992
+ APC_04         0.958         0.983         0.958         0.975         0.992
+ APC_05         0.958         0.983         0.958         0.975         0.992
+ APP_01         0.958         0.983         0.958         0.975         0.992
+ APP_02         0.958         0.983         0.958         0.975         0.992
+ APP_03         0.942         0.958         0.942         0.950         0.975
+ APP_04         0.958         0.975         0.958         0.967         0.983
+ APP_05         0.933         0.950         0.933         0.942         0.958
+ RES_01         0.958         0.983         0.958         0.975         0.992
+ RES_02         0.950         0.975         0.950         0.967         0.983
+ RES_03         0.958         0.983         0.958         0.975         0.992
+ EXH_01         0.958         0.983         0.958         0.975         0.992
+ EXH_04         0.958         0.983         0.958         0.975         0.992
+ EXH_08         0.958         0.983         0.958         0.975         0.992
+ JSA_01         0.950         0.975         0.950         0.967         0.983
+ JSA_02         0.933         0.958         0.933         0.942         0.967
+ JSA_03         0.942         0.967         0.942         0.958         0.975
+ JSA_04         0.958         0.983         0.958         0.975         0.992
+
+
+           Covariance Coverage
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         1.000         1.000
+ APC_04         1.000         1.000         1.000
+ APC_05         1.000         1.000         1.000         1.000
+ APP_01         1.000         1.000         1.000         1.000         1.000
+ APP_02         1.000         1.000         1.000         1.000         1.000
+ APP_03         0.975         0.975         0.975         0.975         0.975
+ APP_04         0.992         0.992         0.992         0.992         0.992
+ APP_05         0.967         0.967         0.967         0.967         0.967
+ RES_01         1.000         1.000         1.000         1.000         1.000
+ RES_02         0.992         0.992         0.992         0.992         0.992
+ RES_03         1.000         1.000         1.000         1.000         1.000
+ EXH_01         1.000         1.000         1.000         1.000         1.000
+ EXH_04         1.000         1.000         1.000         1.000         1.000
+ EXH_08         1.000         1.000         1.000         1.000         1.000
+ JSA_01         0.992         0.992         0.992         0.992         0.992
+ JSA_02         0.967         0.967         0.967         0.967         0.967
+ JSA_03         0.983         0.983         0.983         0.983         0.983
+ JSA_04         1.000         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02         1.000
+ APP_03         0.975         0.975
+ APP_04         0.992         0.975         0.992
+ APP_05         0.967         0.958         0.967         0.967
+ RES_01         1.000         0.975         0.992         0.967         1.000
+ RES_02         0.992         0.967         0.983         0.958         0.992
+ RES_03         1.000         0.975         0.992         0.967         1.000
+ EXH_01         1.000         0.975         0.992         0.967         1.000
+ EXH_04         1.000         0.975         0.992         0.967         1.000
+ EXH_08         1.000         0.975         0.992         0.967         1.000
+ JSA_01         0.992         0.967         0.983         0.958         0.992
+ JSA_02         0.967         0.950         0.958         0.933         0.967
+ JSA_03         0.983         0.958         0.975         0.950         0.983
+ JSA_04         1.000         0.975         0.992         0.967         1.000
+
+
+           Covariance Coverage
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02         0.992
+ RES_03         0.992         1.000
+ EXH_01         0.992         1.000         1.000
+ EXH_04         0.992         1.000         1.000         1.000
+ EXH_08         0.992         1.000         1.000         1.000         1.000
+ JSA_01         0.983         0.992         0.992         0.992         0.992
+ JSA_02         0.958         0.967         0.967         0.967         0.967
+ JSA_03         0.975         0.983         0.983         0.983         0.983
+ JSA_04         0.992         1.000         1.000         1.000         1.000
+
+
+           Covariance Coverage
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01         0.992
+ JSA_02         0.967         0.967
+ JSA_03         0.983         0.958         0.983
+ JSA_04         0.992         0.967         0.983         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+  Group PERM
+    DIJ_01
+      Category 1    0.048           12.000
+      Category 2    0.175           44.000
+      Category 3    0.255           64.000
+      Category 4    0.522          131.000
+    DIJ_02
+      Category 1    0.194           49.000
+      Category 2    0.210           53.000
+      Category 3    0.595          150.000
+    DIJ_03
+      Category 1    0.064           16.000
+      Category 2    0.181           45.000
+      Category 3    0.249           62.000
+      Category 4    0.506          126.000
+    DIJ_04
+      Category 1    0.059           15.000
+      Category 2    0.138           35.000
+      Category 3    0.244           62.000
+      Category 4    0.559          142.000
+    APC_01
+      Category 1    0.118           31.000
+      Category 2    0.519          136.000
+      Category 3    0.363           95.000
+    APC_02
+      Category 1    0.192           50.000
+      Category 2    0.496          129.000
+      Category 3    0.312           81.000
+    APC_03
+      Category 1    0.141           37.000
+      Category 2    0.565          148.000
+      Category 3    0.294           77.000
+    APC_04
+      Category 1    0.195           51.000
+      Category 2    0.261           68.000
+      Category 3    0.544          142.000
+    APC_05
+      Category 1    0.183           48.000
+      Category 2    0.523          137.000
+      Category 3    0.294           77.000
+    APP_01
+      Category 1    0.384           99.000
+      Category 2    0.217           56.000
+      Category 3    0.295           76.000
+      Category 4    0.105           27.000
+    APP_02
+      Category 1    0.306           78.000
+      Category 2    0.471          120.000
+      Category 3    0.224           57.000
+    APP_03
+      Category 1    0.110           28.000
+      Category 2    0.287           73.000
+      Category 3    0.252           64.000
+      Category 4    0.291           74.000
+      Category 5    0.059           15.000
+    APP_04
+      Category 1    0.251           64.000
+      Category 2    0.314           80.000
+      Category 3    0.259           66.000
+      Category 4    0.176           45.000
+    APP_05
+      Category 1    0.092           23.000
+      Category 2    0.184           46.000
+      Category 3    0.360           90.000
+      Category 4    0.364           91.000
+    RES_01
+      Category 1    0.366           96.000
+      Category 2    0.424          111.000
+      Category 3    0.210           55.000
+    RES_02
+      Category 1    0.126           33.000
+      Category 2    0.466          122.000
+      Category 3    0.408          107.000
+    RES_03
+      Category 1    0.261           68.000
+      Category 2    0.387          101.000
+      Category 3    0.352           92.000
+    EXH_01
+      Category 1    0.253           66.000
+      Category 2    0.625          163.000
+      Category 3    0.123           32.000
+    EXH_04
+      Category 1    0.053           14.000
+      Category 2    0.229           60.000
+      Category 3    0.408          107.000
+      Category 4    0.309           81.000
+    EXH_08
+      Category 1    0.092           24.000
+      Category 2    0.395          103.000
+      Category 3    0.303           79.000
+      Category 4    0.211           55.000
+    JSA_01
+      Category 1    0.054           14.000
+      Category 2    0.158           41.000
+      Category 3    0.596          155.000
+      Category 4    0.192           50.000
+    JSA_02
+      Category 1    0.332           86.000
+      Category 2    0.367           95.000
+      Category 3    0.301           78.000
+    JSA_03
+      Category 1    0.077           20.000
+      Category 2    0.272           71.000
+      Category 3    0.575          150.000
+      Category 4    0.077           20.000
+    JSA_04
+      Category 1    0.273           71.000
+      Category 2    0.631          164.000
+      Category 3    0.096           25.000
+
+  Group TEMP
+    DIJ_01
+      Category 1    0.330           38.000
+      Category 2    0.443           51.000
+      Category 3    0.104           12.000
+      Category 4    0.122           14.000
+    DIJ_02
+      Category 1    0.653           77.000
+      Category 2    0.186           22.000
+      Category 3    0.161           19.000
+    DIJ_03
+      Category 1    0.365           42.000
+      Category 2    0.417           48.000
+      Category 3    0.130           15.000
+      Category 4    0.087           10.000
+    DIJ_04
+      Category 1    0.299           35.000
+      Category 2    0.376           44.000
+      Category 3    0.145           17.000
+      Category 4    0.179           21.000
+    APC_01
+      Category 1    0.244           29.000
+      Category 2    0.563           67.000
+      Category 3    0.193           23.000
+    APC_02
+      Category 1    0.450           54.000
+      Category 2    0.400           48.000
+      Category 3    0.150           18.000
+    APC_03
+      Category 1    0.217           26.000
+      Category 2    0.592           71.000
+      Category 3    0.192           23.000
+    APC_04
+      Category 1    0.308           37.000
+      Category 2    0.350           42.000
+      Category 3    0.342           41.000
+    APC_05
+      Category 1    0.467           56.000
+      Category 2    0.350           42.000
+      Category 3    0.183           22.000
+    APP_01
+      Category 1    0.250           30.000
+      Category 2    0.242           29.000
+      Category 3    0.417           50.000
+      Category 4    0.092           11.000
+    APP_02
+      Category 1    0.183           22.000
+      Category 2    0.558           67.000
+      Category 3    0.258           31.000
+    APP_03
+      Category 1    0.120           14.000
+      Category 2    0.188           22.000
+      Category 3    0.325           38.000
+      Category 4    0.274           32.000
+      Category 5    0.094           11.000
+    APP_04
+      Category 1    0.210           25.000
+      Category 2    0.252           30.000
+      Category 3    0.311           37.000
+      Category 4    0.227           27.000
+    APP_05
+      Category 1    0.103           12.000
+      Category 2    0.147           17.000
+      Category 3    0.328           38.000
+      Category 4    0.422           49.000
+    RES_01
+      Category 1    0.367           44.000
+      Category 2    0.433           52.000
+      Category 3    0.200           24.000
+    RES_02
+      Category 1    0.118           14.000
+      Category 2    0.454           54.000
+      Category 3    0.429           51.000
+    RES_03
+      Category 1    0.208           25.000
+      Category 2    0.442           53.000
+      Category 3    0.350           42.000
+    EXH_01
+      Category 1    0.258           31.000
+      Category 2    0.617           74.000
+      Category 3    0.125           15.000
+    EXH_04
+      Category 1    0.100           12.000
+      Category 2    0.267           32.000
+      Category 3    0.367           44.000
+      Category 4    0.267           32.000
+    EXH_08
+      Category 1    0.142           17.000
+      Category 2    0.358           43.000
+      Category 3    0.358           43.000
+      Category 4    0.142           17.000
+    JSA_01
+      Category 1    0.101           12.000
+      Category 2    0.176           21.000
+      Category 3    0.597           71.000
+      Category 4    0.126           15.000
+    JSA_02
+      Category 1    0.233           27.000
+      Category 2    0.353           41.000
+      Category 3    0.414           48.000
+    JSA_03
+      Category 1    0.136           16.000
+      Category 2    0.271           32.000
+      Category 3    0.508           60.000
+      Category 4    0.085           10.000
+    JSA_04
+      Category 1    0.258           31.000
+      Category 2    0.658           79.000
+      Category 3    0.083           10.000
+
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST FIT FUNCTION VALUES
+
+Fit function values at local maxima and random start numbers:
+
+      0.72564596D+00         20
+      0.72564596D+00         6
+      0.72564603D+00         5
+      0.72564608D+00         14
+      0.72564612D+00         1
+      0.72564614D+00         9
+      0.72564630D+00         10
+      0.72564641D+00         12
+      0.72564644D+00         17
+      0.72564647D+00         2
+      0.72564652D+00         3
+      0.72564660D+00         15
+      0.72564663D+00         18
+      0.72564668D+00         19
+      0.72564671D+00         16
+      0.72564675D+00         8
+      0.72564682D+00         unperturbed
+      0.72564690D+00         7
+      0.72564746D+00         13
+      0.72564752D+00         11
+      0.72564860D+00         4
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                      126
+
+Chi-Square Test of Model Fit
+
+          Value                            707.301*
+          Degrees of Freedom                   546
+          P-Value                           0.0000
+
+Chi-Square Contribution From Each Group
+
+          PERM                             353.293
+          TEMP                             354.008
+
+Chi-Square Test for Difference Testing
+
+          Value                             79.495*
+          Degrees of Freedom                    54
+          P-Value                           0.0136
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.  The DIFFTEST
+    option assumes the models are nested.  The NESTED option can be used to verify
+    that the models are nested.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.039
+          90 Percent C.I.                    0.030  0.047
+          Probability RMSEA <= .05           0.987
+
+CFI/TLI
+
+          CFI                                0.977
+          TLI                                0.977
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           7509.855
+          Degrees of Freedom                   552
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.070
+
+Optimum Function Value for Weighted Least-Squares Estimator
+
+          Value                     0.72564596D+00
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             2.131      0.254      8.387      0.000
+    DIJ_02             1.646      0.158     10.403      0.000
+    DIJ_03             1.908      0.220      8.680      0.000
+    DIJ_04             1.280      0.120     10.657      0.000
+
+ APC      BY
+    APC_01            -1.149      0.113    -10.212      0.000
+    APC_02            -2.020      0.241     -8.374      0.000
+    APC_03            -0.998      0.096    -10.431      0.000
+    APC_04            -0.478      0.074     -6.452      0.000
+    APC_05            -4.161      1.266     -3.285      0.001
+
+ APP      BY
+    APP_01            -0.910      0.100     -9.114      0.000
+    APP_02            -1.558      0.193     -8.064      0.000
+    APP_03            -1.089      0.105    -10.321      0.000
+    APP_04            -0.880      0.090     -9.816      0.000
+    APP_05            -1.005      0.116     -8.677      0.000
+
+ RES      BY
+    RES_01             2.643      0.617      4.281      0.000
+    RES_02             0.982      0.116      8.458      0.000
+    RES_03             2.074      0.334      6.206      0.000
+
+ EXH      BY
+    EXH_01            -1.241      0.141     -8.780      0.000
+    EXH_04             1.749      0.225      7.791      0.000
+    EXH_08             1.427      0.174      8.216      0.000
+
+ JSA      BY
+    JSA_01             3.470      0.912      3.806      0.000
+    JSA_02             0.451      0.070      6.476      0.000
+    JSA_03             1.778      0.188      9.481      0.000
+    JSA_04             1.569      0.158      9.954      0.000
+
+ APC      WITH
+    DIJ               -0.097      0.076     -1.286      0.199
+
+ APP      WITH
+    DIJ               -0.063      0.078     -0.810      0.418
+    APC                0.480      0.062      7.772      0.000
+
+ RES      WITH
+    DIJ                0.298      0.073      4.099      0.000
+    APC                0.084      0.077      1.099      0.272
+    APP                0.092      0.076      1.218      0.223
+
+ EXH      WITH
+    DIJ                0.248      0.069      3.585      0.000
+    APC                0.189      0.069      2.728      0.006
+    APP                0.127      0.076      1.680      0.093
+    RES                0.184      0.074      2.495      0.013
+
+ JSA      WITH
+    DIJ               -0.192      0.072     -2.686      0.007
+    APC               -0.291      0.066     -4.442      0.000
+    APP               -0.322      0.070     -4.614      0.000
+    RES               -0.116      0.070     -1.662      0.097
+    EXH               -0.531      0.054     -9.801      0.000
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+    APC                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+    RES                0.000      0.000    999.000    999.000
+    EXH                0.000      0.000    999.000    999.000
+    JSA                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -3.900      0.360    -10.840      0.000
+    DIJ_01$2          -1.666      0.227     -7.335      0.000
+    DIJ_01$3          -0.259      0.190     -1.361      0.174
+    DIJ_02$1          -1.653      0.180     -9.193      0.000
+    DIJ_02$2          -0.513      0.160     -3.211      0.001
+    DIJ_03$1          -3.305      0.308    -10.742      0.000
+    DIJ_03$2          -1.386      0.208     -6.667      0.000
+    DIJ_03$3          -0.053      0.168     -0.317      0.751
+    DIJ_04$1          -2.554      0.176    -14.510      0.000
+    DIJ_04$2          -1.282      0.140     -9.142      0.000
+    DIJ_04$3          -0.304      0.128     -2.366      0.018
+    APC_01$1          -1.824      0.147    -12.441      0.000
+    APC_01$2           0.548      0.109      5.036      0.000
+    APC_02$1          -1.848      0.220     -8.412      0.000
+    APC_02$2           1.099      0.183      6.010      0.000
+    APC_03$1          -1.618      0.122    -13.257      0.000
+    APC_03$2           0.719      0.103      7.003      0.000
+    APC_04$1          -0.926      0.087    -10.640      0.000
+    APC_04$2          -0.046      0.076     -0.597      0.550
+    APC_05$1          -3.613      1.053     -3.431      0.001
+    APC_05$2           2.045      0.632      3.235      0.001
+    APP_01$1          -0.481      0.095     -5.052      0.000
+    APP_01$2           0.289      0.095      3.030      0.002
+    APP_01$3           1.772      0.133     13.287      0.000
+    APP_02$1          -1.020      0.159     -6.411      0.000
+    APP_02$2           1.432      0.163      8.773      0.000
+    APP_03$1          -1.668      0.136    -12.287      0.000
+    APP_03$2          -0.407      0.107     -3.801      0.000
+    APP_03$3           0.621      0.107      5.799      0.000
+    APP_03$4           2.223      0.157     14.197      0.000
+    APP_04$1          -0.873      0.099     -8.860      0.000
+    APP_04$2           0.170      0.091      1.863      0.062
+    APP_04$3           1.208      0.105     11.479      0.000
+    APP_05$1          -1.739      0.146    -11.915      0.000
+    APP_05$2          -0.790      0.110     -7.170      0.000
+    APP_05$3           0.493      0.103      4.798      0.000
+    RES_01$1          -0.935      0.264     -3.545      0.000
+    RES_01$2           2.349      0.508      4.627      0.000
+    RES_02$1          -1.614      0.132    -12.241      0.000
+    RES_02$2           0.315      0.099      3.172      0.002
+    RES_03$1          -1.573      0.262     -5.999      0.000
+    RES_03$2           0.905      0.199      4.556      0.000
+    EXH_01$1          -0.979      0.124     -7.876      0.000
+    EXH_01$2           1.910      0.167     11.425      0.000
+    EXH_04$1          -3.090      0.328     -9.417      0.000
+    EXH_04$2          -1.101      0.181     -6.091      0.000
+    EXH_04$3           0.983      0.164      5.988      0.000
+    EXH_08$1          -2.235      0.209    -10.673      0.000
+    EXH_08$2          -0.120      0.126     -0.949      0.343
+    EXH_08$3           1.457      0.165      8.815      0.000
+    JSA_01$1          -5.711      1.351     -4.228      0.000
+    JSA_01$2          -2.849      0.757     -3.762      0.000
+    JSA_01$3           3.405      0.841      4.048      0.000
+    JSA_02$1          -0.582      0.078     -7.504      0.000
+    JSA_02$2           0.454      0.075      6.041      0.000
+    JSA_03$1          -2.824      0.274    -10.313      0.000
+    JSA_03$2          -0.769      0.164     -4.682      0.000
+    JSA_03$3           2.914      0.255     11.422      0.000
+    JSA_04$1          -1.220      0.157     -7.768      0.000
+    JSA_04$2           2.490      0.221     11.243      0.000
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+    RES                1.000      0.000    999.000    999.000
+    EXH                1.000      0.000    999.000    999.000
+    JSA                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    APP_01             1.000      0.000    999.000    999.000
+    APP_02             1.000      0.000    999.000    999.000
+    APP_03             1.000      0.000    999.000    999.000
+    APP_04             1.000      0.000    999.000    999.000
+    APP_05             1.000      0.000    999.000    999.000
+    RES_01             1.000      0.000    999.000    999.000
+    RES_02             1.000      0.000    999.000    999.000
+    RES_03             1.000      0.000    999.000    999.000
+    EXH_01             1.000      0.000    999.000    999.000
+    EXH_04             1.000      0.000    999.000    999.000
+    EXH_08             1.000      0.000    999.000    999.000
+    JSA_01             1.000      0.000    999.000    999.000
+    JSA_02             1.000      0.000    999.000    999.000
+    JSA_03             1.000      0.000    999.000    999.000
+    JSA_04             1.000      0.000    999.000    999.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             2.131      0.254      8.387      0.000
+    DIJ_02             1.646      0.158     10.403      0.000
+    DIJ_03             1.908      0.220      8.680      0.000
+    DIJ_04             1.280      0.120     10.657      0.000
+
+ APC      BY
+    APC_01            -1.149      0.113    -10.212      0.000
+    APC_02            -2.020      0.241     -8.374      0.000
+    APC_03            -0.998      0.096    -10.431      0.000
+    APC_04            -0.478      0.074     -6.452      0.000
+    APC_05            -4.161      1.266     -3.285      0.001
+
+ APP      BY
+    APP_01            -0.910      0.100     -9.114      0.000
+    APP_02            -1.558      0.193     -8.064      0.000
+    APP_03            -1.089      0.105    -10.321      0.000
+    APP_04            -0.880      0.090     -9.816      0.000
+    APP_05            -1.005      0.116     -8.677      0.000
+
+ RES      BY
+    RES_01             2.643      0.617      4.281      0.000
+    RES_02             0.982      0.116      8.458      0.000
+    RES_03             2.074      0.334      6.206      0.000
+
+ EXH      BY
+    EXH_01            -1.241      0.141     -8.780      0.000
+    EXH_04             1.749      0.225      7.791      0.000
+    EXH_08             1.427      0.174      8.216      0.000
+
+ JSA      BY
+    JSA_01             3.470      0.912      3.806      0.000
+    JSA_02             0.451      0.070      6.476      0.000
+    JSA_03             1.778      0.188      9.481      0.000
+    JSA_04             1.569      0.158      9.954      0.000
+
+ APC      WITH
+    DIJ                0.064      0.101      0.639      0.523
+
+ APP      WITH
+    DIJ                0.182      0.090      2.028      0.043
+    APC                0.448      0.132      3.399      0.001
+
+ RES      WITH
+    DIJ               -0.035      0.097     -0.365      0.715
+    APC               -0.498      0.140     -3.560      0.000
+    APP               -0.263      0.109     -2.406      0.016
+
+ EXH      WITH
+    DIJ                0.227      0.098      2.306      0.021
+    APC                0.103      0.111      0.933      0.351
+    APP                0.075      0.097      0.770      0.441
+    RES               -0.052      0.102     -0.505      0.614
+
+ JSA      WITH
+    DIJ               -0.315      0.101     -3.109      0.002
+    APC               -0.145      0.127     -1.140      0.254
+    APP               -0.133      0.118     -1.128      0.259
+    RES                0.283      0.128      2.212      0.027
+    EXH               -0.462      0.133     -3.461      0.001
+
+ Means
+    DIJ               -1.404      0.136    -10.303      0.000
+    APC                0.671      0.129      5.189      0.000
+    APP               -0.228      0.117     -1.941      0.052
+    RES                0.039      0.123      0.321      0.748
+    EXH               -0.175      0.122     -1.437      0.151
+    JSA               -0.098      0.132     -0.743      0.457
+
+ Thresholds
+    DIJ_01$1          -3.900      0.360    -10.840      0.000
+    DIJ_01$2          -1.666      0.227     -7.335      0.000
+    DIJ_01$3          -0.259      0.190     -1.361      0.174
+    DIJ_02$1          -1.653      0.180     -9.193      0.000
+    DIJ_02$2          -0.513      0.160     -3.211      0.001
+    DIJ_03$1          -3.305      0.308    -10.742      0.000
+    DIJ_03$2          -1.386      0.208     -6.667      0.000
+    DIJ_03$3          -0.053      0.168     -0.317      0.751
+    DIJ_04$1          -2.554      0.176    -14.510      0.000
+    DIJ_04$2          -1.282      0.140     -9.142      0.000
+    DIJ_04$3          -0.304      0.128     -2.366      0.018
+    APC_01$1          -1.824      0.147    -12.441      0.000
+    APC_01$2           0.548      0.109      5.036      0.000
+    APC_02$1          -1.848      0.220     -8.412      0.000
+    APC_02$2           1.099      0.183      6.010      0.000
+    APC_03$1          -1.618      0.122    -13.257      0.000
+    APC_03$2           0.719      0.103      7.003      0.000
+    APC_04$1          -0.926      0.087    -10.640      0.000
+    APC_04$2          -0.046      0.076     -0.597      0.550
+    APC_05$1          -3.613      1.053     -3.431      0.001
+    APC_05$2           2.045      0.632      3.235      0.001
+    APP_01$1          -0.481      0.095     -5.052      0.000
+    APP_01$2           0.289      0.095      3.030      0.002
+    APP_01$3           1.772      0.133     13.287      0.000
+    APP_02$1          -1.020      0.159     -6.411      0.000
+    APP_02$2           1.432      0.163      8.773      0.000
+    APP_03$1          -1.668      0.136    -12.287      0.000
+    APP_03$2          -0.407      0.107     -3.801      0.000
+    APP_03$3           0.621      0.107      5.799      0.000
+    APP_03$4           2.223      0.157     14.197      0.000
+    APP_04$1          -0.873      0.099     -8.860      0.000
+    APP_04$2           0.170      0.091      1.863      0.062
+    APP_04$3           1.208      0.105     11.479      0.000
+    APP_05$1          -1.739      0.146    -11.915      0.000
+    APP_05$2          -0.790      0.110     -7.170      0.000
+    APP_05$3           0.493      0.103      4.798      0.000
+    RES_01$1          -0.935      0.264     -3.545      0.000
+    RES_01$2           2.349      0.508      4.627      0.000
+    RES_02$1          -1.614      0.132    -12.241      0.000
+    RES_02$2           0.315      0.099      3.172      0.002
+    RES_03$1          -1.573      0.262     -5.999      0.000
+    RES_03$2           0.905      0.199      4.556      0.000
+    EXH_01$1          -0.979      0.124     -7.876      0.000
+    EXH_01$2           1.910      0.167     11.425      0.000
+    EXH_04$1          -3.090      0.328     -9.417      0.000
+    EXH_04$2          -1.101      0.181     -6.091      0.000
+    EXH_04$3           0.983      0.164      5.988      0.000
+    EXH_08$1          -2.235      0.209    -10.673      0.000
+    EXH_08$2          -0.120      0.126     -0.949      0.343
+    EXH_08$3           1.457      0.165      8.815      0.000
+    JSA_01$1          -5.711      1.351     -4.228      0.000
+    JSA_01$2          -2.849      0.757     -3.762      0.000
+    JSA_01$3           3.405      0.841      4.048      0.000
+    JSA_02$1          -0.582      0.078     -7.504      0.000
+    JSA_02$2           0.454      0.075      6.041      0.000
+    JSA_03$1          -2.824      0.274    -10.313      0.000
+    JSA_03$2          -0.769      0.164     -4.682      0.000
+    JSA_03$3           2.914      0.255     11.422      0.000
+    JSA_04$1          -1.220      0.157     -7.768      0.000
+    JSA_04$2           2.490      0.221     11.243      0.000
+
+ Variances
+    DIJ                0.696      0.172      4.044      0.000
+    APC                1.099      0.240      4.570      0.000
+    APP                0.815      0.176      4.620      0.000
+    RES                1.025      0.257      3.993      0.000
+    EXH                0.970      0.211      4.590      0.000
+    JSA                1.286      0.264      4.864      0.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    APP_01             1.000      0.000    999.000    999.000
+    APP_02             1.000      0.000    999.000    999.000
+    APP_03             1.000      0.000    999.000    999.000
+    APP_04             1.000      0.000    999.000    999.000
+    APP_05             1.000      0.000    999.000    999.000
+    RES_01             1.000      0.000    999.000    999.000
+    RES_02             1.000      0.000    999.000    999.000
+    RES_03             1.000      0.000    999.000    999.000
+    EXH_01             1.000      0.000    999.000    999.000
+    EXH_04             1.000      0.000    999.000    999.000
+    EXH_08             1.000      0.000    999.000    999.000
+    JSA_01             1.000      0.000    999.000    999.000
+    JSA_02             1.000      0.000    999.000    999.000
+    JSA_03             1.000      0.000    999.000    999.000
+    JSA_04             1.000      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.246E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             0.905      0.019     46.482      0.000
+    DIJ_02             0.855      0.022     38.600      0.000
+    DIJ_03             0.886      0.022     40.286      0.000
+    DIJ_04             0.788      0.028     28.106      0.000
+
+ APC      BY
+    APC_01            -0.754      0.032    -23.693      0.000
+    APC_02            -0.896      0.021    -42.539      0.000
+    APC_03            -0.706      0.034    -20.819      0.000
+    APC_04            -0.432      0.054     -7.928      0.000
+    APC_05            -0.972      0.016    -60.163      0.000
+
+ APP      BY
+    APP_01            -0.673      0.040    -16.659      0.000
+    APP_02            -0.842      0.030    -27.650      0.000
+    APP_03            -0.737      0.033    -22.556      0.000
+    APP_04            -0.660      0.038    -17.411      0.000
+    APP_05            -0.709      0.041    -17.435      0.000
+
+ RES      BY
+    RES_01             0.935      0.027     34.177      0.000
+    RES_02             0.700      0.042     16.607      0.000
+    RES_03             0.901      0.027     32.895      0.000
+
+ EXH      BY
+    EXH_01            -0.779      0.035    -22.298      0.000
+    EXH_04             0.868      0.027     31.623      0.000
+    EXH_08             0.819      0.033     24.947      0.000
+
+ JSA      BY
+    JSA_01             0.961      0.019     49.637      0.000
+    JSA_02             0.411      0.053      7.791      0.000
+    JSA_03             0.872      0.022     39.451      0.000
+    JSA_04             0.843      0.024     34.474      0.000
+
+ APC      WITH
+    DIJ               -0.097      0.076     -1.286      0.199
+
+ APP      WITH
+    DIJ               -0.063      0.078     -0.810      0.418
+    APC                0.480      0.062      7.772      0.000
+
+ RES      WITH
+    DIJ                0.298      0.073      4.099      0.000
+    APC                0.084      0.077      1.099      0.272
+    APP                0.092      0.076      1.218      0.223
+
+ EXH      WITH
+    DIJ                0.248      0.069      3.585      0.000
+    APC                0.189      0.069      2.728      0.006
+    APP                0.127      0.076      1.680      0.093
+    RES                0.184      0.074      2.495      0.013
+
+ JSA      WITH
+    DIJ               -0.192      0.072     -2.686      0.007
+    APC               -0.291      0.066     -4.442      0.000
+    APP               -0.322      0.070     -4.614      0.000
+    RES               -0.116      0.070     -1.662      0.097
+    EXH               -0.531      0.054     -9.801      0.000
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+    APC                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+    RES                0.000      0.000    999.000    999.000
+    EXH                0.000      0.000    999.000    999.000
+    JSA                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -1.657      0.114    -14.585      0.000
+    DIJ_01$2          -0.708      0.080     -8.858      0.000
+    DIJ_01$3          -0.110      0.078     -1.414      0.157
+    DIJ_02$1          -0.858      0.080    -10.705      0.000
+    DIJ_02$2          -0.267      0.077     -3.478      0.001
+    DIJ_03$1          -1.534      0.107    -14.302      0.000
+    DIJ_03$2          -0.643      0.080     -8.038      0.000
+    DIJ_03$3          -0.025      0.077     -0.320      0.749
+    DIJ_04$1          -1.573      0.103    -15.270      0.000
+    DIJ_04$2          -0.789      0.080     -9.873      0.000
+    DIJ_04$3          -0.187      0.076     -2.451      0.014
+    APC_01$1          -1.197      0.088    -13.599      0.000
+    APC_01$2           0.360      0.074      4.875      0.000
+    APC_02$1          -0.820      0.083     -9.918      0.000
+    APC_02$2           0.488      0.079      6.194      0.000
+    APC_03$1          -1.145      0.085    -13.499      0.000
+    APC_03$2           0.509      0.075      6.760      0.000
+    APC_04$1          -0.836      0.074    -11.219      0.000
+    APC_04$2          -0.041      0.069     -0.599      0.549
+    APC_05$1          -0.844      0.085     -9.929      0.000
+    APC_05$2           0.478      0.080      5.957      0.000
+    APP_01$1          -0.356      0.071     -4.995      0.000
+    APP_01$2           0.214      0.070      3.057      0.002
+    APP_01$3           1.310      0.095     13.777      0.000
+    APP_02$1          -0.551      0.078     -7.040      0.000
+    APP_02$2           0.773      0.081      9.572      0.000
+    APP_03$1          -1.129      0.093    -12.185      0.000
+    APP_03$2          -0.275      0.072     -3.801      0.000
+    APP_03$3           0.420      0.072      5.832      0.000
+    APP_03$4           1.503      0.104     14.392      0.000
+    APP_04$1          -0.656      0.075     -8.686      0.000
+    APP_04$2           0.128      0.068      1.868      0.062
+    APP_04$3           0.907      0.080     11.361      0.000
+    APP_05$1          -1.227      0.100    -12.315      0.000
+    APP_05$2          -0.557      0.076     -7.371      0.000
+    APP_05$3           0.348      0.072      4.798      0.000
+    RES_01$1          -0.331      0.075     -4.419      0.000
+    RES_01$2           0.831      0.087      9.583      0.000
+    RES_02$1          -1.152      0.089    -13.010      0.000
+    RES_02$2           0.225      0.071      3.146      0.002
+    RES_03$1          -0.683      0.081     -8.485      0.000
+    RES_03$2           0.393      0.077      5.123      0.000
+    EXH_01$1          -0.615      0.077     -7.933      0.000
+    EXH_01$2           1.199      0.090     13.383      0.000
+    EXH_04$1          -1.534      0.113    -13.520      0.000
+    EXH_04$2          -0.546      0.076     -7.158      0.000
+    EXH_04$3           0.488      0.078      6.277      0.000
+    EXH_08$1          -1.283      0.097    -13.242      0.000
+    EXH_08$2          -0.069      0.072     -0.954      0.340
+    EXH_08$3           0.836      0.083     10.013      0.000
+    JSA_01$1          -1.581      0.119    -13.305      0.000
+    JSA_01$2          -0.789      0.084     -9.360      0.000
+    JSA_01$3           0.943      0.086     10.962      0.000
+    JSA_02$1          -0.531      0.070     -7.589      0.000
+    JSA_02$2           0.414      0.069      6.007      0.000
+    JSA_03$1          -1.384      0.103    -13.471      0.000
+    JSA_03$2          -0.377      0.075     -4.995      0.000
+    JSA_03$3           1.429      0.105     13.604      0.000
+    JSA_04$1          -0.656      0.078     -8.417      0.000
+    JSA_04$2           1.338      0.100     13.377      0.000
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+    RES                1.000      0.000    999.000    999.000
+    EXH                1.000      0.000    999.000    999.000
+    JSA                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.180      0.035      5.117      0.000
+    DIJ_02             0.270      0.038      7.121      0.000
+    DIJ_03             0.215      0.039      5.532      0.000
+    DIJ_04             0.379      0.044      8.583      0.000
+    APC_01             0.431      0.048      8.973      0.000
+    APC_02             0.197      0.038      5.213      0.000
+    APC_03             0.501      0.048     10.452      0.000
+    APC_04             0.814      0.047     17.325      0.000
+    APC_05             0.055      0.031      1.738      0.082
+    APP_01             0.547      0.054     10.061      0.000
+    APP_02             0.292      0.051      5.692      0.000
+    APP_03             0.458      0.048      9.513      0.000
+    APP_04             0.564      0.050     11.251      0.000
+    APP_05             0.498      0.058      8.638      0.000
+    RES_01             0.125      0.051      2.447      0.014
+    RES_02             0.509      0.059      8.619      0.000
+    RES_03             0.189      0.049      3.825      0.000
+    EXH_01             0.394      0.054      7.242      0.000
+    EXH_04             0.246      0.048      5.169      0.000
+    EXH_08             0.329      0.054      6.125      0.000
+    JSA_01             0.077      0.037      2.061      0.039
+    JSA_02             0.831      0.043     19.174      0.000
+    JSA_03             0.240      0.039      6.240      0.000
+    JSA_04             0.289      0.041      6.998      0.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             0.872      0.028     31.350      0.000
+    DIJ_02             0.809      0.036     22.177      0.000
+    DIJ_03             0.847      0.030     28.158      0.000
+    DIJ_04             0.730      0.041     17.850      0.000
+
+ APC      BY
+    APC_01            -0.769      0.037    -20.927      0.000
+    APC_02            -0.904      0.021    -43.850      0.000
+    APC_03            -0.723      0.038    -18.851      0.000
+    APC_04            -0.448      0.058     -7.751      0.000
+    APC_05            -0.975      0.015    -63.107      0.000
+
+ APP      BY
+    APP_01            -0.635      0.048    -13.160      0.000
+    APP_02            -0.815      0.038    -21.548      0.000
+    APP_03            -0.701      0.041    -17.271      0.000
+    APP_04            -0.622      0.044    -14.066      0.000
+    APP_05            -0.672      0.049    -13.588      0.000
+
+ RES      BY
+    RES_01             0.937      0.027     34.660      0.000
+    RES_02             0.705      0.047     14.868      0.000
+    RES_03             0.903      0.033     27.659      0.000
+
+ EXH      BY
+    EXH_01            -0.774      0.040    -19.348      0.000
+    EXH_04             0.865      0.033     25.960      0.000
+    EXH_08             0.815      0.037     21.986      0.000
+
+ JSA      BY
+    JSA_01             0.969      0.015     63.416      0.000
+    JSA_02             0.455      0.058      7.866      0.000
+    JSA_03             0.896      0.022     40.424      0.000
+    JSA_04             0.872      0.026     33.204      0.000
+
+ APC      WITH
+    DIJ                0.074      0.112      0.658      0.511
+
+ APP      WITH
+    DIJ                0.241      0.111      2.169      0.030
+    APC                0.474      0.090      5.274      0.000
+
+ RES      WITH
+    DIJ               -0.042      0.114     -0.368      0.713
+    APC               -0.469      0.093     -5.021      0.000
+    APP               -0.287      0.103     -2.800      0.005
+
+ EXH      WITH
+    DIJ                0.276      0.102      2.704      0.007
+    APC                0.100      0.105      0.956      0.339
+    APP                0.084      0.109      0.768      0.442
+    RES               -0.052      0.101     -0.511      0.609
+
+ JSA      WITH
+    DIJ               -0.333      0.091     -3.651      0.000
+    APC               -0.122      0.106     -1.157      0.247
+    APP               -0.130      0.113     -1.154      0.248
+    RES                0.246      0.099      2.487      0.013
+    EXH               -0.413      0.088     -4.698      0.000
+
+ Means
+    DIJ               -1.682      0.197     -8.530      0.000
+    APC                0.640      0.130      4.938      0.000
+    APP               -0.252      0.132     -1.917      0.055
+    RES                0.039      0.121      0.321      0.748
+    EXH               -0.177      0.125     -1.425      0.154
+    JSA               -0.087      0.116     -0.744      0.457
+
+ Thresholds
+    DIJ_01$1          -1.912      0.169    -11.340      0.000
+    DIJ_01$2          -0.816      0.113     -7.220      0.000
+    DIJ_01$3          -0.127      0.093     -1.364      0.172
+    DIJ_02$1          -0.973      0.112     -8.701      0.000
+    DIJ_02$2          -0.302      0.093     -3.256      0.001
+    DIJ_03$1          -1.758      0.157    -11.161      0.000
+    DIJ_03$2          -0.737      0.109     -6.740      0.000
+    DIJ_03$3          -0.028      0.089     -0.318      0.751
+    DIJ_04$1          -1.746      0.126    -13.908      0.000
+    DIJ_04$2          -0.876      0.097     -9.072      0.000
+    DIJ_04$3          -0.208      0.087     -2.382      0.017
+    APC_01$1          -1.165      0.098    -11.888      0.000
+    APC_01$2           0.350      0.072      4.852      0.000
+    APC_02$1          -0.789      0.092     -8.575      0.000
+    APC_02$2           0.469      0.078      6.039      0.000
+    APC_03$1          -1.118      0.091    -12.258      0.000
+    APC_03$2           0.497      0.074      6.673      0.000
+    APC_04$1          -0.828      0.074    -11.152      0.000
+    APC_04$2          -0.041      0.068     -0.599      0.549
+    APC_05$1          -0.807      0.100     -8.093      0.000
+    APC_05$2           0.457      0.078      5.894      0.000
+    APP_01$1          -0.372      0.075     -4.935      0.000
+    APP_01$2           0.223      0.073      3.056      0.002
+    APP_01$3           1.369      0.104     13.227      0.000
+    APP_02$1          -0.591      0.085     -6.921      0.000
+    APP_02$2           0.830      0.095      8.741      0.000
+    APP_03$1          -1.190      0.104    -11.479      0.000
+    APP_03$2          -0.290      0.076     -3.796      0.000
+    APP_03$3           0.443      0.079      5.623      0.000
+    APP_03$4           1.585      0.122     12.997      0.000
+    APP_04$1          -0.684      0.081     -8.403      0.000
+    APP_04$2           0.133      0.072      1.866      0.062
+    APP_04$3           0.946      0.086     11.059      0.000
+    APP_05$1          -1.288      0.106    -12.109      0.000
+    APP_05$2          -0.585      0.080     -7.288      0.000
+    APP_05$3           0.365      0.077      4.738      0.000
+    RES_01$1          -0.327      0.078     -4.182      0.000
+    RES_01$2           0.822      0.101      8.110      0.000
+    RES_02$1          -1.145      0.099    -11.511      0.000
+    RES_02$2           0.223      0.071      3.135      0.002
+    RES_03$1          -0.676      0.093     -7.287      0.000
+    RES_03$2           0.389      0.078      5.010      0.000
+    EXH_01$1          -0.620      0.080     -7.784      0.000
+    EXH_01$2           1.210      0.107     11.326      0.000
+    EXH_04$1          -1.551      0.135    -11.521      0.000
+    EXH_04$2          -0.553      0.082     -6.701      0.000
+    EXH_04$3           0.493      0.081      6.110      0.000
+    EXH_08$1          -1.296      0.112    -11.586      0.000
+    EXH_08$2          -0.069      0.073     -0.950      0.342
+    EXH_08$3           0.844      0.092      9.162      0.000
+    JSA_01$1          -1.406      0.134    -10.512      0.000
+    JSA_01$2          -0.702      0.085     -8.213      0.000
+    JSA_01$3           0.839      0.099      8.499      0.000
+    JSA_02$1          -0.518      0.070     -7.446      0.000
+    JSA_02$2           0.404      0.067      6.017      0.000
+    JSA_03$1          -1.255      0.113    -11.066      0.000
+    JSA_03$2          -0.342      0.070     -4.875      0.000
+    JSA_03$3           1.295      0.121     10.720      0.000
+    JSA_04$1          -0.598      0.077     -7.768      0.000
+    JSA_04$2           1.219      0.113     10.770      0.000
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+    RES                1.000      0.000    999.000    999.000
+    EXH                1.000      0.000    999.000    999.000
+    JSA                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.240      0.048      4.956      0.000
+    DIJ_02             0.346      0.059      5.875      0.000
+    DIJ_03             0.283      0.051      5.553      0.000
+    DIJ_04             0.467      0.060      7.828      0.000
+    APC_01             0.408      0.057      7.213      0.000
+    APC_02             0.182      0.037      4.891      0.000
+    APC_03             0.477      0.055      8.613      0.000
+    APC_04             0.799      0.052     15.415      0.000
+    APC_05             0.050      0.030      1.659      0.097
+    APP_01             0.597      0.061      9.756      0.000
+    APP_02             0.336      0.062      5.445      0.000
+    APP_03             0.509      0.057      8.942      0.000
+    APP_04             0.613      0.055     11.157      0.000
+    APP_05             0.549      0.066      8.263      0.000
+    RES_01             0.123      0.051      2.420      0.016
+    RES_02             0.503      0.067      7.525      0.000
+    RES_03             0.185      0.059      3.136      0.002
+    EXH_01             0.401      0.062      6.476      0.000
+    EXH_04             0.252      0.058      4.373      0.000
+    EXH_08             0.336      0.060      5.563      0.000
+    JSA_01             0.061      0.030      2.047      0.041
+    JSA_02             0.793      0.053     15.051      0.000
+    JSA_03             0.197      0.040      4.971      0.000
+    JSA_04             0.240      0.046      5.240      0.000
+
+
+R-SQUARE
+
+Group PERM
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.820      0.035     23.241      0.000      0.425
+    DIJ_02             0.730      0.038     19.300      0.000      0.519
+    DIJ_03             0.785      0.039     20.143      0.000      0.464
+    DIJ_04             0.621      0.044     14.053      0.000      0.616
+    APC_01             0.569      0.048     11.846      0.000      0.657
+    APC_02             0.803      0.038     21.269      0.000      0.444
+    APC_03             0.499      0.048     10.410      0.000      0.708
+    APC_04             0.186      0.047      3.964      0.000      0.902
+    APC_05             0.945      0.031     30.081      0.000      0.234
+    APP_01             0.453      0.054      8.330      0.000      0.740
+    APP_02             0.708      0.051     13.825      0.000      0.540
+    APP_03             0.542      0.048     11.278      0.000      0.676
+    APP_04             0.436      0.050      8.705      0.000      0.751
+    APP_05             0.502      0.058      8.718      0.000      0.705
+    RES_01             0.875      0.051     17.089      0.000      0.354
+    RES_02             0.491      0.059      8.304      0.000      0.714
+    RES_03             0.811      0.049     16.448      0.000      0.434
+    EXH_01             0.606      0.054     11.149      0.000      0.628
+    EXH_04             0.754      0.048     15.811      0.000      0.496
+    EXH_08             0.671      0.054     12.474      0.000      0.574
+    JSA_01             0.923      0.037     24.819      0.000      0.277
+    JSA_02             0.169      0.043      3.896      0.000      0.912
+    JSA_03             0.760      0.039     19.726      0.000      0.490
+    JSA_04             0.711      0.041     17.237      0.000      0.537
+
+Group TEMP
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.760      0.048     15.675      0.000      0.490
+    DIJ_02             0.654      0.059     11.088      0.000      0.588
+    DIJ_03             0.717      0.051     14.079      0.000      0.532
+    DIJ_04             0.533      0.060      8.925      0.000      0.684
+    APC_01             0.592      0.057     10.464      0.000      0.639
+    APC_02             0.818      0.037     21.925      0.000      0.427
+    APC_03             0.523      0.055      9.426      0.000      0.691
+    APC_04             0.201      0.052      3.875      0.000      0.894
+    APC_05             0.950      0.030     31.554      0.000      0.223
+    APP_01             0.403      0.061      6.580      0.000      0.773
+    APP_02             0.664      0.062     10.774      0.000      0.579
+    APP_03             0.491      0.057      8.636      0.000      0.713
+    APP_04             0.387      0.055      7.033      0.000      0.783
+    APP_05             0.451      0.066      6.794      0.000      0.741
+    RES_01             0.877      0.051     17.330      0.000      0.350
+    RES_02             0.497      0.067      7.434      0.000      0.709
+    RES_03             0.815      0.059     13.829      0.000      0.430
+    EXH_01             0.599      0.062      9.674      0.000      0.633
+    EXH_04             0.748      0.058     12.980      0.000      0.502
+    EXH_08             0.664      0.060     10.993      0.000      0.580
+    JSA_01             0.939      0.030     31.708      0.000      0.246
+    JSA_02             0.207      0.053      3.933      0.000      0.890
+    JSA_03             0.803      0.040     20.212      0.000      0.444
+    JSA_04             0.760      0.046     16.602      0.000      0.490
+
+
+MODEL MODIFICATION INDICES
+
+NOTE:  Modification indices for direct effects of observed dependent variables
+regressed on covariates and residual covariances among observed dependent
+variables may not be included.  To include these, request MODINDICES (ALL).
+
+Minimum M.I. value for printing the modification index    10.000
+
+                                   M.I.     E.P.C.  Std E.P.C.  StdYX E.P.C.
+Group PERM
+
+
+BY Statements
+
+DIJ      BY APC_04                10.972    -0.192     -0.192       -0.173
+DIJ      BY JSA_04                11.320    -0.388     -0.388       -0.208
+APP      BY JSA_02                15.817    -0.217     -0.217       -0.198
+EXH      BY APC_04                11.973    -0.200     -0.200       -0.180
+EXH      BY RES_02                14.532    -0.301     -0.301       -0.215
+EXH      BY RES_03                10.783     0.477      0.477        0.207
+EXH      BY JSA_04                10.107    -0.438     -0.438       -0.235
+JSA      BY APC_04                11.576     0.186      0.186        0.167
+JSA      BY RES_02                15.738     0.285      0.285        0.204
+JSA      BY RES_03                14.751    -0.500     -0.500       -0.217
+JSA      BY EXH_01                11.618     0.358      0.358        0.225
+
+Group TEMP
+
+
+BY Statements
+
+APP      BY RES_02                12.787    -0.337     -0.304       -0.216
+
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              APC_05$2      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                 21            22            23            24            25
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                 26            27            28            29            30
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+                 31            32            33            34            35
+
+
+           TAU
+              APP_05$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                 36            37            38            39            40
+
+
+           TAU
+              RES_03$1      RES_03$2      EXH_01$1      EXH_01$2      EXH_04$1
+              ________      ________      ________      ________      ________
+                 41            42            43            44            45
+
+
+           TAU
+              EXH_04$2      EXH_04$3      EXH_08$1      EXH_08$2      EXH_08$3
+              ________      ________      ________      ________      ________
+                 46            47            48            49            50
+
+
+           TAU
+              JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1      JSA_02$2
+              ________      ________      ________      ________      ________
+                 51            52            53            54            55
+
+
+           TAU
+              JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1      JSA_04$2
+              ________      ________      ________      ________      ________
+                 56            57            58            59            60
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+                  0             0             0             0
+
+
+           LAMBDA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ_01            61             0             0             0             0
+ DIJ_02            62             0             0             0             0
+ DIJ_03            63             0             0             0             0
+ DIJ_04            64             0             0             0             0
+ APC_01             0            65             0             0             0
+ APC_02             0            66             0             0             0
+ APC_03             0            67             0             0             0
+ APC_04             0            68             0             0             0
+ APC_05             0            69             0             0             0
+ APP_01             0             0            70             0             0
+ APP_02             0             0            71             0             0
+ APP_03             0             0            72             0             0
+ APP_04             0             0            73             0             0
+ APP_05             0             0            74             0             0
+ RES_01             0             0             0            75             0
+ RES_02             0             0             0            76             0
+ RES_03             0             0             0            77             0
+ EXH_01             0             0             0             0            78
+ EXH_04             0             0             0             0            79
+ EXH_08             0             0             0             0            80
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           LAMBDA
+              JSA
+              ________
+ DIJ_01             0
+ DIJ_02             0
+ DIJ_03             0
+ DIJ_04             0
+ APC_01             0
+ APC_02             0
+ APC_03             0
+ APC_04             0
+ APC_05             0
+ APP_01             0
+ APP_02             0
+ APP_03             0
+ APP_04             0
+ APP_05             0
+ RES_01             0
+ RES_02             0
+ RES_03             0
+ EXH_01             0
+ EXH_04             0
+ EXH_08             0
+ JSA_01            81
+ JSA_02            82
+ JSA_03            83
+ JSA_04            84
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ APC_01             0             0             0             0             0
+ APC_02             0             0             0             0             0
+ APC_03             0             0             0             0             0
+ APC_04             0             0             0             0             0
+ APC_05             0             0             0             0             0
+ APP_01             0             0             0             0             0
+ APP_02             0             0             0             0             0
+ APP_03             0             0             0             0             0
+ APP_04             0             0             0             0             0
+ APP_05             0             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02             0
+ APC_03             0             0
+ APC_04             0             0             0
+ APC_05             0             0             0             0
+ APP_01             0             0             0             0             0
+ APP_02             0             0             0             0             0
+ APP_03             0             0             0             0             0
+ APP_04             0             0             0             0             0
+ APP_05             0             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02             0
+ APP_03             0             0
+ APP_04             0             0             0
+ APP_05             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02             0
+ RES_03             0             0
+ EXH_01             0             0             0
+ EXH_04             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01             0
+ JSA_02             0             0
+ JSA_03             0             0             0
+ JSA_04             0             0             0             0
+
+
+           ALPHA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           ALPHA
+              JSA
+              ________
+                  0
+
+
+           BETA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ                0             0             0             0             0
+ APC                0             0             0             0             0
+ APP                0             0             0             0             0
+ RES                0             0             0             0             0
+ EXH                0             0             0             0             0
+ JSA                0             0             0             0             0
+
+
+           BETA
+              JSA
+              ________
+ DIJ                0
+ APC                0
+ APP                0
+ RES                0
+ EXH                0
+ JSA                0
+
+
+           PSI
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ                0
+ APC               85             0
+ APP               86            87             0
+ RES               88            89            90             0
+ EXH               91            92            93            94             0
+ JSA               95            96            97            98            99
+
+
+           PSI
+              JSA
+              ________
+ JSA                0
+
+
+     PARAMETER SPECIFICATION FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              APC_05$2      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                 21            22            23            24            25
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                 26            27            28            29            30
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+                 31            32            33            34            35
+
+
+           TAU
+              APP_05$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                 36            37            38            39            40
+
+
+           TAU
+              RES_03$1      RES_03$2      EXH_01$1      EXH_01$2      EXH_04$1
+              ________      ________      ________      ________      ________
+                 41            42            43            44            45
+
+
+           TAU
+              EXH_04$2      EXH_04$3      EXH_08$1      EXH_08$2      EXH_08$3
+              ________      ________      ________      ________      ________
+                 46            47            48            49            50
+
+
+           TAU
+              JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1      JSA_02$2
+              ________      ________      ________      ________      ________
+                 51            52            53            54            55
+
+
+           TAU
+              JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1      JSA_04$2
+              ________      ________      ________      ________      ________
+                 56            57            58            59            60
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+                  0             0             0             0
+
+
+           LAMBDA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ_01            61             0             0             0             0
+ DIJ_02            62             0             0             0             0
+ DIJ_03            63             0             0             0             0
+ DIJ_04            64             0             0             0             0
+ APC_01             0            65             0             0             0
+ APC_02             0            66             0             0             0
+ APC_03             0            67             0             0             0
+ APC_04             0            68             0             0             0
+ APC_05             0            69             0             0             0
+ APP_01             0             0            70             0             0
+ APP_02             0             0            71             0             0
+ APP_03             0             0            72             0             0
+ APP_04             0             0            73             0             0
+ APP_05             0             0            74             0             0
+ RES_01             0             0             0            75             0
+ RES_02             0             0             0            76             0
+ RES_03             0             0             0            77             0
+ EXH_01             0             0             0             0            78
+ EXH_04             0             0             0             0            79
+ EXH_08             0             0             0             0            80
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           LAMBDA
+              JSA
+              ________
+ DIJ_01             0
+ DIJ_02             0
+ DIJ_03             0
+ DIJ_04             0
+ APC_01             0
+ APC_02             0
+ APC_03             0
+ APC_04             0
+ APC_05             0
+ APP_01             0
+ APP_02             0
+ APP_03             0
+ APP_04             0
+ APP_05             0
+ RES_01             0
+ RES_02             0
+ RES_03             0
+ EXH_01             0
+ EXH_04             0
+ EXH_08             0
+ JSA_01            81
+ JSA_02            82
+ JSA_03            83
+ JSA_04            84
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ APC_01             0             0             0             0             0
+ APC_02             0             0             0             0             0
+ APC_03             0             0             0             0             0
+ APC_04             0             0             0             0             0
+ APC_05             0             0             0             0             0
+ APP_01             0             0             0             0             0
+ APP_02             0             0             0             0             0
+ APP_03             0             0             0             0             0
+ APP_04             0             0             0             0             0
+ APP_05             0             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02             0
+ APC_03             0             0
+ APC_04             0             0             0
+ APC_05             0             0             0             0
+ APP_01             0             0             0             0             0
+ APP_02             0             0             0             0             0
+ APP_03             0             0             0             0             0
+ APP_04             0             0             0             0             0
+ APP_05             0             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02             0
+ APP_03             0             0
+ APP_04             0             0             0
+ APP_05             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+ EXH_01             0             0             0             0             0
+ EXH_04             0             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02             0
+ RES_03             0             0
+ EXH_01             0             0             0
+ EXH_04             0             0             0             0
+ EXH_08             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+
+
+           THETA
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01             0
+ JSA_02             0             0
+ JSA_03             0             0             0
+ JSA_04             0             0             0             0
+
+
+           ALPHA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                100           101           102           103           104
+
+
+           ALPHA
+              JSA
+              ________
+                105
+
+
+           BETA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ                0             0             0             0             0
+ APC                0             0             0             0             0
+ APP                0             0             0             0             0
+ RES                0             0             0             0             0
+ EXH                0             0             0             0             0
+ JSA                0             0             0             0             0
+
+
+           BETA
+              JSA
+              ________
+ DIJ                0
+ APC                0
+ APP                0
+ RES                0
+ EXH                0
+ JSA                0
+
+
+           PSI
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ              106
+ APC              107           108
+ APP              109           110           111
+ RES              112           113           114           115
+ EXH              116           117           118           119           120
+ JSA              121           122           123           124           125
+
+
+           PSI
+              JSA
+              ________
+ JSA              126
+
+
+     STARTING VALUES FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.666        -0.762        -0.055        -0.862        -0.241
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -1.520        -0.690        -0.015        -1.563        -0.853
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+               -0.149        -1.183         0.352        -0.869         0.491
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+               -1.075         0.542        -0.858        -0.111        -0.903
+
+
+           TAU
+              APC_05$2      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                0.542        -0.296         0.255         1.255        -0.508
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                0.760        -1.225        -0.259         0.384         1.563
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+               -0.671         0.163         0.929        -1.329        -0.595
+
+
+           TAU
+              APP_05$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                0.348        -0.341         0.807        -1.146         0.232
+
+
+           TAU
+              RES_03$1      RES_03$2      EXH_01$1      EXH_01$2      EXH_04$1
+              ________      ________      ________      ________      ________
+               -0.642         0.379        -0.665         1.162        -1.612
+
+
+           TAU
+              EXH_04$2      EXH_04$3      EXH_08$1      EXH_08$2      EXH_08$3
+              ________      ________      ________      ________      ________
+               -0.576         0.498        -1.329        -0.034         0.804
+
+
+           TAU
+              JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1      JSA_02$2
+              ________      ________      ________      ________      ________
+               -1.609        -0.801         0.869        -0.434         0.521
+
+
+           TAU
+              JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1      JSA_04$2
+              ________      ________      ________      ________      ________
+               -1.428        -0.389         1.428        -0.604         1.304
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ_01         0.869         0.000         0.000         0.000         0.000
+ DIJ_02         0.883         0.000         0.000         0.000         0.000
+ DIJ_03         0.873         0.000         0.000         0.000         0.000
+ DIJ_04         0.814         0.000         0.000         0.000         0.000
+ APC_01         0.000         0.763         0.000         0.000         0.000
+ APC_02         0.000         0.905         0.000         0.000         0.000
+ APC_03         0.000         0.703         0.000         0.000         0.000
+ APC_04         0.000         0.451         0.000         0.000         0.000
+ APC_05         0.000         0.960         0.000         0.000         0.000
+ APP_01         0.000         0.000         0.726         0.000         0.000
+ APP_02         0.000         0.000         0.801         0.000         0.000
+ APP_03         0.000         0.000         0.734         0.000         0.000
+ APP_04         0.000         0.000         0.605         0.000         0.000
+ APP_05         0.000         0.000         0.761         0.000         0.000
+ RES_01         0.000         0.000         0.000         0.932         0.000
+ RES_02         0.000         0.000         0.000         0.684         0.000
+ RES_03         0.000         0.000         0.000         0.913         0.000
+ EXH_01         0.000         0.000         0.000         0.000        -1.000
+ EXH_04         0.000         0.000         0.000         0.000         1.000
+ EXH_08         0.000         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              JSA
+              ________
+ DIJ_01         0.000
+ DIJ_02         0.000
+ DIJ_03         0.000
+ DIJ_04         0.000
+ APC_01         0.000
+ APC_02         0.000
+ APC_03         0.000
+ APC_04         0.000
+ APC_05         0.000
+ APP_01         0.000
+ APP_02         0.000
+ APP_03         0.000
+ APP_04         0.000
+ APP_05         0.000
+ RES_01         0.000
+ RES_02         0.000
+ RES_03         0.000
+ EXH_01         0.000
+ EXH_04         0.000
+ EXH_08         0.000
+ JSA_01         0.947
+ JSA_02         0.374
+ JSA_03         0.893
+ JSA_04         0.832
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ APC_01         0.000         0.000         0.000         0.000         1.000
+ APC_02         0.000         0.000         0.000         0.000         0.000
+ APC_03         0.000         0.000         0.000         0.000         0.000
+ APC_04         0.000         0.000         0.000         0.000         0.000
+ APC_05         0.000         0.000         0.000         0.000         0.000
+ APP_01         0.000         0.000         0.000         0.000         0.000
+ APP_02         0.000         0.000         0.000         0.000         0.000
+ APP_03         0.000         0.000         0.000         0.000         0.000
+ APP_04         0.000         0.000         0.000         0.000         0.000
+ APP_05         0.000         0.000         0.000         0.000         0.000
+ RES_01         0.000         0.000         0.000         0.000         0.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         0.000         1.000
+ APC_04         0.000         0.000         1.000
+ APC_05         0.000         0.000         0.000         1.000
+ APP_01         0.000         0.000         0.000         0.000         1.000
+ APP_02         0.000         0.000         0.000         0.000         0.000
+ APP_03         0.000         0.000         0.000         0.000         0.000
+ APP_04         0.000         0.000         0.000         0.000         0.000
+ APP_05         0.000         0.000         0.000         0.000         0.000
+ RES_01         0.000         0.000         0.000         0.000         0.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02         1.000
+ APP_03         0.000         1.000
+ APP_04         0.000         0.000         1.000
+ APP_05         0.000         0.000         0.000         1.000
+ RES_01         0.000         0.000         0.000         0.000         1.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02         1.000
+ RES_03         0.000         1.000
+ EXH_01         0.000         0.000         1.000
+ EXH_04         0.000         0.000         0.000         1.000
+ EXH_08         0.000         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01         1.000
+ JSA_02         0.000         1.000
+ JSA_03         0.000         0.000         1.000
+ JSA_04         0.000         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              JSA
+              ________
+                0.000
+
+
+           BETA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000         0.000         0.000         0.000         0.000
+ APC            0.000         0.000         0.000         0.000         0.000
+ APP            0.000         0.000         0.000         0.000         0.000
+ RES            0.000         0.000         0.000         0.000         0.000
+ EXH            0.000         0.000         0.000         0.000         0.000
+ JSA            0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              JSA
+              ________
+ DIJ            0.000
+ APC            0.000
+ APP            0.000
+ RES            0.000
+ EXH            0.000
+ JSA            0.000
+
+
+           PSI
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APC            0.000         1.000
+ APP            0.000         0.000         1.000
+ RES            0.000         0.000         0.000         1.000
+ EXH            0.000         0.000         0.000         0.000         1.000
+ JSA            0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              JSA
+              ________
+ JSA            1.000
+
+
+     STARTING VALUES FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.053        -0.005         0.556        -0.235         0.375
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -0.932         0.045         0.672        -1.045        -0.199
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                0.384        -0.939         0.609        -0.498         0.764
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+               -0.929         0.707        -0.679         0.149        -0.493
+
+
+           TAU
+              APC_05$2      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                0.722        -0.485         0.117         1.293        -0.705
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                0.704        -1.201        -0.381         0.361         1.440
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+               -0.739         0.034         0.839        -1.295        -0.635
+
+
+           TAU
+              APP_05$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                0.272        -0.341         0.824        -1.166         0.206
+
+
+           TAU
+              RES_03$1      RES_03$2      EXH_01$1      EXH_01$2      EXH_04$1
+              ________      ________      ________      ________      ________
+               -0.727         0.382        -0.657         1.156        -1.447
+
+
+           TAU
+              EXH_04$2      EXH_04$3      EXH_08$1      EXH_08$2      EXH_08$3
+              ________      ________      ________      ________      ________
+               -0.458         0.561        -1.201        -0.017         0.938
+
+
+           TAU
+              JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1      JSA_02$2
+              ________      ________      ________      ________      ________
+               -1.443        -0.696         1.007        -0.582         0.369
+
+
+           TAU
+              JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1      JSA_04$2
+              ________      ________      ________      ________      ________
+               -1.264        -0.312         1.401        -0.626         1.343
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ_01         0.909         0.000         0.000         0.000         0.000
+ DIJ_02         0.782         0.000         0.000         0.000         0.000
+ DIJ_03         0.876         0.000         0.000         0.000         0.000
+ DIJ_04         0.595         0.000         0.000         0.000         0.000
+ APC_01         0.000         0.782         0.000         0.000         0.000
+ APC_02         0.000         0.873         0.000         0.000         0.000
+ APC_03         0.000         0.721         0.000         0.000         0.000
+ APC_04         0.000         0.388         0.000         0.000         0.000
+ APC_05         0.000         0.957         0.000         0.000         0.000
+ APP_01         0.000         0.000         0.644         0.000         0.000
+ APP_02         0.000         0.000         0.747         0.000         0.000
+ APP_03         0.000         0.000         0.715         0.000         0.000
+ APP_04         0.000         0.000         0.683         0.000         0.000
+ APP_05         0.000         0.000         0.608         0.000         0.000
+ RES_01         0.000         0.000         0.000         1.005         0.000
+ RES_02         0.000         0.000         0.000         0.656         0.000
+ RES_03         0.000         0.000         0.000         0.848         0.000
+ EXH_01         0.000         0.000         0.000         0.000        -1.000
+ EXH_04         0.000         0.000         0.000         0.000         1.000
+ EXH_08         0.000         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              JSA
+              ________
+ DIJ_01         0.000
+ DIJ_02         0.000
+ DIJ_03         0.000
+ DIJ_04         0.000
+ APC_01         0.000
+ APC_02         0.000
+ APC_03         0.000
+ APC_04         0.000
+ APC_05         0.000
+ APP_01         0.000
+ APP_02         0.000
+ APP_03         0.000
+ APP_04         0.000
+ APP_05         0.000
+ RES_01         0.000
+ RES_02         0.000
+ RES_03         0.000
+ EXH_01         0.000
+ EXH_04         0.000
+ EXH_08         0.000
+ JSA_01         1.029
+ JSA_02         0.497
+ JSA_03         0.873
+ JSA_04         0.833
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ APC_01         0.000         0.000         0.000         0.000         1.000
+ APC_02         0.000         0.000         0.000         0.000         0.000
+ APC_03         0.000         0.000         0.000         0.000         0.000
+ APC_04         0.000         0.000         0.000         0.000         0.000
+ APC_05         0.000         0.000         0.000         0.000         0.000
+ APP_01         0.000         0.000         0.000         0.000         0.000
+ APP_02         0.000         0.000         0.000         0.000         0.000
+ APP_03         0.000         0.000         0.000         0.000         0.000
+ APP_04         0.000         0.000         0.000         0.000         0.000
+ APP_05         0.000         0.000         0.000         0.000         0.000
+ RES_01         0.000         0.000         0.000         0.000         0.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05        APP_01
+              ________      ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         0.000         1.000
+ APC_04         0.000         0.000         1.000
+ APC_05         0.000         0.000         0.000         1.000
+ APP_01         0.000         0.000         0.000         0.000         1.000
+ APP_02         0.000         0.000         0.000         0.000         0.000
+ APP_03         0.000         0.000         0.000         0.000         0.000
+ APP_04         0.000         0.000         0.000         0.000         0.000
+ APP_05         0.000         0.000         0.000         0.000         0.000
+ RES_01         0.000         0.000         0.000         0.000         0.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        RES_01
+              ________      ________      ________      ________      ________
+ APP_02         1.000
+ APP_03         0.000         1.000
+ APP_04         0.000         0.000         1.000
+ APP_05         0.000         0.000         0.000         1.000
+ RES_01         0.000         0.000         0.000         0.000         1.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+ EXH_01         0.000         0.000         0.000         0.000         0.000
+ EXH_04         0.000         0.000         0.000         0.000         0.000
+ EXH_08         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              RES_02        RES_03        EXH_01        EXH_04        EXH_08
+              ________      ________      ________      ________      ________
+ RES_02         1.000
+ RES_03         0.000         1.000
+ EXH_01         0.000         0.000         1.000
+ EXH_04         0.000         0.000         0.000         1.000
+ EXH_08         0.000         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              JSA_01        JSA_02        JSA_03        JSA_04
+              ________      ________      ________      ________
+ JSA_01         1.000
+ JSA_02         0.000         1.000
+ JSA_03         0.000         0.000         1.000
+ JSA_04         0.000         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              JSA
+              ________
+                0.000
+
+
+           BETA
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000         0.000         0.000         0.000         0.000
+ APC            0.000         0.000         0.000         0.000         0.000
+ APP            0.000         0.000         0.000         0.000         0.000
+ RES            0.000         0.000         0.000         0.000         0.000
+ EXH            0.000         0.000         0.000         0.000         0.000
+ JSA            0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              JSA
+              ________
+ DIJ            0.000
+ APC            0.000
+ APP            0.000
+ RES            0.000
+ EXH            0.000
+ JSA            0.000
+
+
+           PSI
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APC            0.000         1.000
+ APP            0.000         0.000         1.000
+ RES            0.000         0.000         0.000         1.000
+ EXH            0.000         0.000         0.000         0.000         1.000
+ JSA            0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              JSA
+              ________
+ JSA            1.000
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                0.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APC           -0.097         1.000
+ APP           -0.063         0.480         1.000
+ RES            0.298         0.084         0.092         1.000
+ EXH            0.248         0.189         0.127         0.184         1.000
+ JSA           -0.192        -0.291        -0.322        -0.116        -0.531
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            1.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APC           -0.097         1.000
+ APP           -0.063         0.480         1.000
+ RES            0.298         0.084         0.092         1.000
+ EXH            0.248         0.189         0.127         0.184         1.000
+ JSA           -0.192        -0.291        -0.322        -0.116        -0.531
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+               -1.404         0.671        -0.228         0.039        -0.175
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+               -0.098
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.696
+ APC            0.064         1.099
+ APP            0.182         0.448         0.815
+ RES           -0.035        -0.498        -0.263         1.025
+ EXH            0.227         0.103         0.075        -0.052         0.970
+ JSA           -0.315        -0.145        -0.133         0.283        -0.462
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            1.286
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APC            0.074         1.000
+ APP            0.241         0.474         1.000
+ RES           -0.042        -0.469        -0.287         1.000
+ EXH            0.276         0.100         0.084        -0.052         1.000
+ JSA           -0.333        -0.122        -0.130         0.246        -0.413
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                0.000
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                1.000         1.000         1.000         1.000         1.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                1.000
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.076         0.000
+ APP            0.078         0.062         0.000
+ RES            0.073         0.077         0.076         0.000
+ EXH            0.069         0.069         0.076         0.074         0.000
+ JSA            0.072         0.066         0.070         0.070         0.054
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ      ***********
+ APC           -1.286   ***********
+ APP           -0.810         7.772   ***********
+ RES            4.099         1.099         1.218   ***********
+ EXH            3.585         2.728         1.680         2.495   ***********
+ JSA           -2.686        -4.442        -4.614        -1.662        -9.801
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA      ***********
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.199         0.000
+ APP            0.418         0.000         0.000
+ RES            0.000         0.272         0.223         0.000
+ EXH            0.000         0.006         0.093         0.013         0.000
+ JSA            0.007         0.000         0.000         0.097         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.076         0.000
+ APP            0.078         0.062         0.000
+ RES            0.073         0.077         0.076         0.000
+ EXH            0.069         0.069         0.076         0.074         0.000
+ JSA            0.072         0.066         0.070         0.070         0.054
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ          999.000
+ APC           -1.286       999.000
+ APP           -0.810         7.772       999.000
+ RES            4.099         1.099         1.218       999.000
+ EXH            3.585         2.728         1.680         2.495       999.000
+ JSA           -2.686        -4.442        -4.614        -1.662        -9.801
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA          999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.199         0.000
+ APP            0.418         0.000         0.000
+ RES            0.000         0.272         0.223         0.000
+ EXH            0.000         0.006         0.093         0.013         0.000
+ JSA            0.007         0.000         0.000         0.097         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.136         0.129         0.117         0.123         0.122
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                0.132
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+              -10.303         5.189        -1.941         0.321        -1.437
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+               -0.743
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.052         0.748         0.151
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              JSA
+              ________
+                0.457
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.172
+ APC            0.101         0.240
+ APP            0.090         0.132         0.176
+ RES            0.097         0.140         0.109         0.257
+ EXH            0.098         0.111         0.097         0.102         0.211
+ JSA            0.101         0.127         0.118         0.128         0.133
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.264
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            4.044
+ APC            0.639         4.570
+ APP            2.028         3.399         4.620
+ RES           -0.365        -3.560        -2.406         3.993
+ EXH            2.306         0.933         0.770        -0.505         4.590
+ JSA           -3.109        -1.140        -1.128         2.212        -3.461
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            4.864
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.523         0.000
+ APP            0.043         0.001         0.000
+ RES            0.715         0.000         0.016         0.000
+ EXH            0.021         0.351         0.441         0.614         0.000
+ JSA            0.002         0.254         0.259         0.027         0.001
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.112         0.000
+ APP            0.111         0.090         0.000
+ RES            0.114         0.093         0.103         0.000
+ EXH            0.102         0.105         0.109         0.101         0.000
+ JSA            0.091         0.106         0.113         0.099         0.088
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ          999.000
+ APC            0.658       999.000
+ APP            2.169         5.274       999.000
+ RES           -0.368        -5.021        -2.800       999.000
+ EXH            2.704         0.956         0.768        -0.511       999.000
+ JSA           -3.651        -1.157        -1.154         2.487        -4.698
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA          999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC           APP           RES           EXH
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APC            0.511         0.000
+ APP            0.030         0.000         0.000
+ RES            0.713         0.000         0.005         0.000
+ EXH            0.007         0.339         0.442         0.609         0.000
+ JSA            0.000         0.247         0.248         0.013         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              JSA
+              ________
+ JSA            0.000
+
+
+SAVEDATA INFORMATION
+
+
+  Difference testing
+
+  Save file
+    02_scalar.diff
+  Save format      Free
+
+     Beginning Time:  09:41:29
+        Ending Time:  09:41:31
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen

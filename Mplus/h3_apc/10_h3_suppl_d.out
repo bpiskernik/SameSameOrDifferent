@@ -1,0 +1,371 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   1:38 PM
+
+INPUT INSTRUCTIONS
+
+  DATA:
+
+      FILE = "../measurement_invariance/10_fscores.dat";
+
+  VARIABLE:
+
+      NAMES =
+      DIJ_01
+      DIJ_02
+      DIJ_03
+      DIJ_04
+      APC_01
+      APC_02
+      APC_03
+      APC_04
+      APC_05
+      APP_01
+      APP_02
+      APP_03
+      APP_04
+      APP_05
+      RES_01
+      RES_02
+      RES_03
+      EXH_01
+      EXH_04
+      EXH_08
+      JSA_01
+      JSA_02
+      JSA_03
+      JSA_04
+      WH_GROUP
+      INC_INS
+      IN_EX
+      DIJ
+      DIJ_SE
+      APC
+      APC_SE
+      APP
+      APP_SE
+      RES
+      RES_SE
+      EXH
+      EXH_SE
+      JSA
+      JSA_SE
+      GROUP
+      ;
+
+      MISSING = *;
+
+      USEVARIABLES =
+          wh_group
+          dij
+          apc
+          jsa
+          ;
+
+      CLASSES = pt (2);
+      KNOWNCLASS = pt (GROUP = 1 GROUP = 2);
+
+    DEFINE:
+      CENTER wh_group (GRANDMEAN);
+
+    ANALYSIS:
+        TYPE = RANDOM MIXTURE;
+        processors = 4;
+        MITERATIONS = 5000;
+
+    MODEL:
+        %OVERALL%
+        JSA on WH_GROUP;
+
+        s | JSA on DIJ;
+        s on
+          APC
+          WH_GROUP
+          ;
+        JSA on APC;
+
+        [s];
+        s@0.001; !fix to avoid saddle point
+
+        %pt#1%
+        s on APC (mod1);
+
+        APC with DIJ;
+
+        [s] (slope);
+        [JSA] (inter);
+
+        !s*; !fix to avoid saddle point
+        JSA*;
+        DIJ*;
+        APC*;
+
+
+        %pt#2%
+        s on APC (mod2);
+
+        APC with DIJ;
+
+        [s] (slope);
+        [JSA] (inter);
+
+        !s*; !fix to avoid saddle point
+        JSA*;
+        DIJ*;
+        APC*;
+
+
+    MODEL TEST:
+        0 = mod1-mod2;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         381
+
+Number of dependent variables                                    1
+Number of independent variables                                  3
+Number of continuous latent variables                            1
+Number of categorical latent variables                           1
+
+Observed dependent variables
+
+  Continuous
+   JSA
+
+Observed independent variables
+   WH_GROUP    DIJ         APC
+
+Continuous latent variables
+   S
+
+Categorical latent variables
+   PT
+
+  Knownclass            PT
+
+Variables with special functions
+
+  Centering (GRANDMEAN)
+   WH_GROUP
+
+
+Estimator                                                      MLR
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                5000
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-03
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+
+Input data file(s)
+  ../measurement_invariance/10_fscores.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns             1
+     Number of y missing data patterns           1
+     Number of u missing data patterns           0
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR Y
+
+
+           Covariance Coverage
+              JSA           DIJ           APC           WH_GROUP
+              ________      ________      ________      ________
+ JSA            1.000
+ DIJ            1.000         1.000
+ APC            1.000         1.000         1.000
+ WH_GROUP       1.000         1.000         1.000         1.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     JSA                  -0.030      -0.118      -2.159    0.26%      -0.889     -0.291      0.153
+             381.000       0.884      -0.393       2.122    0.26%       0.281      0.573
+     DIJ                  -0.493      -0.239      -2.694    0.26%      -1.415     -0.721     -0.461
+             381.000       0.974      -0.906       1.184    0.26%      -0.178      0.668
+     APC                  -0.214       0.031      -2.538    0.26%      -1.090     -0.412     -0.246
+             381.000       0.833      -0.708       1.650    0.26%      -0.086      0.706
+     WH_GROUP              0.000      -1.754      -3.449    1.57%      -0.449      0.551      0.551
+             381.000       0.888       2.388       0.551   67.98%       0.551      0.551
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       20
+
+Loglikelihood
+
+          H0 Value                       -1998.862
+          H0 Scaling Correction Factor      0.9261
+            for MLR
+
+Information Criteria
+
+          Akaike (AIC)                    4037.724
+          Bayesian (BIC)                  4116.580
+          Sample-Size Adjusted BIC        4053.124
+            (n* = (n + 2) / 24)
+
+Wald Test of Parameter Constraints
+
+          Value                              6.674
+          Degrees of Freedom                     1
+          P-Value                           0.0098
+
+
+
+FINAL CLASS COUNTS AND PROPORTIONS FOR THE LATENT CLASSES
+BASED ON THE ESTIMATED MODEL
+
+    Latent
+   Classes
+
+       1        262.00000          0.68766
+       2        119.00000          0.31234
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Latent Class 1 (1)
+
+ S          ON
+    APC               -0.085      0.057     -1.480      0.139
+    WH_GROUP          -0.047      0.045     -1.042      0.297
+
+ JSA        ON
+    WH_GROUP          -0.126      0.058     -2.147      0.032
+    APC                0.411      0.055      7.507      0.000
+
+ APC      WITH
+    DIJ                0.090      0.044      2.042      0.041
+
+ Means
+    DIJ               -0.085      0.050     -1.711      0.087
+    APC               -0.023      0.052     -0.433      0.665
+
+ Intercepts
+    JSA               -0.048      0.048     -0.991      0.321
+    S                 -0.209      0.044     -4.790      0.000
+
+ Variances
+    DIJ                0.649      0.051     12.683      0.000
+    APC                0.722      0.052     13.873      0.000
+
+ Residual Variances
+    JSA                0.668      0.057     11.742      0.000
+    S                  0.001      0.000    999.000    999.000
+
+Latent Class 2 (2)
+
+ S          ON
+    APC                0.128      0.063      2.045      0.041
+    WH_GROUP          -0.047      0.045     -1.042      0.297
+
+ JSA        ON
+    WH_GROUP          -0.126      0.058     -2.147      0.032
+    APC                0.411      0.055      7.507      0.000
+
+ APC      WITH
+    DIJ               -0.041      0.072     -0.567      0.570
+
+ Means
+    DIJ               -1.390      0.066    -21.059      0.000
+    APC               -0.634      0.083     -7.646      0.000
+
+ Intercepts
+    JSA               -0.048      0.048     -0.991      0.321
+    S                 -0.209      0.044     -4.790      0.000
+
+ Variances
+    DIJ                0.518      0.061      8.531      0.000
+    APC                0.819      0.086      9.483      0.000
+
+ Residual Variances
+    JSA                0.930      0.119      7.825      0.000
+    S                  0.001      0.000    999.000    999.000
+
+Categorical Latent Variables
+
+ Means
+    PT#1               0.789      0.111      7.139      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.364E-01
+       (ratio of smallest to largest eigenvalue)
+
+
+     Beginning Time:  13:38:43
+        Ending Time:  13:38:45
+       Elapsed Time:  00:00:02
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen

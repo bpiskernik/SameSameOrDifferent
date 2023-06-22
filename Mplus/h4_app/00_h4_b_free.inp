@@ -1,0 +1,209 @@
+DATA: FILE = "../../data/transforms/mplus.dat";
+
+VARIABLE: 
+
+    NAMES = 
+    group group_detail wh_group 
+dij_01 dij_02 dij_03 dij_04
+apc_01 apc_02 apc_03 apc_04 apc_05
+app_01 app_02 app_03 app_04 app_05
+res_01 res_02 res_03
+exh_01 exh_04 exh_08
+jsa_01 jsa_02 jsa_03 jsa_04
+in_ex inc_ins
+; 
+
+    MISSING = .;
+
+    USEVARIABLES =
+        dij_01-dij_04
+        !apc_01-apc_05
+        app_01-app_05
+        !res_01-res_03
+        !exh_01 exh_04 exh_08
+        !jsa_01 jsa_02 jsa_03 jsa_04
+        wh_group
+        ;
+
+    
+    categorical =
+        dij_01-app_05;
+
+    grouping = group (1 = perm, 2 = temp);
+    
+    
+    DEFINE:
+        CENTER wh_group (GRANDMEAN);
+
+ANALYSIS:
+    estimator = WLSMV;
+    PARAMETERIZATION = THETA;
+    STARTS=20;
+
+MODEL:
+
+    !! PERM
+
+        ! Factor loadings fixed
+        DIJ by
+            dij_01* (f_dij_01) 
+            dij_02* (f_dij_02)  
+            dij_03* (f_dij_03) 
+            dij_04* (f_dij_04)
+            ;
+
+        APP by
+            app_01* (f_app_01) 
+            app_02* (f_app_02) 
+            app_03* (f_app_03) 
+            app_04* (f_app_04) 
+            app_05* (f_app_05)
+            ;
+        
+
+        ! Item thresholds are fix
+
+        !DIJ
+        [dij_01$1*] (t1dij_01);
+        [dij_01$2*] (t2dij_01);
+        [dij_01$3*] (t3dij_01);
+
+        [dij_02$1*] (t1dij_02);
+        [dij_02$2*] (t2dij_02);
+
+        [dij_03$1*] (t1dij_03);
+        [dij_03$2*] (t2dij_03);
+        [dij_03$3*] (t3dij_03);
+
+        [dij_04$1*] (t1dij_04);
+        [dij_04$2*] (t2dij_04);
+        [dij_04$3*] (t3dij_04);
+
+        !APP
+        [app_01$1*] (t1app_01);
+        [app_01$2*] (t2app_01);
+        [app_01$3*] (t3app_01);
+
+        [app_02$1*] (t1app_02);
+        [app_02$2*] (t2app_02);
+
+        [app_03$1*] (t1app_03);
+        [app_03$2*] (t2app_03);
+        [app_03$3*] (t3app_03);
+        [app_03$4*] (t4app_03);
+
+        [app_04$1*] (t1app_04);
+        [app_04$2*] (t2app_04);
+        [app_04$3*] (t3app_04);
+
+        [app_05$1*] (t1app_05);
+        [app_05$2*] (t2app_05);
+        [app_05$3*] (t3app_05);
+
+
+        ! Item residual variances all fixed=1
+        dij_01-app_05@1;
+
+
+        ! Factors mean=0 and variance=1 for identification
+
+        [DIJ@0];
+        [APP@0];
+
+        !DIJ* (dij_var);
+        DIJ@0.996; !this is the residual variance; sets total variance to 1
+        APP@1;
+
+        ! Hypothesis
+        DIJ on
+            wh_group (wh_b)
+            APP* (app_b)
+            ;
+    
+MODEL temp:
+
+        ! Factor loadings fixed
+        DIJ by
+            dij_01* (f_dij_01) 
+            dij_02* (f_dij_02)  
+            dij_03* (f_dij_03) 
+            dij_04* (f_dij_04)
+            ;
+
+        APP by
+            app_01* (f_app_01) 
+            app_02* (f_app_02) 
+            app_03* (f_app_03) 
+            app_04* (f_app_04) 
+            app_05* (f_app_05)
+            ;
+        
+
+        ! Item thresholds are fix
+
+        !DIJ
+        [dij_01$1*] (t1dij_01);
+        [dij_01$2*] (t2dij_01);
+        [dij_01$3*] (t3dij_01);
+
+        [dij_02$1*] (t1dij_02);
+        [dij_02$2*] (t2dij_02);
+
+        [dij_03$1*] (t1dij_03);
+        [dij_03$2*] (t2dij_03);
+        [dij_03$3*] (t3dij_03);
+
+        [dij_04$1*] (t1dij_04);
+        [dij_04$2*] (t2dij_04);
+        [dij_04$3*] (t3dij_04);
+
+        !APP
+        [app_01$1*] (t1app_01);
+        [app_01$2*] (t2app_01);
+        [app_01$3*] (t3app_01);
+
+        [app_02$1*] (t1app_02);
+        [app_02$2*] (t2app_02);
+
+        [app_03$1*] (t1app_03);
+        [app_03$2*] (t2app_03);
+        [app_03$3*] (t3app_03);
+        [app_03$4*] (t4app_03);
+
+        [app_04$1*] (t1app_04);
+        [app_04$2*] (t2app_04);
+        [app_04$3*] (t3app_04);
+
+        [app_05$1*] (t1app_05);
+        [app_05$2*] (t2app_05);
+        [app_05$3*] (t3app_05);
+
+
+        ! Item residual variances all fixed=1
+        dij_01-app_05@1;
+
+
+        ! Factors mean  and variance free
+
+        [DIJ*];
+        [APP*];
+
+        DIJ*;
+        APP*;
+
+        ! Hypothesis
+        DIJ on
+            wh_group (wh_b)
+            APP*
+            ;
+
+OUTPUT:
+	tech1
+	tech4
+	stdyx
+	;
+
+SAVEDATA: DIFFTEST=00_h4_b_free.diff;
+
+!MODEL CONSTRAINT:
+!    0 = 1-(dij_var + wh_b*wh_b + app_b * app_b);

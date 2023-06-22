@@ -1,0 +1,1347 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   1:50 PM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus.dat";
+
+  VARIABLE:
+
+      NAMES =
+      group group_detail wh_group
+  dij_01 dij_02 dij_03 dij_04
+  apc_01 apc_02 apc_03 apc_04 apc_05
+  app_01 app_02 app_03 app_04 app_05
+  res_01 res_02 res_03
+  exh_01 exh_04 exh_08
+  jsa_01 jsa_02 jsa_03 jsa_04
+  in_ex inc_ins
+  ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          dij_01-dij_04
+          !apc_01-apc_05
+          !app_01-app_05
+          res_01-res_03
+          !exh_01 exh_04 exh_08
+          !jsa_01 jsa_02 jsa_03 jsa_04
+          wh_group
+          ;
+
+
+      categorical =
+          dij_01-res_03;
+
+      grouping = group (1 = perm, 2 = temp);
+
+      DEFINE:
+          CENTER wh_group (GRANDMEAN);
+
+  ANALYSIS:
+      estimator = WLSMV;
+      PARAMETERIZATION = THETA;
+      STARTS=20;
+      DIFFTEST=00_h5_b_free.diff;
+
+  MODEL:
+
+      !! PERM
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          RES by
+              res_01* (f_res_01)
+              res_02* (f_res_02)
+              res_03* (f_res_03)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !RES
+          [res_01$1*] (t1res_01);
+          [res_01$2*] (t2res_01);
+
+          [res_02$1*] (t1res_02);
+          [res_02$2*] (t2res_02);
+
+          [res_03$1*] (t1res_03);
+          [res_03$2*] (t2res_03);
+
+          ! Item residual variances all fixed=1
+          dij_01-res_03@1;
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [RES@0];
+
+          DIJ@0.911; !this is the residual variance; sets total variance to 1;
+          RES@1;
+
+          ! Hypothesis
+          DIJ on
+              wh_group (wh_group)
+              RES (hypo)
+              ;
+
+  MODEL temp:
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          RES by
+              res_01* (f_res_01)
+              res_02* (f_res_02)
+              res_03* (f_res_03)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !RES
+          [res_01$1*] (t1res_01);
+          [res_01$2*] (t2res_01);
+
+          [res_02$1*] (t1res_02);
+          [res_02$2*] (t2res_02);
+
+          [res_03$1*] (t1res_03);
+          [res_03$2*] (t2res_03);
+
+          ! Item residual variances all fixed=1
+          dij_01-res_03@1;
+
+
+          ! Factors mean and variance free
+
+          [DIJ*];
+          [RES*];
+
+          DIJ*;
+          RES*;
+
+          ! Hypothesis
+          DIJ on
+              wh_group (wh_group)
+              RES (hypo)
+              ;
+
+  OUTPUT:
+  	tech1
+  	tech4
+  	stdyx
+  	;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group PERM                                                  262
+   Group TEMP                                                  119
+   Total sample size                                           381
+
+Number of dependent variables                                    7
+Number of independent variables                                  1
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      RES_01      RES_02
+   RES_03
+
+Observed independent variables
+   WH_GROUP
+
+Continuous latent variables
+   DIJ         RES
+
+Variables with special functions
+
+  Grouping variable     GROUP
+
+  Centering (GRANDMEAN)
+   WH_GROUP
+
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Random Starts Specifications
+  Number of random starts                                       20
+  Random starts scale                                    0.500D+01
+Parameterization                                             THETA
+Link                                                        PROBIT
+
+Input data file(s)
+  ../../data/transforms/mplus.dat
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group PERM
+     Number of missing data patterns            12
+
+   Group TEMP
+     Number of missing data patterns             8
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR PERM
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.943         0.962
+ DIJ_03         0.935         0.935         0.950
+ DIJ_04         0.950         0.950         0.939         0.969
+ RES_01         0.958         0.962         0.950         0.969         1.000
+ RES_02         0.958         0.962         0.950         0.969         1.000
+ RES_03         0.954         0.958         0.947         0.966         0.996
+
+
+           Covariance Coverage
+              RES_02        RES_03
+              ________      ________
+ RES_02         1.000
+ RES_03         0.996         0.996
+
+
+     PROPORTION OF DATA PRESENT FOR TEMP
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.958         0.983
+ DIJ_03         0.941         0.958         0.958
+ DIJ_04         0.941         0.966         0.941         0.975
+ RES_01         0.958         0.983         0.958         0.975         1.000
+ RES_02         0.950         0.975         0.950         0.966         0.992
+ RES_03         0.958         0.983         0.958         0.975         1.000
+
+
+           Covariance Coverage
+              RES_02        RES_03
+              ________      ________
+ RES_02         0.992
+ RES_03         0.992         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+  Group PERM
+    DIJ_01
+      Category 1    0.048           12.000
+      Category 2    0.175           44.000
+      Category 3    0.255           64.000
+      Category 4    0.522          131.000
+    DIJ_02
+      Category 1    0.194           49.000
+      Category 2    0.210           53.000
+      Category 3    0.595          150.000
+    DIJ_03
+      Category 1    0.064           16.000
+      Category 2    0.181           45.000
+      Category 3    0.249           62.000
+      Category 4    0.506          126.000
+    DIJ_04
+      Category 1    0.059           15.000
+      Category 2    0.138           35.000
+      Category 3    0.244           62.000
+      Category 4    0.559          142.000
+    RES_01
+      Category 1    0.366           96.000
+      Category 2    0.424          111.000
+      Category 3    0.210           55.000
+    RES_02
+      Category 1    0.126           33.000
+      Category 2    0.466          122.000
+      Category 3    0.408          107.000
+    RES_03
+      Category 1    0.261           68.000
+      Category 2    0.387          101.000
+      Category 3    0.352           92.000
+
+  Group TEMP
+    DIJ_01
+      Category 1    0.333           38.000
+      Category 2    0.447           51.000
+      Category 3    0.105           12.000
+      Category 4    0.114           13.000
+    DIJ_02
+      Category 1    0.658           77.000
+      Category 2    0.188           22.000
+      Category 3    0.154           18.000
+    DIJ_03
+      Category 1    0.368           42.000
+      Category 2    0.412           47.000
+      Category 3    0.132           15.000
+      Category 4    0.088           10.000
+    DIJ_04
+      Category 1    0.293           34.000
+      Category 2    0.379           44.000
+      Category 3    0.147           17.000
+      Category 4    0.181           21.000
+    RES_01
+      Category 1    0.370           44.000
+      Category 2    0.429           51.000
+      Category 3    0.202           24.000
+    RES_02
+      Category 1    0.119           14.000
+      Category 2    0.449           53.000
+      Category 3    0.432           51.000
+    RES_03
+      Category 1    0.210           25.000
+      Category 2    0.437           52.000
+      Category 3    0.353           42.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR PERM
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              0.000      -1.568      -2.542    2.29%      -0.542      0.458      0.458
+             262.000       0.607       1.416       0.458   69.85%       0.458      0.458
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR TEMP
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              0.000      -1.463      -3.244    5.04%      -1.244      0.756      0.756
+             119.000       1.445       0.881       0.756   63.87%       0.756      0.756
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST FIT FUNCTION VALUES
+
+Fit function values at local maxima and random start numbers:
+
+      0.12509571D+00         11
+      0.12509571D+00         12
+      0.12509571D+00         8
+      0.12509571D+00         14
+      0.12509571D+00         13
+      0.12509572D+00         1
+      0.12509572D+00         19
+      0.12509572D+00         5
+      0.12509572D+00         9
+      0.12509573D+00         15
+      0.12509573D+00         6
+      0.12509573D+00         16
+      0.12509573D+00         unperturbed
+      0.12509574D+00         18
+      0.12509575D+00         7
+      0.12509575D+00         10
+      0.12509576D+00         4
+      0.12509579D+00         20
+      0.12509580D+00         3
+      0.12509580D+00         17
+      0.12509592D+00         2
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       30
+
+Chi-Square Test of Model Fit
+
+          Value                            107.916*
+          Degrees of Freedom                    60
+          P-Value                           0.0001
+
+Chi-Square Contribution From Each Group
+
+          PERM                              28.709
+          TEMP                              79.207
+
+Chi-Square Test for Difference Testing
+
+          Value                              6.304*
+          Degrees of Freedom                     1
+          P-Value                           0.0120
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.  The DIFFTEST
+    option assumes the models are nested.  The NESTED option can be used to verify
+    that the models are nested.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.065
+          90 Percent C.I.                    0.045  0.084
+          Probability RMSEA <= .05           0.108
+
+CFI/TLI
+
+          CFI                                0.986
+          TLI                                0.987
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           3437.304
+          Degrees of Freedom                    56
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.070
+
+Optimum Function Value for Weighted Least-Squares Estimator
+
+          Value                     0.12509571D+00
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             2.067      0.237      8.724      0.000
+    DIJ_02             1.735      0.172     10.109      0.000
+    DIJ_03             1.973      0.229      8.601      0.000
+    DIJ_04             1.289      0.117     11.040      0.000
+
+ RES      BY
+    RES_01             3.274      1.015      3.226      0.001
+    RES_02             0.940      0.104      9.019      0.000
+    RES_03             2.336      0.435      5.366      0.000
+
+ DIJ      ON
+    RES                0.217      0.066      3.264      0.001
+
+ DIJ      ON
+    WH_GROUP           0.012      0.059      0.201      0.841
+
+ Means
+    RES                0.000      0.000    999.000    999.000
+
+ Intercepts
+    DIJ                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -3.792      0.331    -11.461      0.000
+    DIJ_01$2          -1.584      0.212     -7.483      0.000
+    DIJ_01$3          -0.194      0.180     -1.079      0.281
+    DIJ_02$1          -1.702      0.189     -9.026      0.000
+    DIJ_02$2          -0.508      0.164     -3.100      0.002
+    DIJ_03$1          -3.392      0.313    -10.840      0.000
+    DIJ_03$2          -1.422      0.211     -6.755      0.000
+    DIJ_03$3          -0.047      0.170     -0.278      0.781
+    DIJ_04$1          -2.584      0.175    -14.727      0.000
+    DIJ_04$2          -1.287      0.136     -9.458      0.000
+    DIJ_04$3          -0.298      0.127     -2.342      0.019
+    RES_01$1          -1.014      0.341     -2.973      0.003
+    RES_01$2           2.627      0.745      3.526      0.000
+    RES_02$1          -1.553      0.125    -12.435      0.000
+    RES_02$2           0.300      0.095      3.159      0.002
+    RES_03$1          -1.606      0.293     -5.480      0.000
+    RES_03$2           0.916      0.216      4.233      0.000
+
+ Variances
+    RES                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    RES_01             1.000      0.000    999.000    999.000
+    RES_02             1.000      0.000    999.000    999.000
+    RES_03             1.000      0.000    999.000    999.000
+    DIJ                0.911      0.000    999.000    999.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             2.067      0.237      8.724      0.000
+    DIJ_02             1.735      0.172     10.109      0.000
+    DIJ_03             1.973      0.229      8.601      0.000
+    DIJ_04             1.289      0.117     11.040      0.000
+
+ RES      BY
+    RES_01             3.274      1.015      3.226      0.001
+    RES_02             0.940      0.104      9.019      0.000
+    RES_03             2.336      0.435      5.366      0.000
+
+ DIJ      ON
+    RES                0.217      0.066      3.264      0.001
+
+ DIJ      ON
+    WH_GROUP           0.012      0.059      0.201      0.841
+
+ Means
+    RES                0.032      0.105      0.307      0.759
+
+ Intercepts
+    DIJ               -1.419      0.139    -10.201      0.000
+
+ Thresholds
+    DIJ_01$1          -3.792      0.331    -11.461      0.000
+    DIJ_01$2          -1.584      0.212     -7.483      0.000
+    DIJ_01$3          -0.194      0.180     -1.079      0.281
+    DIJ_02$1          -1.702      0.189     -9.026      0.000
+    DIJ_02$2          -0.508      0.164     -3.100      0.002
+    DIJ_03$1          -3.392      0.313    -10.840      0.000
+    DIJ_03$2          -1.422      0.211     -6.755      0.000
+    DIJ_03$3          -0.047      0.170     -0.278      0.781
+    DIJ_04$1          -2.584      0.175    -14.727      0.000
+    DIJ_04$2          -1.287      0.136     -9.458      0.000
+    DIJ_04$3          -0.298      0.127     -2.342      0.019
+    RES_01$1          -1.014      0.341     -2.973      0.003
+    RES_01$2           2.627      0.745      3.526      0.000
+    RES_02$1          -1.553      0.125    -12.435      0.000
+    RES_02$2           0.300      0.095      3.159      0.002
+    RES_03$1          -1.606      0.293     -5.480      0.000
+    RES_03$2           0.916      0.216      4.233      0.000
+
+ Variances
+    RES                0.561      0.144      3.899      0.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    RES_01             1.000      0.000    999.000    999.000
+    RES_02             1.000      0.000    999.000    999.000
+    RES_03             1.000      0.000    999.000    999.000
+    DIJ                0.732      0.188      3.902      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.331E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             0.896      0.020     44.344      0.000
+    DIJ_02             0.862      0.022     39.222      0.000
+    DIJ_03             0.888      0.022     41.006      0.000
+    DIJ_04             0.784      0.027     28.767      0.000
+
+ RES      BY
+    RES_01             0.956      0.025     37.802      0.000
+    RES_02             0.685      0.040     16.994      0.000
+    RES_03             0.919      0.027     34.640      0.000
+
+ DIJ      ON
+    RES                0.221      0.065      3.433      0.001
+
+ DIJ      ON
+    WH_GROUP           0.010      0.047      0.201      0.841
+
+ Means
+    RES                0.000      0.000    999.000    999.000
+
+ Intercepts
+    DIJ                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -1.680      0.113    -14.814      0.000
+    DIJ_01$2          -0.702      0.081     -8.698      0.000
+    DIJ_01$3          -0.086      0.078     -1.107      0.268
+    DIJ_02$1          -0.864      0.081    -10.659      0.000
+    DIJ_02$2          -0.258      0.077     -3.352      0.001
+    DIJ_03$1          -1.560      0.108    -14.455      0.000
+    DIJ_03$2          -0.654      0.081     -8.120      0.000
+    DIJ_03$3          -0.022      0.078     -0.280      0.779
+    DIJ_04$1          -1.605      0.104    -15.471      0.000
+    DIJ_04$2          -0.799      0.080     -9.983      0.000
+    DIJ_04$3          -0.185      0.077     -2.417      0.016
+    RES_01$1          -0.296      0.075     -3.951      0.000
+    RES_01$2           0.767      0.088      8.676      0.000
+    RES_02$1          -1.131      0.091    -12.375      0.000
+    RES_02$2           0.218      0.070      3.135      0.002
+    RES_03$1          -0.632      0.082     -7.732      0.000
+    RES_03$2           0.361      0.076      4.753      0.000
+
+ Variances
+    RES                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.196      0.036      5.417      0.000
+    DIJ_02             0.258      0.038      6.802      0.000
+    DIJ_03             0.212      0.038      5.500      0.000
+    DIJ_04             0.386      0.043      9.033      0.000
+    RES_01             0.085      0.048      1.764      0.078
+    RES_02             0.531      0.055      9.609      0.000
+    RES_03             0.155      0.049      3.175      0.001
+    DIJ                0.951      0.029     33.217      0.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             0.874      0.027     32.945      0.000
+    DIJ_02             0.834      0.034     24.245      0.000
+    DIJ_03             0.864      0.028     30.934      0.000
+    DIJ_04             0.747      0.041     18.282      0.000
+
+ RES      BY
+    RES_01             0.926      0.040     22.998      0.000
+    RES_02             0.576      0.054     10.750      0.000
+    RES_03             0.868      0.042     20.556      0.000
+
+ DIJ      ON
+    RES                0.186      0.059      3.145      0.002
+
+ DIJ      ON
+    WH_GROUP           0.017      0.082      0.201      0.841
+
+ Means
+    RES                0.043      0.140      0.307      0.759
+
+ Intercepts
+    DIJ               -1.629      0.194     -8.409      0.000
+
+ Thresholds
+    DIJ_01$1          -1.841      0.166    -11.110      0.000
+    DIJ_01$2          -0.769      0.108     -7.109      0.000
+    DIJ_01$3          -0.094      0.087     -1.080      0.280
+    DIJ_02$1          -0.939      0.112     -8.396      0.000
+    DIJ_02$2          -0.281      0.090     -3.134      0.002
+    DIJ_03$1          -1.706      0.158    -10.769      0.000
+    DIJ_03$2          -0.715      0.107     -6.669      0.000
+    DIJ_03$3          -0.024      0.085     -0.279      0.780
+    DIJ_04$1          -1.718      0.126    -13.671      0.000
+    DIJ_04$2          -0.856      0.095     -8.995      0.000
+    DIJ_04$3          -0.198      0.084     -2.350      0.019
+    RES_01$1          -0.383      0.097     -3.941      0.000
+    RES_01$2           0.992      0.123      8.070      0.000
+    RES_02$1          -1.269      0.103    -12.267      0.000
+    RES_02$2           0.245      0.078      3.140      0.002
+    RES_03$1          -0.797      0.109     -7.309      0.000
+    RES_03$2           0.455      0.094      4.811      0.000
+
+ Variances
+    RES                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.236      0.046      5.081      0.000
+    DIJ_02             0.305      0.057      5.308      0.000
+    DIJ_03             0.253      0.048      5.238      0.000
+    DIJ_04             0.442      0.061      7.247      0.000
+    RES_01             0.143      0.075      1.912      0.056
+    RES_02             0.668      0.062     10.831      0.000
+    RES_03             0.246      0.073      3.357      0.001
+    DIJ                0.965      0.022     43.107      0.000
+
+
+R-SQUARE
+
+Group PERM
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.804      0.036     22.172      0.000      0.443
+    DIJ_02             0.742      0.038     19.611      0.000      0.507
+    DIJ_03             0.788      0.038     20.503      0.000      0.460
+    DIJ_04             0.614      0.043     14.384      0.000      0.621
+    RES_01             0.915      0.048     18.901      0.000      0.292
+    RES_02             0.469      0.055      8.497      0.000      0.728
+    RES_03             0.845      0.049     17.320      0.000      0.394
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    DIJ                0.049      0.029      1.716      0.086
+
+Group TEMP
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.764      0.046     16.473      0.000      0.486
+    DIJ_02             0.695      0.057     12.122      0.000      0.552
+    DIJ_03             0.747      0.048     15.467      0.000      0.503
+    DIJ_04             0.558      0.061      9.141      0.000      0.665
+    RES_01             0.857      0.075     11.499      0.000      0.378
+    RES_02             0.332      0.062      5.375      0.000      0.818
+    RES_03             0.754      0.073     10.278      0.000      0.496
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    DIJ                0.035      0.022      1.564      0.118
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              RES_03$1      RES_03$2
+              ________      ________
+                 16            17
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              RES_02        RES_03
+              ________      ________
+                  0             0
+
+
+           LAMBDA
+              DIJ           RES
+              ________      ________
+ DIJ_01            18             0
+ DIJ_02            19             0
+ DIJ_03            20             0
+ DIJ_04            21             0
+ RES_01             0            22
+ RES_02             0            23
+ RES_03             0            24
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+
+
+           THETA
+              RES_02        RES_03
+              ________      ________
+ RES_02             0
+ RES_03             0             0
+
+
+           ALPHA
+              DIJ           RES
+              ________      ________
+                  0             0
+
+
+           BETA
+              DIJ           RES
+              ________      ________
+ DIJ                0            25
+ RES                0             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ               26
+ RES                0
+
+
+           PSI
+              DIJ           RES
+              ________      ________
+ DIJ                0
+ RES                0             0
+
+
+     PARAMETER SPECIFICATION FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              RES_03$1      RES_03$2
+              ________      ________
+                 16            17
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              RES_02        RES_03
+              ________      ________
+                  0             0
+
+
+           LAMBDA
+              DIJ           RES
+              ________      ________
+ DIJ_01            18             0
+ DIJ_02            19             0
+ DIJ_03            20             0
+ DIJ_04            21             0
+ RES_01             0            22
+ RES_02             0            23
+ RES_03             0            24
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ RES_01             0             0             0             0             0
+ RES_02             0             0             0             0             0
+ RES_03             0             0             0             0             0
+
+
+           THETA
+              RES_02        RES_03
+              ________      ________
+ RES_02             0
+ RES_03             0             0
+
+
+           ALPHA
+              DIJ           RES
+              ________      ________
+                 27            28
+
+
+           BETA
+              DIJ           RES
+              ________      ________
+ DIJ                0            25
+ RES                0             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ               26
+ RES                0
+
+
+           PSI
+              DIJ           RES
+              ________      ________
+ DIJ               29
+ RES                0            30
+
+
+     STARTING VALUES FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.666        -0.762        -0.055        -0.862        -0.241
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -1.520        -0.690        -0.015        -1.563        -0.853
+
+
+           TAU
+              DIJ_04$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+               -0.149        -0.341         0.807        -1.146         0.232
+
+
+           TAU
+              RES_03$1      RES_03$2
+              ________      ________
+               -0.642         0.379
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              RES_02        RES_03
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              DIJ           RES
+              ________      ________
+ DIJ_01         0.872         0.000
+ DIJ_02         0.885         0.000
+ DIJ_03         0.875         0.000
+ DIJ_04         0.813         0.000
+ RES_01         0.000         0.933
+ RES_02         0.000         0.684
+ RES_03         0.000         0.913
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ RES_01         0.000         0.000         0.000         0.000         1.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              RES_02        RES_03
+              ________      ________
+ RES_02         1.000
+ RES_03         0.000         1.000
+
+
+           ALPHA
+              DIJ           RES
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           RES
+              ________      ________
+ DIJ            0.000         0.000
+ RES            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ RES            0.000
+
+
+           PSI
+              DIJ           RES
+              ________      ________
+ DIJ            0.911
+ RES            0.000         1.000
+
+
+     STARTING VALUES FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.049         0.006         0.575        -0.227         0.390
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -0.928         0.042         0.670        -1.054        -0.203
+
+
+           TAU
+              DIJ_04$3      RES_01$1      RES_01$2      RES_02$1      RES_02$2
+              ________      ________      ________      ________      ________
+                0.381        -0.337         0.821        -1.164         0.201
+
+
+           TAU
+              RES_03$1      RES_03$2
+              ________      ________
+               -0.724         0.378
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              RES_02        RES_03
+              ________      ________
+                0.000         0.000
+
+
+           LAMBDA
+              DIJ           RES
+              ________      ________
+ DIJ_01         0.913         0.000
+ DIJ_02         0.795         0.000
+ DIJ_03         0.881         0.000
+ DIJ_04         0.609         0.000
+ RES_01         0.000         1.003
+ RES_02         0.000         0.624
+ RES_03         0.000         0.857
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        RES_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ RES_01         0.000         0.000         0.000         0.000         1.000
+ RES_02         0.000         0.000         0.000         0.000         0.000
+ RES_03         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              RES_02        RES_03
+              ________      ________
+ RES_02         1.000
+ RES_03         0.000         1.000
+
+
+           ALPHA
+              DIJ           RES
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           RES
+              ________      ________
+ DIJ            0.000         0.000
+ RES            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ RES            0.000
+
+
+           PSI
+              DIJ           RES
+              ________      ________
+ DIJ            0.911
+ RES            0.000         1.000
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                0.000         0.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.958
+ RES            0.217         1.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            1.000
+ RES            0.221         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+               -1.412         0.032
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.759
+ RES            0.122         0.561
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            1.000
+ RES            0.186         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                0.001         0.000
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                1.000         1.000
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.029
+ RES            0.066         0.000
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ           33.217
+ RES            3.264   ***********
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.001         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.065         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ          999.000
+ RES            3.433       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.001         0.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                0.138         0.105
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+              -10.231         0.307
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+                0.000         0.759
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.189
+ RES            0.044         0.144
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            4.016
+ RES            2.780         3.899
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.005         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.059         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ          999.000
+ RES            3.145       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           RES
+              ________      ________
+ DIJ            0.000
+ RES            0.002         0.000
+
+
+     Beginning Time:  13:50:58
+        Ending Time:  13:50:58
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen

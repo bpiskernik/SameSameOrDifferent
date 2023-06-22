@@ -1,0 +1,114 @@
+DATA:
+
+    FILE = "../measurement_invariance/10_fscores.dat";
+
+VARIABLE:
+
+    NAMES =
+    DIJ_01
+    DIJ_02
+    DIJ_03
+    DIJ_04
+    APC_01
+    APC_02
+    APC_03
+    APC_04
+    APC_05
+    APP_01
+    APP_02
+    APP_03
+    APP_04
+    APP_05
+    RES_01
+    RES_02
+    RES_03
+    EXH_01
+    EXH_04
+    EXH_08
+    JSA_01
+    JSA_02
+    JSA_03
+    JSA_04
+    WH_GROUP
+    INC_INS
+    IN_EX
+    DIJ
+    DIJ_SE
+    APC
+    APC_SE
+    APP
+    APP_SE
+    RES
+    RES_SE
+    EXH
+    EXH_SE
+    JSA
+    JSA_SE
+    GROUP
+    ;
+
+    MISSING = *;
+
+    USEVARIABLES =
+        wh_group
+        dij
+        apc
+        exh
+        ;
+
+    CLASSES = pt (2);
+    KNOWNCLASS = pt (GROUP = 1 GROUP = 2);
+
+  DEFINE: 
+    CENTER wh_group (GRANDMEAN);
+
+  ANALYSIS:
+      TYPE = RANDOM MIXTURE;
+      processors = 4;
+      MITERATIONS = 5000;
+
+  MODEL:
+      %OVERALL%
+      EXH on WH_GROUP;
+
+      s | EXH on DIJ;
+      s on 
+        APC
+        WH_GROUP
+        ;
+      EXH on APC;
+
+      [s];
+     
+
+      %pt#1%
+      s on APC (mod1);
+      s with EXH;
+
+      APC with DIJ;
+
+      [s] (slope);
+      [EXH] (inter);
+
+      s*; 
+      EXH*;
+      DIJ*;
+      APC*;
+
+
+      %pt#2%
+      s on APC (mod2);
+
+      APC with DIJ;
+
+      [s] (slope);
+      [EXH] (inter);
+
+      s*;
+      EXH*;
+      DIJ*;
+      APC*;
+
+
+  MODEL TEST:
+      0 = mod1-mod2;

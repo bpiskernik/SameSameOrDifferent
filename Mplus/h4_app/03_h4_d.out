@@ -1,0 +1,1093 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   1:42 PM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus.dat";
+
+  VARIABLE:
+
+      NAMES =
+      group group_detail wh_group
+  dij_01 dij_02 dij_03 dij_04
+  apc_01 apc_02 apc_03 apc_04 apc_05
+  app_01 app_02 app_03 app_04 app_05
+  res_01 res_02 res_03
+  exh_01 exh_04 exh_08
+  jsa_01 jsa_02 jsa_03 jsa_04
+  in_ex inc_ins
+  ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          dij_01-dij_04
+          !apc_01-apc_05
+          app_01-app_05
+          !res_01-res_03
+          !exh_01 exh_04 exh_08
+          jsa_01 jsa_02 jsa_03 jsa_04
+          wh_group
+          ;
+
+      categorical =
+          dij_01-jsa_04;
+
+
+
+      DEFINE:
+          CENTER wh_group (GRANDMEAN);
+
+  ANALYSIS:
+      estimator=MLF;
+      type = RANDOM;
+      INTEGRATION = MONTECARLO;
+      MCSEED=21; !default 42 did not converge
+      PROCESS=4;
+
+  MODEL:
+
+      !! PERM
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APP by
+              app_01* (f_app_01)
+              app_02* (f_app_02)
+              app_03* (f_app_03)
+              app_04* (f_app_04)
+              app_05* (f_app_05)
+              ;
+
+          JSA by
+              jsa_01* (f_jsa_01)
+              jsa_02* (f_jsa_02)
+              jsa_03* (f_jsa_03)
+              jsa_04* (f_jsa_04)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+
+          [dij_04$3*] (t3dij_04);
+
+          !APP
+          [app_01$1*] (t1app_01);
+          [app_01$2*] (t2app_01);
+          [app_01$3*] (t3app_01);
+
+          [app_02$1*] (t1app_02);
+          [app_02$2*] (t2app_02);
+
+          [app_03$1*] (t1app_03);
+          [app_03$2*] (t2app_03);
+          [app_03$3*] (t3app_03);
+          [app_03$4*] (t4app_03);
+
+          [app_04$1*] (t1app_04);
+          [app_04$2*] (t2app_04);
+          [app_04$3*] (t3app_04);
+
+          [app_05$1*] (t1app_05);
+          [app_05$2*] (t2app_05);
+          [app_05$3*] (t3app_05);
+
+
+          !JSA
+          [jsa_01$1*] (t1jsa_01);
+          [jsa_01$2*] (t2jsa_01);
+          [jsa_01$3*] (t3jsa_01);
+
+          [jsa_02$1*] (t1jsa_02);
+          [jsa_02$2*] (t2jsa_02);
+
+          [jsa_03$1*] (t1jsa_03);
+          [jsa_03$2*] (t2jsa_03);
+          [jsa_03$3*] (t3jsa_03);
+
+          [jsa_04$1*] (t1jsa_04);
+          [jsa_04$2*] (t2jsa_04);
+
+
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [JSA@0];
+          [APP@0];
+
+          DIJ@1;
+          JSA@1;
+          APP@1;
+
+
+          DIJ with APP;
+
+          S_JSA | JSA on DIJ;
+
+          JSA S_JSA on wh_group APP;
+
+          S_JSA@0.01; !fixed at low value to avoid saddle point/non-convergence
+
+  OUTPUT:
+  	tech1
+  	tech4
+  	stdyx
+  	;
+
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 1
+Number of observations                                         381
+
+Number of dependent variables                                   13
+Number of independent variables                                  1
+Number of continuous latent variables                            4
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      APP_01      APP_02
+   APP_03      APP_04      APP_05      JSA_01      JSA_02      JSA_03
+   JSA_04
+
+Observed independent variables
+   WH_GROUP
+
+Continuous latent variables
+   DIJ         APP         JSA         S_JSA
+
+Variables with special functions
+
+  Centering (GRANDMEAN)
+   WH_GROUP
+
+
+Estimator                                                      MLF
+Information matrix                                        OBSERVED
+Optimization Specifications for the Quasi-Newton Algorithm for
+Continuous Outcomes
+  Maximum number of iterations                                 100
+  Convergence criterion                                  0.100D-05
+Optimization Specifications for the EM Algorithm
+  Maximum number of iterations                                 500
+  Convergence criteria
+    Loglikelihood change                                 0.100D-02
+    Relative loglikelihood change                        0.100D-05
+    Derivative                                           0.100D-02
+Optimization Specifications for the M step of the EM Algorithm for
+Categorical Latent variables
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+Optimization Specifications for the M step of the EM Algorithm for
+Censored, Binary or Ordered Categorical (Ordinal), Unordered
+Categorical (Nominal) and Count Outcomes
+  Number of M step iterations                                    1
+  M step convergence criterion                           0.100D-02
+  Basis for M step termination                           ITERATION
+  Maximum value for logit thresholds                            15
+  Minimum value for logit thresholds                           -15
+  Minimum expected cell size for chi-square              0.100D-01
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Optimization algorithm                                         EMA
+Integration Specifications
+  Type                                                  MONTECARLO
+  Number of integration points                                4000
+  Dimensions of numerical integration                            4
+  Adaptive quadrature                                           ON
+  Monte Carlo integration seed                                  21
+Link                                                         LOGIT
+Cholesky                                                        ON
+
+Input data file(s)
+  ../../data/transforms/mplus.dat
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+     Number of missing data patterns            32
+     Number of y missing data patterns           0
+     Number of u missing data patterns          32
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR U
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APP_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.948         0.969
+ DIJ_03         0.937         0.942         0.953
+ DIJ_04         0.948         0.955         0.940         0.971
+ APP_01         0.950         0.961         0.945         0.963         0.990
+ APP_02         0.942         0.953         0.937         0.955         0.979
+ APP_03         0.940         0.945         0.934         0.950         0.969
+ APP_04         0.945         0.953         0.940         0.953         0.974
+ APP_05         0.927         0.934         0.921         0.934         0.958
+ JSA_01         0.953         0.963         0.945         0.966         0.982
+ JSA_02         0.945         0.955         0.937         0.955         0.971
+ JSA_03         0.950         0.961         0.945         0.963         0.982
+ JSA_04         0.955         0.966         0.948         0.969         0.984
+
+
+           Covariance Coverage
+              APP_02        APP_03        APP_04        APP_05        JSA_01
+              ________      ________      ________      ________      ________
+ APP_02         0.982
+ APP_03         0.966         0.971
+ APP_04         0.971         0.963         0.979
+ APP_05         0.953         0.948         0.953         0.958
+ JSA_01         0.974         0.963         0.971         0.950         0.992
+ JSA_02         0.963         0.955         0.961         0.942         0.979
+ JSA_03         0.974         0.963         0.971         0.950         0.990
+ JSA_04         0.976         0.966         0.974         0.953         0.992
+
+
+           Covariance Coverage
+              JSA_02        JSA_03        JSA_04
+              ________      ________      ________
+ JSA_02         0.982
+ JSA_03         0.976         0.992
+ JSA_04         0.979         0.990         0.995
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+    DIJ_01
+      Category 1    0.137           50.000
+      Category 2    0.260           95.000
+      Category 3    0.208           76.000
+      Category 4    0.395          144.000
+    DIJ_02
+      Category 1    0.341          126.000
+      Category 2    0.203           75.000
+      Category 3    0.455          168.000
+    DIJ_03
+      Category 1    0.160           58.000
+      Category 2    0.253           92.000
+      Category 3    0.212           77.000
+      Category 4    0.375          136.000
+    DIJ_04
+      Category 1    0.132           49.000
+      Category 2    0.214           79.000
+      Category 3    0.214           79.000
+      Category 4    0.441          163.000
+    APP_01
+      Category 1    0.342          129.000
+      Category 2    0.223           84.000
+      Category 3    0.334          126.000
+      Category 4    0.101           38.000
+    APP_02
+      Category 1    0.267          100.000
+      Category 2    0.497          186.000
+      Category 3    0.235           88.000
+    APP_03
+      Category 1    0.114           42.000
+      Category 2    0.257           95.000
+      Category 3    0.273          101.000
+      Category 4    0.286          106.000
+      Category 5    0.070           26.000
+    APP_04
+      Category 1    0.239           89.000
+      Category 2    0.292          109.000
+      Category 3    0.276          103.000
+      Category 4    0.193           72.000
+    APP_05
+      Category 1    0.096           35.000
+      Category 2    0.173           63.000
+      Category 3    0.348          127.000
+      Category 4    0.384          140.000
+    JSA_01
+      Category 1    0.069           26.000
+      Category 2    0.164           62.000
+      Category 3    0.595          225.000
+      Category 4    0.172           65.000
+    JSA_02
+      Category 1    0.302          113.000
+      Category 2    0.364          136.000
+      Category 3    0.334          125.000
+    JSA_03
+      Category 1    0.095           36.000
+      Category 2    0.272          103.000
+      Category 3    0.553          209.000
+      Category 4    0.079           30.000
+    JSA_04
+      Category 1    0.269          102.000
+      Category 2    0.639          242.000
+      Category 3    0.092           35.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              0.000      -1.754      -3.449    1.57%      -0.449      0.551      0.551
+             381.000       0.888       2.388       0.551   67.98%       0.551      0.551
+
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       55
+
+Loglikelihood
+
+          H0 Value                       -4855.243
+
+Information Criteria
+
+          Akaike (AIC)                    9820.486
+          Bayesian (BIC)                 10037.340
+          Sample-Size Adjusted BIC        9862.835
+            (n* = (n + 2) / 24)
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ DIJ      BY
+    DIJ_01             4.345      0.524      8.286      0.000
+    DIJ_02             3.774      0.457      8.266      0.000
+    DIJ_03             4.230      0.432      9.782      0.000
+    DIJ_04             2.758      0.262     10.536      0.000
+
+ APP      BY
+    APP_01             1.598      0.201      7.955      0.000
+    APP_02             2.420      0.320      7.555      0.000
+    APP_03             2.018      0.225      8.982      0.000
+    APP_04             1.473      0.185      7.977      0.000
+    APP_05             1.823      0.213      8.545      0.000
+
+ JSA      BY
+    JSA_01             5.698      1.669      3.413      0.001
+    JSA_02             0.717      0.132      5.418      0.000
+    JSA_03             3.487      0.540      6.457      0.000
+    JSA_04             2.704      0.323      8.375      0.000
+
+ JSA        ON
+    APP                0.240      0.070      3.404      0.001
+
+ S_JSA      ON
+    APP                0.020      0.061      0.332      0.740
+
+ JSA        ON
+    WH_GROUP          -0.041      0.068     -0.597      0.551
+
+ S_JSA      ON
+    WH_GROUP           0.014      0.074      0.184      0.854
+
+ DIJ      WITH
+    APP               -0.085      0.061     -1.398      0.162
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+
+ Intercepts
+    JSA                0.000      0.000    999.000    999.000
+    S_JSA             -0.114      0.074     -1.538      0.124
+
+ Thresholds
+    DIJ_01$1          -5.054      0.637     -7.937      0.000
+    DIJ_01$2          -1.134      0.338     -3.357      0.001
+    DIJ_01$3           1.209      0.335      3.607      0.000
+    DIJ_02$1          -1.606      0.324     -4.957      0.000
+    DIJ_02$2           0.489      0.288      1.697      0.090
+    DIJ_03$1          -4.593      0.494     -9.302      0.000
+    DIJ_03$2          -0.999      0.338     -2.959      0.003
+    DIJ_03$3           1.428      0.330      4.325      0.000
+    DIJ_04$1          -3.562      0.352    -10.109      0.000
+    DIJ_04$2          -1.153      0.244     -4.734      0.000
+    DIJ_04$3           0.511      0.225      2.272      0.023
+    APP_01$1          -0.917      0.174     -5.282      0.000
+    APP_01$2           0.370      0.161      2.303      0.021
+    APP_01$3           2.985      0.294     10.160      0.000
+    APP_02$1          -1.781      0.254     -7.019      0.000
+    APP_02$2           2.132      0.277      7.699      0.000
+    APP_03$1          -3.233      0.302    -10.706      0.000
+    APP_03$2          -0.872      0.189     -4.605      0.000
+    APP_03$3           0.933      0.194      4.805      0.000
+    APP_03$4           3.949      0.391     10.096      0.000
+    APP_04$1          -1.591      0.191     -8.345      0.000
+    APP_04$2           0.144      0.156      0.922      0.356
+    APP_04$3           1.889      0.209      9.024      0.000
+    APP_05$1          -3.293      0.308    -10.680      0.000
+    APP_05$2          -1.516      0.203     -7.479      0.000
+    APP_05$3           0.731      0.181      4.034      0.000
+    JSA_01$1          -9.307      2.454     -3.793      0.000
+    JSA_01$2          -4.521      1.219     -3.708      0.000
+    JSA_01$3           5.829      1.641      3.551      0.000
+    JSA_02$1          -0.938      0.138     -6.788      0.000
+    JSA_02$2           0.772      0.133      5.789      0.000
+    JSA_03$1          -5.340      0.702     -7.602      0.000
+    JSA_03$2          -1.360      0.331     -4.112      0.000
+    JSA_03$3           5.741      0.812      7.074      0.000
+    JSA_04$1          -2.047      0.276     -7.427      0.000
+    JSA_04$2           4.379      0.458      9.568      0.000
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    JSA                1.000      0.000    999.000    999.000
+    S_JSA              0.010      0.000    999.000    999.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.177E-02
+       (ratio of smallest to largest eigenvalue)
+
+
+BRANT WALD TEST FOR PROPORTIONAL ODDS
+
+                                   Degrees of
+                      Chi-Square     Freedom   P-Value
+
+  DIJ_01
+    Overall test           1.044         2      0.593
+    WH_GROUP               1.044         2      0.593
+
+  DIJ_02
+    Overall test           1.284         1      0.257
+    WH_GROUP               1.284         1      0.257
+
+  DIJ_03
+    Overall test           3.623         2      0.163
+    WH_GROUP               3.623         2      0.163
+
+  DIJ_04
+    Overall test           0.536         2      0.765
+    WH_GROUP               0.536         2      0.765
+
+  APP_01
+    Overall test           0.733         2      0.693
+    WH_GROUP               0.733         2      0.693
+
+  APP_02
+    Overall test           1.502         1      0.220
+    WH_GROUP               1.502         1      0.220
+
+  APP_03
+    Overall test           0.759         3      0.859
+    WH_GROUP               0.759         3      0.859
+
+  APP_04
+    Overall test           1.600         2      0.449
+    WH_GROUP               1.600         2      0.449
+
+  APP_05
+    Overall test           2.897         2      0.235
+    WH_GROUP               2.897         2      0.235
+
+  JSA_01
+    Overall test           0.723         2      0.696
+    WH_GROUP               0.723         2      0.696
+
+  JSA_02
+    Overall test           0.000         1      0.989
+    WH_GROUP               0.000         1      0.989
+
+  JSA_03
+    Overall test           4.477         2      0.107
+    WH_GROUP               4.477         2      0.107
+
+  JSA_04
+    Overall test           0.518         1      0.472
+    WH_GROUP               0.518         1      0.472
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+ DIJ      BY
+    DIJ_01             0.923      0.017     55.849      0.000
+    DIJ_02             0.901      0.020     44.060      0.000
+    DIJ_03             0.919      0.015     62.994      0.000
+    DIJ_04             0.835      0.024     34.887      0.000
+
+ APP      BY
+    APP_01             0.661      0.047     14.128      0.000
+    APP_02             0.800      0.038     21.009      0.000
+    APP_03             0.744      0.037     20.101      0.000
+    APP_04             0.630      0.048     13.236      0.000
+    APP_05             0.709      0.041     17.173      0.000
+
+ JSA      BY
+    JSA_01             0.956      0.024     39.943      0.000
+    JSA_02             0.381      0.060      6.403      0.000
+    JSA_03             0.895      0.028     32.159      0.000
+    JSA_04             0.841      0.029     28.523      0.000
+
+ JSA        ON
+    APP                0.230      0.064      3.601      0.000
+
+ S_JSA      ON
+    APP                0.197      0.571      0.345      0.730
+
+ JSA        ON
+    WH_GROUP          -0.037      0.062     -0.596      0.551
+
+ S_JSA      ON
+    WH_GROUP           0.124      0.667      0.187      0.852
+
+ DIJ      WITH
+    APP               -0.085      0.061     -1.398      0.162
+
+ Means
+    DIJ                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+
+ Intercepts
+    JSA                0.000      0.000    999.000    999.000
+    S_JSA             -1.107      0.714     -1.550      0.121
+
+ Thresholds
+    DIJ_01$1          -1.073      0.091    -11.777      0.000
+    DIJ_01$2          -0.241      0.071     -3.398      0.001
+    DIJ_01$3           0.257      0.070      3.665      0.000
+    DIJ_02$1          -0.384      0.071     -5.418      0.000
+    DIJ_02$2           0.117      0.069      1.684      0.092
+    DIJ_03$1          -0.998      0.089    -11.275      0.000
+    DIJ_03$2          -0.217      0.072     -3.022      0.003
+    DIJ_03$3           0.310      0.073      4.262      0.000
+    DIJ_04$1          -1.079      0.091    -11.893      0.000
+    DIJ_04$2          -0.349      0.072     -4.881      0.000
+    DIJ_04$3           0.155      0.070      2.224      0.026
+    APP_01$1          -0.380      0.070     -5.426      0.000
+    APP_01$2           0.153      0.066      2.331      0.020
+    APP_01$3           1.235      0.099     12.452      0.000
+    APP_02$1          -0.589      0.074     -7.911      0.000
+    APP_02$2           0.705      0.077      9.154      0.000
+    APP_03$1          -1.191      0.094    -12.722      0.000
+    APP_03$2          -0.322      0.068     -4.718      0.000
+    APP_03$3           0.344      0.069      4.983      0.000
+    APP_03$4           1.455      0.118     12.352      0.000
+    APP_04$1          -0.681      0.078     -8.720      0.000
+    APP_04$2           0.062      0.067      0.927      0.354
+    APP_04$3           0.809      0.080     10.131      0.000
+    APP_05$1          -1.281      0.106    -12.069      0.000
+    APP_05$2          -0.590      0.073     -8.120      0.000
+    APP_05$3           0.284      0.070      4.043      0.000
+    JSA_01$1          -1.498      0.104    -14.371      0.000
+    JSA_01$2          -0.728      0.075     -9.704      0.000
+    JSA_01$3           0.938      0.082     11.445      0.000
+    JSA_02$1          -0.478      0.070     -6.875      0.000
+    JSA_02$2           0.393      0.068      5.827      0.000
+    JSA_03$1          -1.314      0.099    -13.254      0.000
+    JSA_03$2          -0.335      0.070     -4.805      0.000
+    JSA_03$3           1.413      0.106     13.385      0.000
+    JSA_04$1          -0.610      0.074     -8.207      0.000
+    JSA_04$2           1.306      0.098     13.341      0.000
+
+ Variances
+    DIJ                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    JSA                0.920      0.035     26.377      0.000
+    S_JSA              0.946      0.278      3.405      0.001
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                   20            21            22            23            24
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                   25            26            27            28            29
+
+
+           TAU
+              DIJ_04$3      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                   30            31            32            33            34
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                   35            36            37            38            39
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+                   40            41            42            43            44
+
+
+           TAU
+              APP_05$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+                   45            46            47            48            49
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                   50            51            52            53            54
+
+
+           TAU
+              JSA_04$2
+              ________
+                   55
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APP_01
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        JSA_01
+              ________      ________      ________      ________      ________
+                    0             0             0             0             0
+
+
+           NU
+              JSA_02        JSA_03        JSA_04        WH_GROUP
+              ________      ________      ________      ________
+                    0             0             0             0
+
+
+           LAMBDA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ_01             1             0             0             0             0
+ DIJ_02             2             0             0             0             0
+ DIJ_03             3             0             0             0             0
+ DIJ_04             4             0             0             0             0
+ APP_01             0             5             0             0             0
+ APP_02             0             6             0             0             0
+ APP_03             0             7             0             0             0
+ APP_04             0             8             0             0             0
+ APP_05             0             9             0             0             0
+ JSA_01             0             0            10             0             0
+ JSA_02             0             0            11             0             0
+ JSA_03             0             0            12             0             0
+ JSA_04             0             0            13             0             0
+ WH_GROUP           0             0             0             0             0
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APP_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ APP_01             0             0             0             0             0
+ APP_02             0             0             0             0             0
+ APP_03             0             0             0             0             0
+ APP_04             0             0             0             0             0
+ APP_05             0             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+ WH_GROUP           0             0             0             0             0
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        JSA_01
+              ________      ________      ________      ________      ________
+ APP_02             0
+ APP_03             0             0
+ APP_04             0             0             0
+ APP_05             0             0             0             0
+ JSA_01             0             0             0             0             0
+ JSA_02             0             0             0             0             0
+ JSA_03             0             0             0             0             0
+ JSA_04             0             0             0             0             0
+ WH_GROUP           0             0             0             0             0
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04        WH_GROUP
+              ________      ________      ________      ________
+ JSA_02             0
+ JSA_03             0             0
+ JSA_04             0             0             0
+ WH_GROUP           0             0             0             0
+
+
+           ALPHA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                    0             0             0            14             0
+
+
+           BETA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ                0             0             0             0             0
+ APP                0             0             0             0             0
+ JSA                0            15             0             0            16
+ S_JSA              0            17             0             0            18
+ WH_GROUP           0             0             0             0             0
+
+
+           PSI
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ                0
+ APP               19             0
+ JSA                0             0             0
+ S_JSA              0             0             0             0
+ WH_GROUP           0             0             0             0             0
+
+
+     STARTING VALUES
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.841        -0.417         0.428        -0.657         0.179
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -1.660        -0.351         0.512        -1.880        -0.637
+
+
+           TAU
+              DIJ_04$3      APP_01$1      APP_01$2      APP_01$3      APP_02$1
+              ________      ________      ________      ________      ________
+                0.239        -0.654         0.261         2.188        -1.008
+
+
+           TAU
+              APP_02$2      APP_03$1      APP_03$2      APP_03$3      APP_03$4
+              ________      ________      ________      ________      ________
+                1.179        -2.055        -0.531         0.589         2.583
+
+
+           TAU
+              APP_04$1      APP_04$2      APP_04$3      APP_05$1      APP_05$2
+              ________      ________      ________      ________      ________
+               -1.160         0.123         1.430        -2.244        -1.002
+
+
+           TAU
+              APP_05$3      JSA_01$1      JSA_01$2      JSA_01$3      JSA_02$1
+              ________      ________      ________      ________      ________
+                0.474        -2.606        -1.193         1.572        -0.837
+
+
+           TAU
+              JSA_02$2      JSA_03$1      JSA_03$2      JSA_03$3      JSA_04$1
+              ________      ________      ________      ________      ________
+                0.689        -2.251        -0.542         2.451        -0.999
+
+
+           TAU
+              JSA_04$2
+              ________
+                2.285
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APP_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APP_02        APP_03        APP_04        APP_05        JSA_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              JSA_02        JSA_03        JSA_04        WH_GROUP
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000         0.000         0.000         0.000         0.000
+ DIJ_02         1.000         0.000         0.000         0.000         0.000
+ DIJ_03         1.000         0.000         0.000         0.000         0.000
+ DIJ_04         1.000         0.000         0.000         0.000         0.000
+ APP_01         0.000         1.000         0.000         0.000         0.000
+ APP_02         0.000         1.000         0.000         0.000         0.000
+ APP_03         0.000         1.000         0.000         0.000         0.000
+ APP_04         0.000         1.000         0.000         0.000         0.000
+ APP_05         0.000         1.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         1.000         0.000         0.000
+ JSA_02         0.000         0.000         1.000         0.000         0.000
+ JSA_03         0.000         0.000         1.000         0.000         0.000
+ JSA_04         0.000         0.000         1.000         0.000         0.000
+ WH_GROUP       0.000         0.000         0.000         0.000         1.000
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APP_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ APP_01         0.000         0.000         0.000         0.000         1.000
+ APP_02         0.000         0.000         0.000         0.000         0.000
+ APP_03         0.000         0.000         0.000         0.000         0.000
+ APP_04         0.000         0.000         0.000         0.000         0.000
+ APP_05         0.000         0.000         0.000         0.000         0.000
+ JSA_01         0.000         0.000         0.000         0.000         0.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+ WH_GROUP       0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APP_02        APP_03        APP_04        APP_05        JSA_01
+              ________      ________      ________      ________      ________
+ APP_02         1.000
+ APP_03         0.000         1.000
+ APP_04         0.000         0.000         1.000
+ APP_05         0.000         0.000         0.000         1.000
+ JSA_01         0.000         0.000         0.000         0.000         1.000
+ JSA_02         0.000         0.000         0.000         0.000         0.000
+ JSA_03         0.000         0.000         0.000         0.000         0.000
+ JSA_04         0.000         0.000         0.000         0.000         0.000
+ WH_GROUP       0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              JSA_02        JSA_03        JSA_04        WH_GROUP
+              ________      ________      ________      ________
+ JSA_02         1.000
+ JSA_03         0.000         1.000
+ JSA_04         0.000         0.000         1.000
+ WH_GROUP       0.000         0.000         0.000         0.000
+
+
+           ALPHA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           BETA
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            0.000         0.000         0.000         0.000         0.000
+ APP            0.000         0.000         0.000         0.000         0.000
+ JSA            0.000         0.000         0.000         0.000         0.000
+ S_JSA          0.000         0.000         0.000         0.000         0.000
+ WH_GROUP       0.000         0.000         0.000         0.000         0.000
+
+
+           PSI
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APP            0.000         1.000
+ JSA            0.000         0.000         1.000
+ S_JSA          0.000         0.000         0.000         0.010
+ WH_GROUP       0.000         0.000         0.000         0.000         0.444
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                0.000         0.000        -0.002        -0.114         0.000
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.006         0.074         0.048
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                0.000         0.000        -0.291        -1.538         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+                1.000         1.000         0.771         0.124         1.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APP           -0.085         1.000
+ JSA           -0.134         0.250         1.087
+ S_JSA         -0.002         0.020         0.005         0.011
+ WH_GROUP       0.000         0.000        -0.036         0.012         0.888
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APP            0.061         0.000
+ JSA            0.078         0.071         0.041
+ S_JSA          0.006         0.061         0.016         0.003
+ WH_GROUP       0.000         0.000         0.061         0.066         0.064
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ       100000.000
+ APP           -1.398    100000.000
+ JSA           -1.729         3.513        26.377
+ S_JSA         -0.309         0.332         0.288         3.405
+ WH_GROUP       0.000         0.000        -0.596         0.184        13.802
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APP            0.162         0.000
+ JSA            0.084         0.000         0.000
+ S_JSA          0.758         0.740         0.774         0.001
+ WH_GROUP       1.000         1.000         0.551         0.854         0.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            1.000
+ APP           -0.085         1.000
+ JSA           -0.129         0.239         1.000
+ S_JSA         -0.017         0.197         0.043         1.000
+ WH_GROUP       0.000         0.000        -0.037         0.124         1.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APP            0.061         0.000
+ JSA            0.073         0.064         0.000
+ S_JSA          0.052         0.571         0.143         0.000
+ WH_GROUP       0.000         0.000         0.062         0.667         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ          999.000
+ APP           -1.398       999.000
+ JSA           -1.760         3.738       999.000
+ S_JSA         -0.320         0.345         0.297       999.000
+ WH_GROUP       0.000         0.000        -0.596         0.187       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APP           JSA           S_JSA         WH_GROUP
+              ________      ________      ________      ________      ________
+ DIJ            0.000
+ APP            0.162         0.000
+ JSA            0.078         0.000         0.000
+ S_JSA          0.749         0.730         0.766         0.000
+ WH_GROUP       1.000         1.000         0.551         0.852         0.000
+
+
+     Beginning Time:  13:42:00
+        Ending Time:  13:45:20
+       Elapsed Time:  00:03:20
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen

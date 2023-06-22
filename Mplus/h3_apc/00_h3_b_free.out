@@ -1,0 +1,1482 @@
+Mplus VERSION 8.9 (Linux)
+MUTHEN & MUTHEN
+06/19/2023   1:12 PM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus.dat";
+
+  VARIABLE:
+
+      NAMES =
+      group group_detail wh_group
+  dij_01 dij_02 dij_03 dij_04
+  apc_01 apc_02 apc_03 apc_04 apc_05
+  app_01 app_02 app_03 app_04 app_05
+  res_01 res_02 res_03
+  exh_01 exh_04 exh_08
+  jsa_01 jsa_02 jsa_03 jsa_04
+  in_ex inc_ins
+  ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          dij_01-dij_04
+          apc_01-apc_05
+          !app_01-app_05
+          !res_01-res_03
+          !exh_01 exh_04 exh_08
+          !jsa_01 jsa_02 jsa_03 jsa_04
+          wh_group
+          ;
+
+
+      categorical =
+          dij_01-apc_05;
+
+      grouping = group (1 = perm, 2 = temp)
+
+      DEFINE:
+          CENTER wh_group (GRANDMEAN);
+
+  ANALYSIS:
+      estimator = WLSMV;
+      PARAMETERIZATION = THETA;
+      STARTS=20;
+
+  MODEL:
+
+      !! PERM
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APC by
+              apc_01* (f_apc_01)
+              apc_02* (f_apc_02)
+              apc_03* (f_apc_03)
+              apc_04* (f_apc_04)
+              apc_05* (f_apc_05)
+              ;
+
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !APC
+          [apc_01$1*] (t1apc_01);
+          [apc_01$2*] (t2apc_01);
+
+          [apc_02$1*] (t1apc_02);
+          [apc_02$2*] (t2apc_02);
+
+          [apc_03$1*] (t1apc_03);
+          [apc_03$2*] (t2apc_03);
+
+          [apc_04$1*] (t1apc_04);
+          [apc_04$2*] (t2apc_04);
+
+          [apc_05$1*] (t1apc_05);
+          [apc_05$2*] (t2apc_05);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-apc_05@1;
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [APC@0];
+
+          !DIJ* (dij_var) ;
+          DIJ@0.991; !this is the residual variance; sets total variance to 1
+          APC@1;
+
+          ! Hypothesis
+          DIJ on
+              wh_group (wh_b)
+              APC* (apc_b)
+              ;
+
+  MODEL temp:
+
+          ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APC by
+              apc_01* (f_apc_01)
+              apc_02* (f_apc_02)
+              apc_03* (f_apc_03)
+              apc_04* (f_apc_04)
+              apc_05* (f_apc_05)
+              ;
+
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !APC
+          [apc_01$1*] (t1apc_01);
+          [apc_01$2*] (t2apc_01);
+
+          [apc_02$1*] (t1apc_02);
+          [apc_02$2*] (t2apc_02);
+
+          [apc_03$1*] (t1apc_03);
+          [apc_03$2*] (t2apc_03);
+
+          [apc_04$1*] (t1apc_04);
+          [apc_04$2*] (t2apc_04);
+
+          [apc_05$1*] (t1apc_05);
+          [apc_05$2*] (t2apc_05);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-apc_05@1;
+
+
+          ! Factors mean and variance free
+
+          [DIJ*];
+          [APC*];
+
+          DIJ*;
+          APC*;
+
+          ! Hypothesis
+          DIJ on
+              wh_group (wh_b)
+              APC*
+              ;
+
+  OUTPUT:
+  	tech1
+  	tech4
+  	stdyx
+  	;
+
+  !MODEL CONSTRAINT:
+  !    0 = 1-(dij_var + wh_b*wh_b + apc_b * apc_b);
+
+
+  SAVEDATA: DIFFTEST=00_h3_b_free.diff;
+
+
+
+*** WARNING
+  Data set contains cases with missing on x-variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on x-variables:  1
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group PERM                                                  262
+   Group TEMP                                                  119
+   Total sample size                                           381
+
+Number of dependent variables                                    9
+Number of independent variables                                  1
+Number of continuous latent variables                            2
+
+Observed dependent variables
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      APC_01      APC_02
+   APC_03      APC_04      APC_05
+
+Observed independent variables
+   WH_GROUP
+
+Continuous latent variables
+   DIJ         APC
+
+Variables with special functions
+
+  Grouping variable     GROUP
+
+  Centering (GRANDMEAN)
+   WH_GROUP
+
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Random Starts Specifications
+  Number of random starts                                       20
+  Random starts scale                                    0.500D+01
+Parameterization                                             THETA
+Link                                                        PROBIT
+
+Input data file(s)
+  ../../data/transforms/mplus.dat
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group PERM
+     Number of missing data patterns            13
+
+   Group TEMP
+     Number of missing data patterns             8
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR PERM
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.943         0.962
+ DIJ_03         0.935         0.935         0.950
+ DIJ_04         0.950         0.950         0.939         0.969
+ APC_01         0.958         0.962         0.950         0.969         1.000
+ APC_02         0.950         0.954         0.943         0.962         0.992
+ APC_03         0.958         0.962         0.950         0.969         1.000
+ APC_04         0.954         0.958         0.947         0.966         0.996
+ APC_05         0.958         0.962         0.950         0.969         1.000
+
+
+           Covariance Coverage
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02         0.992
+ APC_03         0.992         1.000
+ APC_04         0.989         0.996         0.996
+ APC_05         0.992         1.000         0.996         1.000
+
+
+     PROPORTION OF DATA PRESENT FOR TEMP
+
+
+           Covariance Coverage
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         0.958
+ DIJ_02         0.958         0.983
+ DIJ_03         0.941         0.958         0.958
+ DIJ_04         0.941         0.966         0.941         0.975
+ APC_01         0.950         0.975         0.950         0.966         0.992
+ APC_02         0.958         0.983         0.958         0.975         0.992
+ APC_03         0.958         0.983         0.958         0.975         0.992
+ APC_04         0.958         0.983         0.958         0.975         0.992
+ APC_05         0.958         0.983         0.958         0.975         0.992
+
+
+           Covariance Coverage
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         1.000         1.000
+ APC_04         1.000         1.000         1.000
+ APC_05         1.000         1.000         1.000         1.000
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+  Group PERM
+    DIJ_01
+      Category 1    0.048           12.000
+      Category 2    0.175           44.000
+      Category 3    0.255           64.000
+      Category 4    0.522          131.000
+    DIJ_02
+      Category 1    0.194           49.000
+      Category 2    0.210           53.000
+      Category 3    0.595          150.000
+    DIJ_03
+      Category 1    0.064           16.000
+      Category 2    0.181           45.000
+      Category 3    0.249           62.000
+      Category 4    0.506          126.000
+    DIJ_04
+      Category 1    0.059           15.000
+      Category 2    0.138           35.000
+      Category 3    0.244           62.000
+      Category 4    0.559          142.000
+    APC_01
+      Category 1    0.118           31.000
+      Category 2    0.519          136.000
+      Category 3    0.363           95.000
+    APC_02
+      Category 1    0.192           50.000
+      Category 2    0.496          129.000
+      Category 3    0.312           81.000
+    APC_03
+      Category 1    0.141           37.000
+      Category 2    0.565          148.000
+      Category 3    0.294           77.000
+    APC_04
+      Category 1    0.195           51.000
+      Category 2    0.261           68.000
+      Category 3    0.544          142.000
+    APC_05
+      Category 1    0.183           48.000
+      Category 2    0.523          137.000
+      Category 3    0.294           77.000
+
+  Group TEMP
+    DIJ_01
+      Category 1    0.333           38.000
+      Category 2    0.447           51.000
+      Category 3    0.105           12.000
+      Category 4    0.114           13.000
+    DIJ_02
+      Category 1    0.658           77.000
+      Category 2    0.188           22.000
+      Category 3    0.154           18.000
+    DIJ_03
+      Category 1    0.368           42.000
+      Category 2    0.412           47.000
+      Category 3    0.132           15.000
+      Category 4    0.088           10.000
+    DIJ_04
+      Category 1    0.293           34.000
+      Category 2    0.379           44.000
+      Category 3    0.147           17.000
+      Category 4    0.181           21.000
+    APC_01
+      Category 1    0.246           29.000
+      Category 2    0.559           66.000
+      Category 3    0.195           23.000
+    APC_02
+      Category 1    0.445           53.000
+      Category 2    0.403           48.000
+      Category 3    0.151           18.000
+    APC_03
+      Category 1    0.218           26.000
+      Category 2    0.588           70.000
+      Category 3    0.193           23.000
+    APC_04
+      Category 1    0.311           37.000
+      Category 2    0.353           42.000
+      Category 3    0.336           40.000
+    APC_05
+      Category 1    0.462           55.000
+      Category 2    0.353           42.000
+      Category 3    0.185           22.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR PERM
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              0.000      -1.568      -2.542    2.29%      -0.542      0.458      0.458
+             262.000       0.607       1.416       0.458   69.85%       0.458      0.458
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR TEMP
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              0.000      -1.463      -3.244    5.04%      -1.244      0.756      0.756
+             119.000       1.445       0.881       0.756   63.87%       0.756      0.756
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST FIT FUNCTION VALUES
+
+Fit function values at local maxima and random start numbers:
+
+      0.13350854D+00         12
+      0.13350855D+00         10
+      0.13350855D+00         7
+      0.13350855D+00         15
+      0.13350855D+00         8
+      0.13350855D+00         4
+      0.13350855D+00         3
+      0.13350855D+00         17
+      0.13350856D+00         19
+      0.13350856D+00         14
+      0.13350856D+00         16
+      0.13350857D+00         13
+      0.13350857D+00         5
+      0.13350857D+00         6
+      0.13350858D+00         18
+      0.13350859D+00         20
+      0.13350859D+00         9
+      0.13350861D+00         unperturbed
+      0.13350861D+00         11
+      0.13350862D+00         1
+      0.13350876D+00         2
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                       37
+
+Chi-Square Test of Model Fit
+
+          Value                            135.433*
+          Degrees of Freedom                    95
+          P-Value                           0.0041
+
+Chi-Square Contribution From Each Group
+
+          PERM                              63.150
+          TEMP                              72.284
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.047
+          90 Percent C.I.                    0.027  0.065
+          Probability RMSEA <= .05           0.583
+
+CFI/TLI
+
+          CFI                                0.990
+          TLI                                0.991
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                           4129.537
+          Degrees of Freedom                    90
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.061
+
+Optimum Function Value for Weighted Least-Squares Estimator
+
+          Value                     0.13350854D+00
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             2.054      0.243      8.448      0.000
+    DIJ_02             1.700      0.167     10.186      0.000
+    DIJ_03             2.020      0.242      8.361      0.000
+    DIJ_04             1.268      0.114     11.126      0.000
+
+ APC      BY
+    APC_01             1.134      0.109     10.373      0.000
+    APC_02             2.039      0.242      8.412      0.000
+    APC_03             1.025      0.102     10.075      0.000
+    APC_04             0.475      0.073      6.549      0.000
+    APC_05             3.637      0.903      4.029      0.000
+
+ DIJ      ON
+    APC                0.094      0.076      1.229      0.219
+
+ DIJ      ON
+    WH_GROUP           0.012      0.059      0.199      0.842
+
+ Means
+    APC                0.000      0.000    999.000    999.000
+
+ Intercepts
+    DIJ                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -3.790      0.339    -11.182      0.000
+    DIJ_01$2          -1.602      0.216     -7.427      0.000
+    DIJ_01$3          -0.213      0.182     -1.168      0.243
+    DIJ_02$1          -1.696      0.188     -9.030      0.000
+    DIJ_02$2          -0.516      0.164     -3.143      0.002
+    DIJ_03$1          -3.488      0.331    -10.544      0.000
+    DIJ_03$2          -1.482      0.222     -6.677      0.000
+    DIJ_03$3          -0.068      0.177     -0.386      0.700
+    DIJ_04$1          -2.563      0.172    -14.891      0.000
+    DIJ_04$2          -1.283      0.136     -9.432      0.000
+    DIJ_04$3          -0.304      0.128     -2.378      0.017
+    APC_01$1          -1.814      0.144    -12.562      0.000
+    APC_01$2           0.542      0.109      4.965      0.000
+    APC_02$1          -1.882      0.220     -8.539      0.000
+    APC_02$2           1.118      0.189      5.898      0.000
+    APC_03$1          -1.646      0.129    -12.791      0.000
+    APC_03$2           0.726      0.105      6.921      0.000
+    APC_04$1          -0.926      0.087    -10.680      0.000
+    APC_04$2          -0.044      0.077     -0.569      0.570
+    APC_05$1          -3.226      0.760     -4.245      0.000
+    APC_05$2           1.843      0.482      3.821      0.000
+
+ Variances
+    APC                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    DIJ                0.991      0.000    999.000    999.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             2.054      0.243      8.448      0.000
+    DIJ_02             1.700      0.167     10.186      0.000
+    DIJ_03             2.020      0.242      8.361      0.000
+    DIJ_04             1.268      0.114     11.126      0.000
+
+ APC      BY
+    APC_01             1.134      0.109     10.373      0.000
+    APC_02             2.039      0.242      8.412      0.000
+    APC_03             1.025      0.102     10.075      0.000
+    APC_04             0.475      0.073      6.549      0.000
+    APC_05             3.637      0.903      4.029      0.000
+
+ DIJ      ON
+    APC               -0.061      0.090     -0.678      0.498
+
+ DIJ      ON
+    WH_GROUP           0.012      0.059      0.199      0.842
+
+ Means
+    APC               -0.678      0.129     -5.237      0.000
+
+ Intercepts
+    DIJ               -1.458      0.154     -9.461      0.000
+
+ Thresholds
+    DIJ_01$1          -3.790      0.339    -11.182      0.000
+    DIJ_01$2          -1.602      0.216     -7.427      0.000
+    DIJ_01$3          -0.213      0.182     -1.168      0.243
+    DIJ_02$1          -1.696      0.188     -9.030      0.000
+    DIJ_02$2          -0.516      0.164     -3.143      0.002
+    DIJ_03$1          -3.488      0.331    -10.544      0.000
+    DIJ_03$2          -1.482      0.222     -6.677      0.000
+    DIJ_03$3          -0.068      0.177     -0.386      0.700
+    DIJ_04$1          -2.563      0.172    -14.891      0.000
+    DIJ_04$2          -1.283      0.136     -9.432      0.000
+    DIJ_04$3          -0.304      0.128     -2.378      0.017
+    APC_01$1          -1.814      0.144    -12.562      0.000
+    APC_01$2           0.542      0.109      4.965      0.000
+    APC_02$1          -1.882      0.220     -8.539      0.000
+    APC_02$2           1.118      0.189      5.898      0.000
+    APC_03$1          -1.646      0.129    -12.791      0.000
+    APC_03$2           0.726      0.105      6.921      0.000
+    APC_04$1          -0.926      0.087    -10.680      0.000
+    APC_04$2          -0.044      0.077     -0.569      0.570
+    APC_05$1          -3.226      0.760     -4.245      0.000
+    APC_05$2           1.843      0.482      3.821      0.000
+
+ Variances
+    APC                1.082      0.236      4.588      0.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    DIJ                0.712      0.175      4.058      0.000
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.385E-03
+       (ratio of smallest to largest eigenvalue)
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group PERM
+
+ DIJ      BY
+    DIJ_01             0.899      0.020     44.155      0.000
+    DIJ_02             0.862      0.022     39.621      0.000
+    DIJ_03             0.896      0.021     42.486      0.000
+    DIJ_04             0.785      0.027     29.028      0.000
+
+ APC      BY
+    APC_01             0.750      0.032     23.715      0.000
+    APC_02             0.898      0.021     43.391      0.000
+    APC_03             0.716      0.035     20.652      0.000
+    APC_04             0.429      0.053      8.030      0.000
+    APC_05             0.964      0.017     57.314      0.000
+
+ DIJ      ON
+    APC                0.094      0.076      1.240      0.215
+
+ DIJ      ON
+    WH_GROUP           0.009      0.046      0.199      0.842
+
+ Means
+    APC                0.000      0.000    999.000    999.000
+
+ Intercepts
+    DIJ                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -1.659      0.113    -14.655      0.000
+    DIJ_01$2          -0.701      0.080     -8.751      0.000
+    DIJ_01$3          -0.093      0.078     -1.202      0.229
+    DIJ_02$1          -0.860      0.081    -10.654      0.000
+    DIJ_02$2          -0.262      0.077     -3.407      0.001
+    DIJ_03$1          -1.548      0.108    -14.318      0.000
+    DIJ_03$2          -0.658      0.080     -8.198      0.000
+    DIJ_03$3          -0.030      0.078     -0.390      0.697
+    DIJ_04$1          -1.588      0.103    -15.397      0.000
+    DIJ_04$2          -0.794      0.080     -9.954      0.000
+    DIJ_04$3          -0.188      0.076     -2.459      0.014
+    APC_01$1          -1.200      0.087    -13.717      0.000
+    APC_01$2           0.359      0.075      4.785      0.000
+    APC_02$1          -0.829      0.083     -9.968      0.000
+    APC_02$2           0.492      0.080      6.170      0.000
+    APC_03$1          -1.150      0.086    -13.436      0.000
+    APC_03$2           0.507      0.076      6.680      0.000
+    APC_04$1          -0.837      0.074    -11.247      0.000
+    APC_04$2          -0.039      0.069     -0.570      0.569
+    APC_05$1          -0.855      0.085    -10.087      0.000
+    APC_05$2           0.489      0.081      6.003      0.000
+
+ Variances
+    APC                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.192      0.037      5.235      0.000
+    DIJ_02             0.257      0.037      6.859      0.000
+    DIJ_03             0.197      0.038      5.207      0.000
+    DIJ_04             0.384      0.042      9.034      0.000
+    APC_01             0.437      0.047      9.219      0.000
+    APC_02             0.194      0.037      5.218      0.000
+    APC_03             0.488      0.050      9.836      0.000
+    APC_04             0.816      0.046     17.762      0.000
+    APC_05             0.070      0.032      2.167      0.030
+    DIJ                0.991      0.014     69.618      0.000
+
+Group TEMP
+
+ DIJ      BY
+    DIJ_01             0.867      0.028     31.235      0.000
+    DIJ_02             0.821      0.036     23.110      0.000
+    DIJ_03             0.863      0.028     31.006      0.000
+    DIJ_04             0.731      0.041     17.854      0.000
+
+ APC      BY
+    APC_01             0.763      0.037     20.642      0.000
+    APC_02             0.904      0.022     42.060      0.000
+    APC_03             0.729      0.038     19.094      0.000
+    APC_04             0.443      0.056      7.876      0.000
+    APC_05             0.967      0.016     59.879      0.000
+
+ DIJ      ON
+    APC               -0.075      0.111     -0.678      0.498
+
+ DIJ      ON
+    WH_GROUP           0.017      0.084      0.199      0.842
+
+ Means
+    APC               -0.652      0.131     -4.958      0.000
+
+ Intercepts
+    DIJ               -1.722      0.203     -8.467      0.000
+
+ Thresholds
+    DIJ_01$1          -1.890      0.167    -11.326      0.000
+    DIJ_01$2          -0.799      0.111     -7.220      0.000
+    DIJ_01$3          -0.106      0.091     -1.170      0.242
+    DIJ_02$1          -0.968      0.113     -8.539      0.000
+    DIJ_02$2          -0.295      0.092     -3.188      0.001
+    DIJ_03$1          -1.761      0.162    -10.844      0.000
+    DIJ_03$2          -0.748      0.111     -6.729      0.000
+    DIJ_03$3          -0.035      0.089     -0.387      0.699
+    DIJ_04$1          -1.748      0.125    -13.968      0.000
+    DIJ_04$2          -0.874      0.096     -9.121      0.000
+    DIJ_04$3          -0.207      0.087     -2.389      0.017
+    APC_01$1          -1.173      0.098    -12.027      0.000
+    APC_01$2           0.351      0.073      4.781      0.000
+    APC_02$1          -0.803      0.094     -8.565      0.000
+    APC_02$2           0.477      0.079      6.019      0.000
+    APC_03$1          -1.127      0.093    -12.170      0.000
+    APC_03$2           0.497      0.075      6.625      0.000
+    APC_04$1          -0.830      0.074    -11.162      0.000
+    APC_04$2          -0.039      0.069     -0.570      0.569
+    APC_05$1          -0.825      0.100     -8.241      0.000
+    APC_05$2           0.471      0.079      5.929      0.000
+
+ Variances
+    APC                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.249      0.048      5.169      0.000
+    DIJ_02             0.326      0.058      5.584      0.000
+    DIJ_03             0.255      0.048      5.304      0.000
+    DIJ_04             0.465      0.060      7.756      0.000
+    APC_01             0.418      0.056      7.419      0.000
+    APC_02             0.182      0.039      4.676      0.000
+    APC_03             0.468      0.056      8.408      0.000
+    APC_04             0.804      0.050     16.106      0.000
+    APC_05             0.065      0.031      2.093      0.036
+    DIJ                0.994      0.017     59.272      0.000
+
+
+R-SQUARE
+
+Group PERM
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.808      0.037     22.078      0.000      0.438
+    DIJ_02             0.743      0.037     19.810      0.000      0.507
+    DIJ_03             0.803      0.038     21.243      0.000      0.444
+    DIJ_04             0.616      0.042     14.514      0.000      0.619
+    APC_01             0.563      0.047     11.857      0.000      0.661
+    APC_02             0.806      0.037     21.696      0.000      0.440
+    APC_03             0.512      0.050     10.326      0.000      0.698
+    APC_04             0.184      0.046      4.015      0.000      0.903
+    APC_05             0.930      0.032     28.657      0.000      0.265
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    DIJ                0.009      0.014      0.625      0.532
+
+Group TEMP
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.751      0.048     15.618      0.000      0.499
+    DIJ_02             0.674      0.058     11.555      0.000      0.571
+    DIJ_03             0.745      0.048     15.503      0.000      0.505
+    DIJ_04             0.535      0.060      8.927      0.000      0.682
+    APC_01             0.582      0.056     10.321      0.000      0.647
+    APC_02             0.818      0.039     21.030      0.000      0.427
+    APC_03             0.532      0.056      9.547      0.000      0.684
+    APC_04             0.196      0.050      3.938      0.000      0.896
+    APC_05             0.935      0.031     29.939      0.000      0.256
+
+     Latent                                         Two-Tailed
+    Variable        Estimate       S.E.  Est./S.E.    P-Value
+
+    DIJ                0.006      0.017      0.353      0.724
+
+
+TECHNICAL 1 OUTPUT
+
+
+     PARAMETER SPECIFICATION FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              APC_05$2
+              ________
+                 21
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+                  0             0             0             0
+
+
+           LAMBDA
+              DIJ           APC
+              ________      ________
+ DIJ_01            22             0
+ DIJ_02            23             0
+ DIJ_03            24             0
+ DIJ_04            25             0
+ APC_01             0            26
+ APC_02             0            27
+ APC_03             0            28
+ APC_04             0            29
+ APC_05             0            30
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ APC_01             0             0             0             0             0
+ APC_02             0             0             0             0             0
+ APC_03             0             0             0             0             0
+ APC_04             0             0             0             0             0
+ APC_05             0             0             0             0             0
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02             0
+ APC_03             0             0
+ APC_04             0             0             0
+ APC_05             0             0             0             0
+
+
+           ALPHA
+              DIJ           APC
+              ________      ________
+                  0             0
+
+
+           BETA
+              DIJ           APC
+              ________      ________
+ DIJ                0            31
+ APC                0             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ               32
+ APC                0
+
+
+           PSI
+              DIJ           APC
+              ________      ________
+ DIJ                0
+ APC                0             0
+
+
+     PARAMETER SPECIFICATION FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+                  1             2             3             4             5
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+                  6             7             8             9            10
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                 11            12            13            14            15
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+                 16            17            18            19            20
+
+
+           TAU
+              APC_05$2
+              ________
+                 21
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                  0             0             0             0             0
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+                  0             0             0             0
+
+
+           LAMBDA
+              DIJ           APC
+              ________      ________
+ DIJ_01            22             0
+ DIJ_02            23             0
+ DIJ_03            24             0
+ DIJ_04            25             0
+ APC_01             0            26
+ APC_02             0            27
+ APC_03             0            28
+ APC_04             0            29
+ APC_05             0            30
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01             0
+ DIJ_02             0             0
+ DIJ_03             0             0             0
+ DIJ_04             0             0             0             0
+ APC_01             0             0             0             0             0
+ APC_02             0             0             0             0             0
+ APC_03             0             0             0             0             0
+ APC_04             0             0             0             0             0
+ APC_05             0             0             0             0             0
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02             0
+ APC_03             0             0
+ APC_04             0             0             0
+ APC_05             0             0             0             0
+
+
+           ALPHA
+              DIJ           APC
+              ________      ________
+                 33            34
+
+
+           BETA
+              DIJ           APC
+              ________      ________
+ DIJ                0            35
+ APC                0             0
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ               32
+ APC                0
+
+
+           PSI
+              DIJ           APC
+              ________      ________
+ DIJ               36
+ APC                0            37
+
+
+     STARTING VALUES FOR PERM
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.666        -0.762        -0.055        -0.862        -0.241
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -1.520        -0.690        -0.015        -1.563        -0.853
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+               -0.149        -1.183         0.352        -0.869         0.491
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+               -1.075         0.542        -0.858        -0.111        -0.903
+
+
+           TAU
+              APC_05$2
+              ________
+                0.542
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           APC
+              ________      ________
+ DIJ_01         0.872         0.000
+ DIJ_02         0.885         0.000
+ DIJ_03         0.875         0.000
+ DIJ_04         0.813         0.000
+ APC_01         0.000         0.761
+ APC_02         0.000         0.904
+ APC_03         0.000         0.700
+ APC_04         0.000         0.452
+ APC_05         0.000         0.961
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ APC_01         0.000         0.000         0.000         0.000         1.000
+ APC_02         0.000         0.000         0.000         0.000         0.000
+ APC_03         0.000         0.000         0.000         0.000         0.000
+ APC_04         0.000         0.000         0.000         0.000         0.000
+ APC_05         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         0.000         1.000
+ APC_04         0.000         0.000         1.000
+ APC_05         0.000         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           APC
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           APC
+              ________      ________
+ DIJ            0.000         0.000
+ APC            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ APC            0.000
+
+
+           PSI
+              DIJ           APC
+              ________      ________
+ DIJ            0.991
+ APC            0.000         1.000
+
+
+     STARTING VALUES FOR TEMP
+
+
+           TAU
+              DIJ_01$1      DIJ_01$2      DIJ_01$3      DIJ_02$1      DIJ_02$2
+              ________      ________      ________      ________      ________
+               -1.049         0.006         0.575        -0.227         0.390
+
+
+           TAU
+              DIJ_03$1      DIJ_03$2      DIJ_03$3      DIJ_04$1      DIJ_04$2
+              ________      ________      ________      ________      ________
+               -0.928         0.042         0.670        -1.054        -0.203
+
+
+           TAU
+              DIJ_04$3      APC_01$1      APC_01$2      APC_02$1      APC_02$2
+              ________      ________      ________      ________      ________
+                0.381        -0.936         0.606        -0.503         0.761
+
+
+           TAU
+              APC_03$1      APC_03$2      APC_04$1      APC_04$2      APC_05$1
+              ________      ________      ________      ________      ________
+               -0.926         0.704        -0.676         0.156        -0.499
+
+
+           TAU
+              APC_05$2
+              ________
+                0.719
+
+
+           NU
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+                0.000         0.000         0.000         0.000         0.000
+
+
+           NU
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+                0.000         0.000         0.000         0.000
+
+
+           LAMBDA
+              DIJ           APC
+              ________      ________
+ DIJ_01         0.913         0.000
+ DIJ_02         0.795         0.000
+ DIJ_03         0.881         0.000
+ DIJ_04         0.609         0.000
+ APC_01         0.000         0.775
+ APC_02         0.000         0.867
+ APC_03         0.000         0.724
+ APC_04         0.000         0.368
+ APC_05         0.000         0.957
+
+
+           THETA
+              DIJ_01        DIJ_02        DIJ_03        DIJ_04        APC_01
+              ________      ________      ________      ________      ________
+ DIJ_01         1.000
+ DIJ_02         0.000         1.000
+ DIJ_03         0.000         0.000         1.000
+ DIJ_04         0.000         0.000         0.000         1.000
+ APC_01         0.000         0.000         0.000         0.000         1.000
+ APC_02         0.000         0.000         0.000         0.000         0.000
+ APC_03         0.000         0.000         0.000         0.000         0.000
+ APC_04         0.000         0.000         0.000         0.000         0.000
+ APC_05         0.000         0.000         0.000         0.000         0.000
+
+
+           THETA
+              APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________
+ APC_02         1.000
+ APC_03         0.000         1.000
+ APC_04         0.000         0.000         1.000
+ APC_05         0.000         0.000         0.000         1.000
+
+
+           ALPHA
+              DIJ           APC
+              ________      ________
+                0.000         0.000
+
+
+           BETA
+              DIJ           APC
+              ________      ________
+ DIJ            0.000         0.000
+ APC            0.000         0.000
+
+
+           GAMMA
+              WH_GROUP
+              ________
+ DIJ            0.000
+ APC            0.000
+
+
+           PSI
+              DIJ           APC
+              ________      ________
+ DIJ            0.991
+ APC            0.000         1.000
+
+
+TECHNICAL 4 OUTPUT
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                0.000         0.000
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            1.000
+ APC            0.094         1.000
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            1.000
+ APC            0.094         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+               -1.416        -0.678
+
+
+           ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.716
+ APC           -0.066         1.082
+
+
+           ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            1.000
+ APC           -0.075         1.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR PERM
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                0.001         0.000
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                0.000         0.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                1.000         1.000
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.014
+ APC            0.076         0.000
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ           69.618
+ APC            1.229   ***********
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.219         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.076         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ          999.000
+ APC            1.240       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.215         0.000
+
+
+     ESTIMATES DERIVED FROM THE MODEL FOR TEMP
+
+
+           S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                0.138         0.129
+
+
+           EST./S.E. FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+              -10.278        -5.237
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED MEANS FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+                0.000         0.000
+
+
+           S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.178
+ APC            0.101         0.236
+
+
+           EST./S.E. FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            4.034
+ APC           -0.657         4.588
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED COVARIANCE MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.511         0.000
+
+
+           S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.111         0.000
+
+
+           EST./S.E. FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ          999.000
+ APC           -0.678       999.000
+
+
+           TWO-TAILED P-VALUE FOR ESTIMATED CORRELATION MATRIX FOR THE LATENT VARIABLES
+              DIJ           APC
+              ________      ________
+ DIJ            0.000
+ APC            0.498         0.000
+
+
+SAVEDATA INFORMATION
+
+
+  Difference testing
+
+  Save file
+    00_h3_b_free.diff
+  Save format      Free
+
+     Beginning Time:  13:12:09
+        Ending Time:  13:12:09
+       Elapsed Time:  00:00:00
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2023 Muthen & Muthen
