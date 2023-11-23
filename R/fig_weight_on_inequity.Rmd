@@ -1,0 +1,78 @@
+---
+title: "fig_weight_on_inequity"
+author: "Bernhard Piskernik"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(MplusAutomation)
+```
+
+
+```{r}
+get_bs_on_inequity <- function(subfoldername) {
+  readModels(here::here("Mplus", subfoldername), filefilter = '00_h._b_free') %>% 
+    .$parameters %>%
+    .$unstandardized %>%
+  filter(
+    paramHeader == 'DIJ.ON',
+    param != 'WH_GROUP'
+  )
+}
+```
+
+
+```{r}
+lookup <- c(Referent = "param", b = "est", `EA group` = "Group")
+```
+
+
+```{r}
+df <- tibble(subfolder = c('h3_apc', 'h4_app', 'h5_res')) %>%
+  mutate(
+    param = map(subfolder, get_bs_on_inequity)
+  ) %>%
+  unnest(param) %>%
+  rename(all_of(lookup)) %>%
+  mutate(
+    `EA group` = recode(`EA group`, PERM = 'staff', TEMP = 'temporary')
+    , Referent = recode(Referent, APC = "Colleagues'\nappreciation", APP = "Patients'\nappreciation", RES = "Outcome\nresponsibility")
+    , Referent = factor(Referent, levels=c("Outcome\nresponsibility", "Patients'\nappreciation", "Colleagues'\nappreciation"))
+  )
+df
+```
+
+
+```{r}
+fig <- df %>% 
+  ggplot(
+    aes(y=Referent, x=b, group=`EA group`, color=`EA group`, shape=`EA group`)
+  ) +
+  geom_pointrange(aes(xmin=b-1.96*se, xmax=b+1.96*se), position=position_dodge(-0.5)) +
+  scale_color_manual(values = c('#000000', '#606060')) + 
+  scale_x_continuous(breaks=seq(-0.4, 0.4, by = 0.1)) +
+  geom_vline(xintercept=0, linetype='dotted') +
+  ggthemes::geom_rangeframe(sides='b', color='black') +
+  ggthemes::theme_tufte() + 
+  theme(legend.position = c(0.9, 0.8), text = element_text(family = 'serif'))
+
+fig
+
+```
+
+```{r}
+ggsave('fig_weight_on_inequity.png', 
+       width = 18,
+  height = 9,
+  units = "cm",
+  dpi = 300,
+  bg = 'white')
+```
+

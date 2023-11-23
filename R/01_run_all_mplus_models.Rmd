@@ -1,0 +1,53 @@
+---
+title: "Untitled"
+author: "Bernhard Piskernik"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(magrittr)
+library(MplusAutomation)
+```
+
+```{r}
+runModels(here::here("Mplus", "measurement_invariance"))
+```
+
+
+
+
+```{r}
+runModels(here::here("Mplus", "h1"))
+```
+
+
+
+```{r}
+runModels(here::here("Mplus", "h2_inc_in"))
+```
+
+
+```{r}
+runModels(here::here("Mplus", "h2_supplement_inEx"))
+```
+
+```{r}
+runModels(here::here("Mplus", "h3_apc"))
+```
+
+
+```{r}
+runModels(here::here("Mplus", "h4_app"))
+```
+
+
+
+```{r}
+runModels(here::here("Mplus", "h5_res"))
+```
