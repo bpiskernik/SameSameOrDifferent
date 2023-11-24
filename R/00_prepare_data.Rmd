@@ -446,3 +446,23 @@ df %>%
   dplyr::select(starts_with('jsa')) %>%
   ltm::cronbach.alpha(na.rm = T)
 ```
+
+
+```{r}
+df %>%
+  group_by(group_detail) %>%
+  summarise(
+    m = mean(emp_prob),
+    sd = sd(emp_prob)
+  )
+```
+
+```{r}
+df %>%
+  group_by(group) %>%
+  summarise(
+    m = mean(emp_prob),
+    sd = sd(emp_prob)
+  )
+```
+
