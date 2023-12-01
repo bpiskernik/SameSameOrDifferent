@@ -44,7 +44,7 @@ df <- tibble(subfolder = c('h3_apc', 'h4_app', 'h5_res')) %>%
   mutate(
     `EA group` = recode(`EA group`, PERM = 'staff', TEMP = 'temporary')
     , Referent = recode(Referent, APC = "Colleagues'\nappreciation", APP = "Patients'\nappreciation", RES = "Outcome\nresponsibility")
-    , Referent = factor(Referent, levels=c("Outcome\nresponsibility", "Patients'\nappreciation", "Colleagues'\nappreciation"))
+    , Referent = factor(Referent, levels=c( "Patients'\nappreciation", "Colleagues'\nappreciation", "Outcome\nresponsibility"))
   )
 df
 ```
@@ -61,7 +61,11 @@ fig <- df %>%
   geom_vline(xintercept=0, linetype='dotted') +
   ggthemes::geom_rangeframe(sides='b', color='black') +
   ggthemes::theme_tufte() + 
-  theme(legend.position = c(0.9, 0.8), text = element_text(family = 'serif'))
+  theme(
+    legend.position = c(0.92, 0.13)
+    , text = element_text(family = 'serif')
+    #, axis.line.x.bottom = element_line()
+    )
 
 fig
 
@@ -75,4 +79,36 @@ ggsave('fig_weight_on_inequity.png',
   dpi = 300,
   bg = 'white')
 ```
+
+
+
+
+```{r}
+fig <- df %>% 
+  ggplot(
+    aes(y=Referent, x=b, group=`EA group`, color=`EA group`, shape=`EA group`)
+  ) +
+  geom_pointrange(aes(xmin=b-1.96*se, xmax=b+1.96*se), position=position_dodge(-0.5)) +
+  scale_color_manual(values = c('#000000', '#606060')) + 
+  scale_x_continuous(breaks=seq(-0.4, 0.4, by = 0.1)) +
+  geom_vline(xintercept=0, linetype='dotted') +
+  ggthemes::geom_rangeframe(sides='b', color='black') +
+  ggthemes::theme_tufte() + 
+  theme(
+    legend.position = c(0.92, 0.12)
+    , text = element_text(family = 'serif')
+    , axis.line.x.bottom = element_line(linewidth=0.3)
+    )
+
+fig
+
+ggsave('fig_weight_on_inequity_full_x_axis.png', 
+       width = 18,
+  height = 9,
+  units = "cm",
+  dpi = 300,
+  bg = 'white')
+
+```
+
 
