@@ -27,15 +27,10 @@ runModels(here::here("Mplus", "h1"))
 ```
 
 
-
 ```{r}
-runModels(here::here("Mplus", "h2_inc_in"))
+runModels(here::here("Mplus", "h2_res"))
 ```
 
-
-```{r}
-runModels(here::here("Mplus", "h2_supplement_inEx"))
-```
 
 ```{r}
 runModels(here::here("Mplus", "h3_apc"))
@@ -46,8 +41,3 @@ runModels(here::here("Mplus", "h3_apc"))
 runModels(here::here("Mplus", "h4_app"))
 ```
 
-
-
-```{r}
-runModels(here::here("Mplus", "h5_res"))
-```

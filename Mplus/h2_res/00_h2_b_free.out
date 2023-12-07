@@ -180,7 +180,7 @@ INPUT INSTRUCTIONS
   	stdyx
   	;
 
-  SAVEDATA: DIFFTEST=00_h5_b_free.diff;
+  SAVEDATA: DIFFTEST=00_h2_b_free.diff;
 
   !MODEL CONSTRAINT:
   !    0 = 1-(dij_var + wh_b*wh_b + res_b * res_b);
@@ -1332,7 +1332,7 @@ SAVEDATA INFORMATION
   Difference testing
 
   Save file
-    00_h5_b_free.diff
+    00_h2_b_free.diff
   Save format      Free
 
      Beginning Time:  13:50:58

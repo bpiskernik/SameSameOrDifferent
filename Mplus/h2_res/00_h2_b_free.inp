@@ -10,7 +10,7 @@ app_01 app_02 app_03 app_04 app_05
 res_01 res_02 res_03
 exh_01 exh_04 exh_08
 jsa_01 jsa_02 jsa_03 jsa_04
- in_ex inc_ins
+in_ex inc_ins
 ; 
 
     MISSING = .;
@@ -19,27 +19,25 @@ jsa_01 jsa_02 jsa_03 jsa_04
         dij_01-dij_04
         !apc_01-apc_05
         !app_01-app_05
-        !res_01-res_03
+        res_01-res_03
         !exh_01 exh_04 exh_08
         !jsa_01 jsa_02 jsa_03 jsa_04
         wh_group
-        in_ex
         ;
 
     
     categorical =
-        dij_01-dij_04;
+        dij_01-res_03;
 
     grouping = group (1 = perm, 2 = temp);
 
     DEFINE:
-        CENTER wh_group in_ex (GRANDMEAN);
+        CENTER wh_group (GRANDMEAN);
 
 ANALYSIS:
     estimator = WLSMV;
     PARAMETERIZATION = THETA;
     STARTS=20;
-    DIFFTEST=00_h2b_b_free.diff
 
 MODEL:
 
@@ -52,6 +50,12 @@ MODEL:
             dij_03* (f_dij_03) 
             dij_04* (f_dij_04)
             ;
+
+        RES by
+            res_01* (f_res_01) 
+            res_02* (f_res_02) 
+            res_03* (f_res_03)
+            ;
         
 
         ! Item thresholds are fix
@@ -72,20 +76,33 @@ MODEL:
         [dij_04$2*] (t2dij_04);
         [dij_04$3*] (t3dij_04);
 
+        !RES
+        [res_01$1*] (t1res_01);
+        [res_01$2*] (t2res_01);
+
+        [res_02$1*] (t1res_02);
+        [res_02$2*] (t2res_02);
+
+        [res_03$1*] (t1res_03);
+        [res_03$2*] (t2res_03);
+
         ! Item residual variances all fixed=1
-        dij_01-dij_04@1;
+        dij_01-res_03@1;
 
 
         ! Factors mean=0 and variance=1 for identification
 
         [DIJ@0];
+        [RES@0];
 
-        DIJ@0.662; !estimated with model constraint, so that total var 1
+        !DIJ* (dij_var);
+        DIJ@0.911; !this is the residual variance; sets total variance to 1
+        RES@1;
 
         ! Hypothesis
         DIJ on
-            wh_group (wh_group)
-            in_ex (hypo)
+            wh_group (wh_b)
+            RES* (res_b)
             ;
     
 MODEL temp:
@@ -97,6 +114,12 @@ MODEL temp:
             dij_03* (f_dij_03) 
             dij_04* (f_dij_04)
             ;
+
+        RES by
+            res_01* (f_res_01) 
+            res_02* (f_res_02) 
+            res_03* (f_res_03)
+            ;
         
 
         ! Item thresholds are fix
@@ -117,20 +140,32 @@ MODEL temp:
         [dij_04$2*] (t2dij_04);
         [dij_04$3*] (t3dij_04);
 
+        !RES
+        [res_01$1*] (t1res_01);
+        [res_01$2*] (t2res_01);
+
+        [res_02$1*] (t1res_02);
+        [res_02$2*] (t2res_02);
+
+        [res_03$1*] (t1res_03);
+        [res_03$2*] (t2res_03);
+
         ! Item residual variances all fixed=1
-        dij_01-dij_04@1;
+        dij_01-res_03@1;
 
 
         ! Factors mean and variance free
 
         [DIJ*];
+        [RES*];
 
         DIJ*;
+        RES*;
 
         ! Hypothesis
         DIJ on
-            wh_group (wh_group)
-            in_ex (hypo)
+            wh_group (wh_b)
+            RES*
             ;
 
 OUTPUT:
@@ -138,3 +173,8 @@ OUTPUT:
 	tech4
 	stdyx
 	;
+
+SAVEDATA: DIFFTEST=00_h2_b_free.diff;
+
+!MODEL CONSTRAINT:
+!    0 = 1-(dij_var + wh_b*wh_b + res_b * res_b);

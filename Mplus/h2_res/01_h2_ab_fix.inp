@@ -38,6 +38,7 @@ ANALYSIS:
     estimator = WLSMV;
     PARAMETERIZATION = THETA;
     STARTS=20;
+    DIFFTEST=00_h2_b_free.diff;
 
 MODEL:
 
@@ -95,14 +96,13 @@ MODEL:
         [DIJ@0];
         [RES@0];
 
-        !DIJ* (dij_var);
-        DIJ@0.911; !this is the residual variance; sets total variance to 1
+        DIJ@0.911; !this is the residual variance; sets total variance to 1;
         RES@1;
 
         ! Hypothesis
         DIJ on
-            wh_group (wh_b)
-            RES* (res_b)
+            wh_group (wh_group)
+            RES (hypo)
             ;
     
 MODEL temp:
@@ -164,8 +164,8 @@ MODEL temp:
 
         ! Hypothesis
         DIJ on
-            wh_group (wh_b)
-            RES*
+            wh_group (wh_group)
+            RES (hypo)
             ;
 
 OUTPUT:
@@ -173,8 +173,3 @@ OUTPUT:
 	tech4
 	stdyx
 	;
-
-SAVEDATA: DIFFTEST=00_h5_b_free.diff;
-
-!MODEL CONSTRAINT:
-!    0 = 1-(dij_var + wh_b*wh_b + res_b * res_b);

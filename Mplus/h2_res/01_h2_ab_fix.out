@@ -44,7 +44,7 @@ INPUT INSTRUCTIONS
       estimator = WLSMV;
       PARAMETERIZATION = THETA;
       STARTS=20;
-      DIFFTEST=00_h5_b_free.diff;
+      DIFFTEST=00_h2_b_free.diff;
 
   MODEL:
 
