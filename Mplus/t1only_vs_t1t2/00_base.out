@@ -1,0 +1,1320 @@
+Mplus VERSION 8.2 (Mac)
+MUTHEN & MUTHEN
+04/11/2024   2:09 PM
+
+INPUT INSTRUCTIONS
+
+  DATA: FILE = "../../data/transforms/mplus_incl_t1_only.dat";
+
+  VARIABLE:
+
+      NAMES =
+      t1_only
+      group group_detail wh_group
+      dij_01 dij_02 dij_03 dij_04
+      apc_01 apc_02 apc_03 apc_04 apc_05
+      app_01 app_02 app_03 app_04 app_05
+      res_01 res_02 res_03 !t2 only
+      exh_01 exh_04 exh_08 !t2 only
+      jsa_01 jsa_02 jsa_03 jsa_04 !t2 only
+      in_ex inc_ins
+      ;
+
+      MISSING = .;
+
+      USEVARIABLES =
+          wh_group
+          dij_01-dij_04
+          apc_01-apc_05
+          app_01-app_05
+          in_ex inc_ins
+          ;
+
+
+      categorical =
+          dij_01-app_05;
+
+      grouping = t1_only (0 = all, 1 = t1_only)
+
+  ANALYSIS:
+      estimator = WLSMV;
+      PARAMETERIZATION = THETA;
+      STARTS = 20
+
+  MODEL:
+
+      ! Factor loadings fixed
+          DIJ by
+              dij_01* (f_dij_01)
+              dij_02* (f_dij_02)
+              dij_03* (f_dij_03)
+              dij_04* (f_dij_04)
+              ;
+
+          APC by
+              apc_01* (f_apc_01)
+              apc_02* (f_apc_02)
+              apc_03* (f_apc_03)
+              apc_04* (f_apc_04)
+              apc_05* (f_apc_05)
+              ;
+
+          APP by
+              app_01* (f_app_01)
+              app_02* (f_app_02)
+              app_03* (f_app_03)
+              app_04* (f_app_04)
+              app_05* (f_app_05)
+              ;
+
+
+          ! Item thresholds are fix
+
+          !DIJ
+          [dij_01$1*] (t1dij_01);
+          [dij_01$2*] (t2dij_01);
+          [dij_01$3*] (t3dij_01);
+
+          [dij_02$1*] (t1dij_02);
+          [dij_02$2*] (t2dij_02);
+
+          [dij_03$1*] (t1dij_03);
+          [dij_03$2*] (t2dij_03);
+          [dij_03$3*] (t3dij_03);
+
+          [dij_04$1*] (t1dij_04);
+          [dij_04$2*] (t2dij_04);
+          [dij_04$3*] (t3dij_04);
+
+          !APC
+          [apc_01$1*] (t1apc_01);
+          [apc_01$2*] (t2apc_01);
+
+          [apc_02$1*] (t1apc_02);
+          [apc_02$2*] (t2apc_02);
+
+          [apc_03$1*] (t1apc_03);
+          [apc_03$2*] (t2apc_03);
+
+          [apc_04$1*] (t1apc_04);
+          [apc_04$2*] (t2apc_04);
+
+          [apc_05$1*] (t1apc_05);
+          [apc_05$2*] (t2apc_05);
+
+          !APP
+          [app_01$1*] (t1app_01);
+          [app_01$2*] (t2app_01);
+          [app_01$3*] (t3app_01);
+
+          [app_02$1*] (t1app_02);
+          [app_02$2*] (t2app_02);
+
+          [app_03$1*] (t1app_03);
+          [app_03$2*] (t2app_03);
+          [app_03$3*] (t3app_03);
+          [app_03$4*] (t4app_03);
+
+          [app_04$1*] (t1app_04);
+          [app_04$2*] (t2app_04);
+          [app_04$3*] (t3app_04);
+
+          [app_05$1*] (t1app_05);
+          [app_05$2*] (t2app_05);
+          [app_05$3*] (t3app_05);
+
+
+          ! Item residual variances all fixed=1
+          dij_01-app_05@1;
+
+
+          ! Factors mean=0 and variance=1 for identification
+
+          [DIJ@0];
+          [APC@0];
+          [APP@0];
+
+          DIJ@1;
+          APC@1;
+          APP@1;
+
+          ! estimate manifest vars
+          [wh_group*];
+          [inc_ins*];
+          [in_ex*];
+
+
+          wh_group*;
+          inc_ins*;
+          in_ex*;
+
+          ! correlations
+
+          wh_group with
+              inc_ins
+              in_ex
+              DIJ
+              APC
+              APP
+              ;
+
+          inc_ins with
+              in_ex
+              DIJ
+              APC
+              APP
+              ;
+
+          in_ex with
+              DIJ
+              APC
+              APP
+              ;
+
+  MODEL t1_only:
+
+      ! Factor loadings and Item thresholds are fixed by default
+
+          ! Item residual variances all fixed=1
+          dij_01-app_05@1;
+
+
+          ! Factors mean free
+
+          [DIJ*];
+          [APC*];
+          [APP*];
+
+          ! variance free
+          DIJ*;
+          APC*;
+          APP*;
+
+          ! estimate manifest vars
+          [wh_group*];
+          [inc_ins*];
+          [in_ex*];
+
+
+          wh_group*;
+          inc_ins*;
+          in_ex*;
+
+          ! correlations
+
+          wh_group with
+              inc_ins
+              in_ex
+              DIJ
+              APC
+              APP
+              ;
+
+          inc_ins with
+              in_ex
+              DIJ
+              APC
+              APP
+              ;
+
+          in_ex with
+              DIJ
+              APC
+              APP
+              ;
+
+
+  OUTPUT:
+  	stdyx
+  	;
+
+
+  SAVEDATA: DIFFTEST=00_base.diff;
+
+
+
+*** WARNING
+  Data set contains cases with missing on all variables.
+  These cases were not included in the analysis.
+  Number of cases with missing on all variables:  4
+   1 WARNING(S) FOUND IN THE INPUT INSTRUCTIONS
+
+
+
+
+SUMMARY OF ANALYSIS
+
+Number of groups                                                 2
+Number of observations
+   Group ALL                                                   382
+   Group T1_ONLY                                               250
+   Total sample size                                           632
+
+Number of dependent variables                                   17
+Number of independent variables                                  0
+Number of continuous latent variables                            3
+
+Observed dependent variables
+
+  Continuous
+   WH_GROUP    IN_EX       INC_INS
+
+  Binary and ordered categorical (ordinal)
+   DIJ_01      DIJ_02      DIJ_03      DIJ_04      APC_01      APC_02
+   APC_03      APC_04      APC_05      APP_01      APP_02      APP_03
+   APP_04      APP_05
+
+Continuous latent variables
+   DIJ         APC         APP
+
+Variables with special functions
+
+  Grouping variable     T1_ONLY
+
+Estimator                                                    WLSMV
+Maximum number of iterations                                  1000
+Convergence criterion                                    0.500D-04
+Maximum number of steepest descent iterations                   20
+Maximum number of iterations for H1                           2000
+Convergence criterion for H1                             0.100D-03
+Random Starts Specifications
+  Number of random starts                                       20
+  Random starts scale                                    0.500D+01
+Parameterization                                             THETA
+Link                                                        PROBIT
+
+Input data file(s)
+  ../../data/transforms/mplus_incl_t1_only.dat
+
+Input data format  FREE
+
+
+SUMMARY OF DATA
+
+   Group ALL
+     Number of missing data patterns            30
+
+   Group T1_ONLY
+     Number of missing data patterns            24
+
+
+COVARIANCE COVERAGE OF DATA
+
+Minimum covariance coverage value   0.100
+
+
+     PROPORTION OF DATA PRESENT FOR ALL
+
+
+           Covariance Coverage
+              WH_GROUP      DIJ_01        DIJ_02        DIJ_03        DIJ_04
+              ________      ________      ________      ________      ________
+ WH_GROUP       0.997
+ DIJ_01         0.955         0.958
+ DIJ_02         0.966         0.948         0.969
+ DIJ_03         0.950         0.937         0.942         0.953
+ DIJ_04         0.969         0.948         0.955         0.940         0.971
+ APC_01         0.995         0.955         0.966         0.950         0.969
+ APC_02         0.992         0.953         0.963         0.948         0.966
+ APC_03         0.997         0.958         0.969         0.953         0.971
+ APC_04         0.995         0.955         0.966         0.950         0.969
+ APC_05         0.997         0.958         0.969         0.953         0.971
+ APP_01         0.987         0.950         0.961         0.945         0.963
+ APP_02         0.979         0.942         0.953         0.937         0.955
+ APP_03         0.969         0.940         0.945         0.935         0.950
+ APP_04         0.976         0.945         0.953         0.940         0.953
+ APP_05         0.955         0.927         0.935         0.921         0.935
+ IN_EX          0.990         0.950         0.961         0.942         0.963
+ INC_INS        0.997         0.958         0.969         0.953         0.971
+
+
+           Covariance Coverage
+              APC_01        APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________      ________
+ APC_01         0.997
+ APC_02         0.992         0.995
+ APC_03         0.997         0.995         1.000
+ APC_04         0.995         0.992         0.997         0.997
+ APC_05         0.997         0.995         1.000         0.997         1.000
+ APP_01         0.987         0.984         0.990         0.987         0.990
+ APP_02         0.979         0.976         0.982         0.982         0.982
+ APP_03         0.971         0.966         0.971         0.971         0.971
+ APP_04         0.976         0.974         0.979         0.979         0.979
+ APP_05         0.955         0.953         0.958         0.958         0.958
+ IN_EX          0.987         0.984         0.990         0.987         0.990
+ INC_INS        0.997         0.995         1.000         0.997         1.000
+
+
+           Covariance Coverage
+              APP_01        APP_02        APP_03        APP_04        APP_05
+              ________      ________      ________      ________      ________
+ APP_01         0.990
+ APP_02         0.979         0.982
+ APP_03         0.969         0.966         0.971
+ APP_04         0.974         0.971         0.963         0.979
+ APP_05         0.958         0.953         0.948         0.953         0.958
+ IN_EX          0.979         0.971         0.961         0.969         0.948
+ INC_INS        0.990         0.982         0.971         0.979         0.958
+
+
+           Covariance Coverage
+              IN_EX         INC_INS
+              ________      ________
+ IN_EX          0.990
+ INC_INS        0.990         1.000
+
+
+     PROPORTION OF DATA PRESENT FOR T1_ONLY
+
+
+           Covariance Coverage
+              WH_GROUP      DIJ_01        DIJ_02        DIJ_03        DIJ_04
+              ________      ________      ________      ________      ________
+ WH_GROUP       0.988
+ DIJ_01         0.952         0.964
+ DIJ_02         0.936         0.936         0.948
+ DIJ_03         0.920         0.928         0.916         0.932
+ DIJ_04         0.944         0.940         0.928         0.916         0.956
+ APC_01         0.984         0.964         0.948         0.932         0.956
+ APC_02         0.980         0.960         0.944         0.928         0.952
+ APC_03         0.984         0.964         0.948         0.932         0.956
+ APC_04         0.980         0.960         0.944         0.928         0.952
+ APC_05         0.980         0.960         0.944         0.928         0.952
+ APP_01         0.968         0.952         0.940         0.924         0.948
+ APP_02         0.976         0.956         0.940         0.924         0.948
+ APP_03         0.944         0.924         0.912         0.896         0.920
+ APP_04         0.976         0.956         0.940         0.924         0.948
+ APP_05         0.952         0.940         0.924         0.912         0.932
+ IN_EX          0.984         0.948         0.932         0.916         0.940
+ INC_INS        0.984         0.964         0.948         0.932         0.956
+
+
+           Covariance Coverage
+              APC_01        APC_02        APC_03        APC_04        APC_05
+              ________      ________      ________      ________      ________
+ APC_01         0.996
+ APC_02         0.992         0.992
+ APC_03         0.996         0.992         0.996
+ APC_04         0.992         0.988         0.992         0.992
+ APC_05         0.992         0.988         0.992         0.988         0.992
+ APP_01         0.980         0.976         0.980         0.976         0.976
+ APP_02         0.988         0.984         0.988         0.984         0.984
+ APP_03         0.956         0.952         0.956         0.956         0.952
+ APP_04         0.988         0.984         0.988         0.984         0.984
+ APP_05         0.964         0.960         0.964         0.960         0.964
+ IN_EX          0.980         0.976         0.980         0.976         0.976
+ INC_INS        0.996         0.992         0.996         0.992         0.992
+
+
+           Covariance Coverage
+              APP_01        APP_02        APP_03        APP_04        APP_05
+              ________      ________      ________      ________      ________
+ APP_01         0.980
+ APP_02         0.976         0.988
+ APP_03         0.952         0.956         0.956
+ APP_04         0.980         0.984         0.956         0.988
+ APP_05         0.960         0.964         0.944         0.964         0.964
+ IN_EX          0.964         0.976         0.944         0.972         0.952
+ INC_INS        0.980         0.988         0.956         0.988         0.964
+
+
+           Covariance Coverage
+              IN_EX         INC_INS
+              ________      ________
+ IN_EX          0.984
+ INC_INS        0.980         0.996
+
+
+UNIVARIATE PROPORTIONS AND COUNTS FOR CATEGORICAL VARIABLES
+
+  Group ALL
+    DIJ_01
+      Category 1    0.137           50.000
+      Category 2    0.260           95.000
+      Category 3    0.208           76.000
+      Category 4    0.251           92.000
+      Category 5    0.145           53.000
+    DIJ_02
+      Category 1    0.114           42.000
+      Category 2    0.227           84.000
+      Category 3    0.203           75.000
+      Category 4    0.297          110.000
+      Category 5    0.159           59.000
+    DIJ_03
+      Category 1    0.159           58.000
+      Category 2    0.255           93.000
+      Category 3    0.212           77.000
+      Category 4    0.247           90.000
+      Category 5    0.126           46.000
+    DIJ_04
+      Category 1    0.135           50.000
+      Category 2    0.213           79.000
+      Category 3    0.213           79.000
+      Category 4    0.272          101.000
+      Category 5    0.167           62.000
+    APC_01
+      Category 1    0.157           60.000
+      Category 2    0.533          203.000
+      Category 3    0.310          118.000
+    APC_02
+      Category 1    0.068           26.000
+      Category 2    0.205           78.000
+      Category 3    0.466          177.000
+      Category 4    0.261           99.000
+    APC_03
+      Category 1    0.165           63.000
+      Category 2    0.573          219.000
+      Category 3    0.262          100.000
+    APC_04
+      Category 1    0.045           17.000
+      Category 2    0.186           71.000
+      Category 3    0.289          110.000
+      Category 4    0.357          136.000
+      Category 5    0.123           47.000
+    APC_05
+      Category 1    0.071           27.000
+      Category 2    0.202           77.000
+      Category 3    0.469          179.000
+      Category 4    0.259           99.000
+    APP_01
+      Category 1    0.103           39.000
+      Category 2    0.238           90.000
+      Category 3    0.225           85.000
+      Category 4    0.333          126.000
+      Category 5    0.101           38.000
+    APP_02
+      Category 1    0.101           38.000
+      Category 2    0.165           62.000
+      Category 3    0.499          187.000
+      Category 4    0.235           88.000
+    APP_03
+      Category 1    0.113           42.000
+      Category 2    0.256           95.000
+      Category 3    0.275          102.000
+      Category 4    0.286          106.000
+      Category 5    0.070           26.000
+    APP_04
+      Category 1    0.238           89.000
+      Category 2    0.294          110.000
+      Category 3    0.275          103.000
+      Category 4    0.150           56.000
+      Category 5    0.043           16.000
+    APP_05
+      Category 1    0.096           35.000
+      Category 2    0.172           63.000
+      Category 3    0.350          128.000
+      Category 4    0.287          105.000
+      Category 5    0.096           35.000
+
+  Group T1_ONLY
+    DIJ_01
+      Category 1    0.137           33.000
+      Category 2    0.224           54.000
+      Category 3    0.220           53.000
+      Category 4    0.216           52.000
+      Category 5    0.203           49.000
+    DIJ_02
+      Category 1    0.118           28.000
+      Category 2    0.177           42.000
+      Category 3    0.198           47.000
+      Category 4    0.266           63.000
+      Category 5    0.241           57.000
+    DIJ_03
+      Category 1    0.137           32.000
+      Category 2    0.193           45.000
+      Category 3    0.275           64.000
+      Category 4    0.219           51.000
+      Category 5    0.176           41.000
+    DIJ_04
+      Category 1    0.130           31.000
+      Category 2    0.180           43.000
+      Category 3    0.209           50.000
+      Category 4    0.259           62.000
+      Category 5    0.222           53.000
+    APC_01
+      Category 1    0.141           35.000
+      Category 2    0.542          135.000
+      Category 3    0.317           79.000
+    APC_02
+      Category 1    0.073           18.000
+      Category 2    0.238           59.000
+      Category 3    0.431          107.000
+      Category 4    0.258           64.000
+    APC_03
+      Category 1    0.169           42.000
+      Category 2    0.562          140.000
+      Category 3    0.269           67.000
+    APC_04
+      Category 1    0.081           20.000
+      Category 2    0.129           32.000
+      Category 3    0.282           70.000
+      Category 4    0.363           90.000
+      Category 5    0.145           36.000
+    APC_05
+      Category 1    0.056           14.000
+      Category 2    0.173           43.000
+      Category 3    0.492          122.000
+      Category 4    0.278           69.000
+    APP_01
+      Category 1    0.065           16.000
+      Category 2    0.212           52.000
+      Category 3    0.286           70.000
+      Category 4    0.331           81.000
+      Category 5    0.106           26.000
+    APP_02
+      Category 1    0.065           16.000
+      Category 2    0.170           42.000
+      Category 3    0.522          129.000
+      Category 4    0.243           60.000
+    APP_03
+      Category 1    0.117           28.000
+      Category 2    0.197           47.000
+      Category 3    0.301           72.000
+      Category 4    0.272           65.000
+      Category 5    0.113           27.000
+    APP_04
+      Category 1    0.202           50.000
+      Category 2    0.263           65.000
+      Category 3    0.308           76.000
+      Category 4    0.182           45.000
+      Category 5    0.045           11.000
+    APP_05
+      Category 1    0.075           18.000
+      Category 2    0.108           26.000
+      Category 3    0.386           93.000
+      Category 4    0.344           83.000
+      Category 5    0.087           21.000
+
+
+
+UNIVARIATE SAMPLE STATISTICS
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR ALL
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              4.449      -1.754       1.000    1.57%       4.000      5.000      5.000
+             381.000       0.888       2.388       5.000   67.98%       5.000      5.000
+     IN_EX                 1.023      -1.547       0.200    0.79%       0.932      1.000      1.000
+             378.000       0.029       4.399       1.204   28.31%       1.064      1.204
+     INC_INS               2.639       0.384       1.000    7.85%       2.000      2.000      3.000
+             382.000       0.780       0.310       5.000    3.40%       3.000      3.000
+
+
+     UNIVARIATE HIGHER-ORDER MOMENT DESCRIPTIVE STATISTICS FOR T1_ONLY
+
+         Variable/         Mean/     Skewness/   Minimum/ % with                Percentiles
+        Sample Size      Variance    Kurtosis    Maximum  Min/Max      20%/60%    40%/80%    Median
+
+     WH_GROUP              4.429      -1.699       1.000    2.02%       4.000      5.000      5.000
+             247.000       0.933       2.198       5.000   68.02%       5.000      5.000
+     IN_EX                 1.015      -1.587       0.200    0.81%       0.955      1.000      1.000
+             246.000       0.024       5.696       1.204   22.36%       1.015      1.204
+     INC_INS               2.835       0.258       1.000    8.03%       2.000      3.000      3.000
+             249.000       0.965      -0.016       5.000    6.83%       3.000      3.000
+
+
+RANDOM STARTS RESULTS RANKED FROM THE BEST TO THE WORST FIT FUNCTION VALUES
+
+Fit function values at local maxima and random start numbers:
+
+            233.8808         19
+            233.8808         11
+            233.8808         6
+            233.8808         20
+            233.8808         17
+            233.8808         14
+            233.8808         16
+            233.8808         unperturbed
+            233.8808         4
+            233.8808         15
+            233.8808         10
+            233.8808         13
+            233.8808         18
+            233.8808         9
+            233.8808         2
+            233.8808         12
+            233.8808         8
+            233.8808         5
+            233.8808         7
+            233.8808         3
+            233.8808         1
+
+THE MODEL ESTIMATION TERMINATED NORMALLY
+
+
+
+MODEL FIT INFORMATION
+
+Number of Free Parameters                      111
+
+Chi-Square Test of Model Fit
+
+          Value                            364.193*
+          Degrees of Freedom                   271
+          P-Value                           0.0001
+
+Chi-Square Contribution From Each Group
+
+          ALL                              156.755
+          T1_ONLY                          207.439
+
+*   The chi-square value for MLM, MLMV, MLR, ULSMV, WLSM and WLSMV cannot be used
+    for chi-square difference testing in the regular way.  MLM, MLR and WLSM
+    chi-square difference testing is described on the Mplus website.  MLMV, WLSMV,
+    and ULSMV difference testing is done using the DIFFTEST option.
+
+RMSEA (Root Mean Square Error Of Approximation)
+
+          Estimate                           0.033
+          90 Percent C.I.                    0.024  0.041
+          Probability RMSEA <= .05           1.000
+
+CFI/TLI
+
+          CFI                                0.992
+          TLI                                0.992
+
+Chi-Square Test of Model Fit for the Baseline Model
+
+          Value                          12607.261
+          Degrees of Freedom                   272
+          P-Value                           0.0000
+
+SRMR (Standardized Root Mean Square Residual)
+
+          Value                              0.037
+
+Optimum Function Value for Weighted Least-Squares Estimator
+
+          Value                     0.18503228D+00
+
+
+
+MODEL RESULTS
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group ALL
+
+ DIJ      BY
+    DIJ_01             1.888      0.116     16.260      0.000
+    DIJ_02             1.843      0.112     16.489      0.000
+    DIJ_03             2.093      0.134     15.588      0.000
+    DIJ_04             1.451      0.087     16.625      0.000
+
+ APC      BY
+    APC_01             1.090      0.078     13.925      0.000
+    APC_02             2.008      0.170     11.826      0.000
+    APC_03             1.119      0.085     13.152      0.000
+    APC_04             0.689      0.057     11.990      0.000
+    APC_05             3.487      0.674      5.173      0.000
+
+ APP      BY
+    APP_01             0.880      0.067     13.219      0.000
+    APP_02             1.325      0.100     13.243      0.000
+    APP_03             1.245      0.102     12.158      0.000
+    APP_04             0.956      0.071     13.511      0.000
+    APP_05             1.017      0.076     13.302      0.000
+
+ WH_GROUP WITH
+    DIJ                0.088      0.050      1.749      0.080
+    APC                0.190      0.052      3.620      0.000
+    APP               -0.078      0.050     -1.544      0.123
+
+ INC_INS  WITH
+    DIJ                0.381      0.041      9.274      0.000
+    APC               -0.066      0.046     -1.457      0.145
+    APP               -0.036      0.047     -0.766      0.444
+
+ IN_EX    WITH
+    DIJ                0.011      0.010      1.061      0.289
+    APC                0.035      0.009      3.928      0.000
+    APP               -0.014      0.009     -1.585      0.113
+
+ APC      WITH
+    DIJ                0.200      0.056      3.590      0.000
+
+ APP      WITH
+    DIJ               -0.088      0.058     -1.504      0.132
+    APC                0.407      0.048      8.550      0.000
+
+ WH_GROUP WITH
+    INC_INS           -0.087      0.040     -2.146      0.032
+    IN_EX              0.122      0.012     10.523      0.000
+
+ INC_INS  WITH
+    IN_EX             -0.025      0.007     -3.507      0.000
+
+ Means
+    WH_GROUP           4.449      0.088     50.415      0.000
+    IN_EX              1.023      0.011     92.982      0.000
+    INC_INS            2.639      0.047     56.484      0.000
+    DIJ                0.000      0.000    999.000    999.000
+    APC                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -2.223      0.147    -15.080      0.000
+    DIJ_01$2          -0.533      0.126     -4.224      0.000
+    DIJ_01$3           0.615      0.129      4.774      0.000
+    DIJ_01$4           2.152      0.136     15.867      0.000
+    DIJ_02$1          -2.399      0.149    -16.089      0.000
+    DIJ_02$2          -0.861      0.128     -6.711      0.000
+    DIJ_02$3           0.226      0.124      1.817      0.069
+    DIJ_02$4           1.925      0.139     13.809      0.000
+    DIJ_03$1          -2.275      0.156    -14.619      0.000
+    DIJ_03$2          -0.582      0.140     -4.160      0.000
+    DIJ_03$3           0.809      0.141      5.717      0.000
+    DIJ_03$4           2.552      0.160     15.907      0.000
+    DIJ_04$1          -1.876      0.115    -16.326      0.000
+    DIJ_04$2          -0.681      0.104     -6.544      0.000
+    DIJ_04$3           0.275      0.102      2.692      0.007
+    DIJ_04$4           1.632      0.108     15.170      0.000
+    APC_01$1          -1.527      0.101    -15.065      0.000
+    APC_01$2           0.748      0.087      8.619      0.000
+    APC_02$1          -3.333      0.236    -14.121      0.000
+    APC_02$2          -1.244      0.150     -8.285      0.000
+    APC_02$3           1.500      0.160      9.365      0.000
+    APC_03$1          -1.453      0.100    -14.550      0.000
+    APC_03$2           0.973      0.091     10.633      0.000
+    APC_04$1          -1.892      0.100    -18.897      0.000
+    APC_04$2          -0.922      0.071    -12.995      0.000
+    APC_04$3           0.038      0.065      0.586      0.558
+    APC_04$4           1.378      0.081     16.978      0.000
+    APC_05$1          -5.524      0.968     -5.704      0.000
+    APC_05$2          -2.366      0.459     -5.151      0.000
+    APC_05$3           2.358      0.470      5.015      0.000
+    APP_01$1          -1.745      0.102    -17.122      0.000
+    APP_01$2          -0.582      0.077     -7.565      0.000
+    APP_01$3           0.274      0.074      3.709      0.000
+    APP_01$4           1.743      0.100     17.396      0.000
+    APP_02$1          -2.177      0.142    -15.365      0.000
+    APP_02$2          -1.016      0.110     -9.261      0.000
+    APP_02$3           1.268      0.102     12.427      0.000
+    APP_03$1          -1.838      0.122    -15.042      0.000
+    APP_03$2          -0.548      0.095     -5.752      0.000
+    APP_03$3           0.621      0.094      6.573      0.000
+    APP_03$4           2.252      0.138     16.287      0.000
+    APP_04$1          -0.991      0.084    -11.810      0.000
+    APP_04$2           0.081      0.077      1.050      0.294
+    APP_04$3           1.197      0.088     13.534      0.000
+    APP_04$4           2.429      0.135     18.021      0.000
+    APP_05$1          -1.874      0.110    -16.998      0.000
+    APP_05$2          -0.971      0.089    -10.867      0.000
+    APP_05$3           0.419      0.082      5.118      0.000
+    APP_05$4           1.955      0.111     17.574      0.000
+
+ Variances
+    WH_GROUP           0.888      0.079     11.184      0.000
+    IN_EX              0.029      0.001     19.455      0.000
+    INC_INS            0.780      0.054     14.370      0.000
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    APP_01             1.000      0.000    999.000    999.000
+    APP_02             1.000      0.000    999.000    999.000
+    APP_03             1.000      0.000    999.000    999.000
+    APP_04             1.000      0.000    999.000    999.000
+    APP_05             1.000      0.000    999.000    999.000
+
+Group T1_ONLY
+
+ DIJ      BY
+    DIJ_01             1.888      0.116     16.260      0.000
+    DIJ_02             1.843      0.112     16.489      0.000
+    DIJ_03             2.093      0.134     15.588      0.000
+    DIJ_04             1.451      0.087     16.625      0.000
+
+ APC      BY
+    APC_01             1.090      0.078     13.925      0.000
+    APC_02             2.008      0.170     11.826      0.000
+    APC_03             1.119      0.085     13.152      0.000
+    APC_04             0.689      0.057     11.990      0.000
+    APC_05             3.487      0.674      5.173      0.000
+
+ APP      BY
+    APP_01             0.880      0.067     13.219      0.000
+    APP_02             1.325      0.100     13.243      0.000
+    APP_03             1.245      0.102     12.158      0.000
+    APP_04             0.956      0.071     13.511      0.000
+    APP_05             1.017      0.076     13.302      0.000
+
+ WH_GROUP WITH
+    DIJ               -0.032      0.064     -0.505      0.614
+    APC                0.028      0.071      0.391      0.696
+    APP                0.016      0.070      0.232      0.816
+
+ INC_INS  WITH
+    DIJ                0.352      0.070      5.025      0.000
+    APC               -0.198      0.070     -2.822      0.005
+    APP               -0.064      0.063     -1.022      0.307
+
+ IN_EX    WITH
+    DIJ               -0.006      0.010     -0.577      0.564
+    APC                0.009      0.010      0.869      0.385
+    APP                0.000      0.011      0.034      0.972
+
+ APC      WITH
+    DIJ                0.078      0.075      1.035      0.301
+
+ APP      WITH
+    DIJ               -0.037      0.066     -0.557      0.578
+    APC                0.520      0.096      5.438      0.000
+
+ WH_GROUP WITH
+    INC_INS           -0.033      0.063     -0.525      0.600
+    IN_EX              0.111      0.014      8.065      0.000
+
+ INC_INS  WITH
+    IN_EX             -0.010      0.010     -0.975      0.330
+
+ Means
+    WH_GROUP           4.429      0.110     40.288      0.000
+    IN_EX              1.015      0.012     83.542      0.000
+    INC_INS            2.835      0.063     44.781      0.000
+    DIJ                0.138      0.087      1.598      0.110
+    APC                0.041      0.091      0.450      0.652
+    APP                0.161      0.091      1.771      0.077
+
+ Thresholds
+    DIJ_01$1          -2.223      0.147    -15.080      0.000
+    DIJ_01$2          -0.533      0.126     -4.224      0.000
+    DIJ_01$3           0.615      0.129      4.774      0.000
+    DIJ_01$4           2.152      0.136     15.867      0.000
+    DIJ_02$1          -2.399      0.149    -16.089      0.000
+    DIJ_02$2          -0.861      0.128     -6.711      0.000
+    DIJ_02$3           0.226      0.124      1.817      0.069
+    DIJ_02$4           1.925      0.139     13.809      0.000
+    DIJ_03$1          -2.275      0.156    -14.619      0.000
+    DIJ_03$2          -0.582      0.140     -4.160      0.000
+    DIJ_03$3           0.809      0.141      5.717      0.000
+    DIJ_03$4           2.552      0.160     15.907      0.000
+    DIJ_04$1          -1.876      0.115    -16.326      0.000
+    DIJ_04$2          -0.681      0.104     -6.544      0.000
+    DIJ_04$3           0.275      0.102      2.692      0.007
+    DIJ_04$4           1.632      0.108     15.170      0.000
+    APC_01$1          -1.527      0.101    -15.065      0.000
+    APC_01$2           0.748      0.087      8.619      0.000
+    APC_02$1          -3.333      0.236    -14.121      0.000
+    APC_02$2          -1.244      0.150     -8.285      0.000
+    APC_02$3           1.500      0.160      9.365      0.000
+    APC_03$1          -1.453      0.100    -14.550      0.000
+    APC_03$2           0.973      0.091     10.633      0.000
+    APC_04$1          -1.892      0.100    -18.897      0.000
+    APC_04$2          -0.922      0.071    -12.995      0.000
+    APC_04$3           0.038      0.065      0.586      0.558
+    APC_04$4           1.378      0.081     16.978      0.000
+    APC_05$1          -5.524      0.968     -5.704      0.000
+    APC_05$2          -2.366      0.459     -5.151      0.000
+    APC_05$3           2.358      0.470      5.015      0.000
+    APP_01$1          -1.745      0.102    -17.122      0.000
+    APP_01$2          -0.582      0.077     -7.565      0.000
+    APP_01$3           0.274      0.074      3.709      0.000
+    APP_01$4           1.743      0.100     17.396      0.000
+    APP_02$1          -2.177      0.142    -15.365      0.000
+    APP_02$2          -1.016      0.110     -9.261      0.000
+    APP_02$3           1.268      0.102     12.427      0.000
+    APP_03$1          -1.838      0.122    -15.042      0.000
+    APP_03$2          -0.548      0.095     -5.752      0.000
+    APP_03$3           0.621      0.094      6.573      0.000
+    APP_03$4           2.252      0.138     16.287      0.000
+    APP_04$1          -0.991      0.084    -11.810      0.000
+    APP_04$2           0.081      0.077      1.050      0.294
+    APP_04$3           1.197      0.088     13.534      0.000
+    APP_04$4           2.429      0.135     18.021      0.000
+    APP_05$1          -1.874      0.110    -16.998      0.000
+    APP_05$2          -0.971      0.089    -10.867      0.000
+    APP_05$3           0.419      0.082      5.118      0.000
+    APP_05$4           1.955      0.111     17.574      0.000
+
+ Variances
+    WH_GROUP           0.933      0.104      9.003      0.000
+    IN_EX              0.024      0.001     17.843      0.000
+    INC_INS            0.965      0.088     10.927      0.000
+    DIJ                0.970      0.149      6.509      0.000
+    APC                1.110      0.168      6.626      0.000
+    APP                0.996      0.149      6.694      0.000
+
+ Residual Variances
+    DIJ_01             1.000      0.000    999.000    999.000
+    DIJ_02             1.000      0.000    999.000    999.000
+    DIJ_03             1.000      0.000    999.000    999.000
+    DIJ_04             1.000      0.000    999.000    999.000
+    APC_01             1.000      0.000    999.000    999.000
+    APC_02             1.000      0.000    999.000    999.000
+    APC_03             1.000      0.000    999.000    999.000
+    APC_04             1.000      0.000    999.000    999.000
+    APC_05             1.000      0.000    999.000    999.000
+    APP_01             1.000      0.000    999.000    999.000
+    APP_02             1.000      0.000    999.000    999.000
+    APP_03             1.000      0.000    999.000    999.000
+    APP_04             1.000      0.000    999.000    999.000
+    APP_05             1.000      0.000    999.000    999.000
+
+
+STANDARDIZED MODEL RESULTS
+
+
+STDYX Standardization
+
+                                                    Two-Tailed
+                    Estimate       S.E.  Est./S.E.    P-Value
+
+Group ALL
+
+ DIJ      BY
+    DIJ_01             0.884      0.012     74.195      0.000
+    DIJ_02             0.879      0.012     72.519      0.000
+    DIJ_03             0.902      0.011     83.860      0.000
+    DIJ_04             0.823      0.016     51.648      0.000
+
+ APC      BY
+    APC_01             0.737      0.024     30.467      0.000
+    APC_02             0.895      0.015     59.512      0.000
+    APC_03             0.746      0.025     29.618      0.000
+    APC_04             0.568      0.032     17.686      0.000
+    APC_05             0.961      0.014     68.072      0.000
+
+ APP      BY
+    APP_01             0.661      0.028     23.456      0.000
+    APP_02             0.798      0.022     36.498      0.000
+    APP_03             0.780      0.025     30.996      0.000
+    APP_04             0.691      0.027     25.857      0.000
+    APP_05             0.713      0.026     27.066      0.000
+
+ WH_GROUP WITH
+    DIJ                0.094      0.053      1.769      0.077
+    APC                0.202      0.053      3.786      0.000
+    APP               -0.082      0.053     -1.556      0.120
+
+ INC_INS  WITH
+    DIJ                0.431      0.039     10.951      0.000
+    APC               -0.075      0.051     -1.463      0.143
+    APP               -0.040      0.053     -0.767      0.443
+
+ IN_EX    WITH
+    DIJ                0.062      0.059      1.062      0.288
+    APC                0.205      0.051      3.991      0.000
+    APP               -0.085      0.054     -1.589      0.112
+
+ APC      WITH
+    DIJ                0.200      0.056      3.590      0.000
+
+ APP      WITH
+    DIJ               -0.088      0.058     -1.504      0.132
+    APC                0.407      0.048      8.550      0.000
+
+ WH_GROUP WITH
+    INC_INS           -0.104      0.047     -2.192      0.028
+    IN_EX              0.768      0.031     24.457      0.000
+
+ INC_INS  WITH
+    IN_EX             -0.164      0.045     -3.627      0.000
+
+ Means
+    WH_GROUP           4.722      0.142     33.195      0.000
+    IN_EX              6.045      0.127     47.777      0.000
+    INC_INS            2.987      0.128     23.342      0.000
+    DIJ                0.000      0.000    999.000    999.000
+    APC                0.000      0.000    999.000    999.000
+    APP                0.000      0.000    999.000    999.000
+
+ Thresholds
+    DIJ_01$1          -1.041      0.074    -14.148      0.000
+    DIJ_01$2          -0.250      0.060     -4.136      0.000
+    DIJ_01$3           0.288      0.060      4.797      0.000
+    DIJ_01$4           1.007      0.073     13.868      0.000
+    DIJ_02$1          -1.144      0.077    -14.810      0.000
+    DIJ_02$2          -0.411      0.061     -6.689      0.000
+    DIJ_02$3           0.108      0.059      1.811      0.070
+    DIJ_02$4           0.918      0.071     12.961      0.000
+    DIJ_03$1          -0.981      0.073    -13.496      0.000
+    DIJ_03$2          -0.251      0.061     -4.125      0.000
+    DIJ_03$3           0.349      0.061      5.675      0.000
+    DIJ_03$4           1.100      0.076     14.411      0.000
+    DIJ_04$1          -1.064      0.073    -14.656      0.000
+    DIJ_04$2          -0.386      0.060     -6.448      0.000
+    DIJ_04$3           0.156      0.058      2.676      0.007
+    DIJ_04$4           0.926      0.068     13.618      0.000
+    APC_01$1          -1.032      0.068    -15.217      0.000
+    APC_01$2           0.505      0.060      8.449      0.000
+    APC_02$1          -1.486      0.088    -16.802      0.000
+    APC_02$2          -0.554      0.062     -8.892      0.000
+    APC_02$3           0.669      0.067     10.037      0.000
+    APC_03$1          -0.968      0.065    -14.954      0.000
+    APC_03$2           0.648      0.062     10.532      0.000
+    APC_04$1          -1.558      0.083    -18.671      0.000
+    APC_04$2          -0.759      0.059    -12.974      0.000
+    APC_04$3           0.031      0.054      0.586      0.558
+    APC_04$4           1.134      0.066     17.264      0.000
+    APC_05$1          -1.523      0.091    -16.691      0.000
+    APC_05$2          -0.652      0.065    -10.107      0.000
+    APC_05$3           0.650      0.067      9.700      0.000
+    APP_01$1          -1.310      0.078    -16.896      0.000
+    APP_01$2          -0.437      0.058     -7.527      0.000
+    APP_01$3           0.205      0.055      3.715      0.000
+    APP_01$4           1.308      0.076     17.317      0.000
+    APP_02$1          -1.311      0.080    -16.434      0.000
+    APP_02$2          -0.612      0.063     -9.672      0.000
+    APP_02$3           0.764      0.064     11.938      0.000
+    APP_03$1          -1.151      0.075    -15.429      0.000
+    APP_03$2          -0.344      0.060     -5.770      0.000
+    APP_03$3           0.389      0.058      6.673      0.000
+    APP_03$4           1.410      0.080     17.560      0.000
+    APP_04$1          -0.716      0.063    -11.439      0.000
+    APP_04$2           0.058      0.055      1.052      0.293
+    APP_04$3           0.865      0.063     13.776      0.000
+    APP_04$4           1.756      0.095     18.543      0.000
+    APP_05$1          -1.314      0.079    -16.695      0.000
+    APP_05$2          -0.681      0.063    -10.879      0.000
+    APP_05$3           0.294      0.057      5.120      0.000
+    APP_05$4           1.370      0.078     17.588      0.000
+
+ Variances
+    WH_GROUP           1.000      0.000    999.000    999.000
+    IN_EX              1.000      0.000    999.000    999.000
+    INC_INS            1.000      0.000    999.000    999.000
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.219      0.021     10.411      0.000
+    DIJ_02             0.227      0.021     10.670      0.000
+    DIJ_03             0.186      0.019      9.573      0.000
+    DIJ_04             0.322      0.026     12.259      0.000
+    APC_01             0.457      0.036     12.824      0.000
+    APC_02             0.199      0.027      7.379      0.000
+    APC_03             0.444      0.038     11.828      0.000
+    APC_04             0.678      0.036     18.612      0.000
+    APC_05             0.076      0.027      2.799      0.005
+    APP_01             0.564      0.037     15.143      0.000
+    APP_02             0.363      0.035     10.392      0.000
+    APP_03             0.392      0.039     10.002      0.000
+    APP_04             0.523      0.037     14.149      0.000
+    APP_05             0.491      0.038     13.079      0.000
+
+Group T1_ONLY
+
+ DIJ      BY
+    DIJ_01             0.881      0.014     61.969      0.000
+    DIJ_02             0.876      0.016     55.549      0.000
+    DIJ_03             0.900      0.013     69.895      0.000
+    DIJ_04             0.819      0.019     43.773      0.000
+
+ APC      BY
+    APC_01             0.754      0.026     28.565      0.000
+    APC_02             0.904      0.016     57.010      0.000
+    APC_03             0.763      0.025     30.117      0.000
+    APC_04             0.588      0.034     17.492      0.000
+    APC_05             0.965      0.013     72.052      0.000
+
+ APP      BY
+    APP_01             0.660      0.031     20.990      0.000
+    APP_02             0.798      0.024     32.785      0.000
+    APP_03             0.779      0.025     30.624      0.000
+    APP_04             0.690      0.030     22.794      0.000
+    APP_05             0.712      0.029     24.966      0.000
+
+ WH_GROUP WITH
+    DIJ               -0.034      0.067     -0.507      0.612
+    APC                0.027      0.070      0.392      0.695
+    APP                0.017      0.073      0.232      0.816
+
+ INC_INS  WITH
+    DIJ                0.364      0.057      6.360      0.000
+    APC               -0.191      0.064     -2.979      0.003
+    APP               -0.065      0.063     -1.034      0.301
+
+ IN_EX    WITH
+    DIJ               -0.037      0.063     -0.579      0.563
+    APC                0.053      0.061      0.872      0.383
+    APP                0.002      0.068      0.034      0.972
+
+ APC      WITH
+    DIJ                0.075      0.072      1.038      0.299
+
+ APP      WITH
+    DIJ               -0.037      0.067     -0.559      0.576
+    APC                0.494      0.055      8.949      0.000
+
+ WH_GROUP WITH
+    INC_INS           -0.035      0.066     -0.526      0.599
+    IN_EX              0.732      0.052     14.003      0.000
+
+ INC_INS  WITH
+    IN_EX             -0.063      0.065     -0.979      0.328
+
+ Means
+    WH_GROUP           4.585      0.172     26.585      0.000
+    IN_EX              6.494      0.152     42.846      0.000
+    INC_INS            2.887      0.157     18.361      0.000
+    DIJ                0.141      0.088      1.596      0.110
+    APC                0.039      0.086      0.452      0.651
+    APP                0.161      0.091      1.769      0.077
+
+ Thresholds
+    DIJ_01$1          -1.053      0.081    -12.945      0.000
+    DIJ_01$2          -0.253      0.061     -4.131      0.000
+    DIJ_01$3           0.291      0.062      4.698      0.000
+    DIJ_01$4           1.019      0.078     13.108      0.000
+    DIJ_02$1          -1.158      0.085    -13.591      0.000
+    DIJ_02$2          -0.415      0.063     -6.543      0.000
+    DIJ_02$3           0.109      0.060      1.805      0.071
+    DIJ_02$4           0.929      0.075     12.386      0.000
+    DIJ_03$1          -0.993      0.081    -12.293      0.000
+    DIJ_03$2          -0.254      0.062     -4.080      0.000
+    DIJ_03$3           0.353      0.064      5.557      0.000
+    DIJ_03$4           1.114      0.083     13.477      0.000
+    DIJ_04$1          -1.075      0.079    -13.591      0.000
+    DIJ_04$2          -0.390      0.061     -6.368      0.000
+    DIJ_04$3           0.157      0.059      2.669      0.008
+    DIJ_04$4           0.935      0.072     13.037      0.000
+    APC_01$1          -1.003      0.071    -14.209      0.000
+    APC_01$2           0.491      0.058      8.476      0.000
+    APC_02$1          -1.424      0.098    -14.479      0.000
+    APC_02$2          -0.531      0.063     -8.458      0.000
+    APC_02$3           0.641      0.064     10.040      0.000
+    APC_03$1          -0.940      0.069    -13.627      0.000
+    APC_03$2           0.629      0.060     10.471      0.000
+    APC_04$1          -1.531      0.086    -17.698      0.000
+    APC_04$2          -0.746      0.059    -12.598      0.000
+    APC_04$3           0.031      0.053      0.586      0.558
+    APC_04$4           1.115      0.067     16.570      0.000
+    APC_05$1          -1.451      0.107    -13.518      0.000
+    APC_05$2          -0.622      0.068     -9.133      0.000
+    APC_05$3           0.619      0.066      9.444      0.000
+    APP_01$1          -1.311      0.080    -16.464      0.000
+    APP_01$2          -0.438      0.059     -7.475      0.000
+    APP_01$3           0.206      0.055      3.705      0.000
+    APP_01$4           1.309      0.076     17.174      0.000
+    APP_02$1          -1.313      0.087    -15.150      0.000
+    APP_02$2          -0.613      0.064     -9.643      0.000
+    APP_02$3           0.765      0.066     11.504      0.000
+    APP_03$1          -1.153      0.078    -14.698      0.000
+    APP_03$2          -0.344      0.060     -5.768      0.000
+    APP_03$3           0.389      0.059      6.544      0.000
+    APP_03$4           1.412      0.087     16.317      0.000
+    APP_04$1          -0.717      0.063    -11.386      0.000
+    APP_04$2           0.058      0.056      1.051      0.293
+    APP_04$3           0.866      0.065     13.364      0.000
+    APP_04$4           1.758      0.100     17.568      0.000
+    APP_05$1          -1.315      0.082    -16.089      0.000
+    APP_05$2          -0.682      0.064    -10.694      0.000
+    APP_05$3           0.294      0.058      5.095      0.000
+    APP_05$4           1.372      0.082     16.715      0.000
+
+ Variances
+    WH_GROUP           1.000      0.000    999.000    999.000
+    IN_EX              1.000      0.000    999.000    999.000
+    INC_INS            1.000      0.000    999.000    999.000
+    DIJ                1.000      0.000    999.000    999.000
+    APC                1.000      0.000    999.000    999.000
+    APP                1.000      0.000    999.000    999.000
+
+ Residual Variances
+    DIJ_01             0.224      0.025      8.967      0.000
+    DIJ_02             0.233      0.028      8.428      0.000
+    DIJ_03             0.191      0.023      8.228      0.000
+    DIJ_04             0.329      0.031     10.714      0.000
+    APC_01             0.431      0.040     10.831      0.000
+    APC_02             0.183      0.029      6.368      0.000
+    APC_03             0.418      0.039     10.835      0.000
+    APC_04             0.655      0.039     16.582      0.000
+    APC_05             0.069      0.026      2.669      0.008
+    APP_01             0.565      0.041     13.608      0.000
+    APP_02             0.364      0.039      9.374      0.000
+    APP_03             0.393      0.040      9.923      0.000
+    APP_04             0.524      0.042     12.525      0.000
+    APP_05             0.493      0.041     12.115      0.000
+
+
+R-SQUARE
+
+Group ALL
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.781      0.021     37.098      0.000      0.468
+    DIJ_02             0.773      0.021     36.259      0.000      0.477
+    DIJ_03             0.814      0.019     41.930      0.000      0.431
+    DIJ_04             0.678      0.026     25.824      0.000      0.567
+    APC_01             0.543      0.036     15.233      0.000      0.676
+    APC_02             0.801      0.027     29.756      0.000      0.446
+    APC_03             0.556      0.038     14.809      0.000      0.666
+    APC_04             0.322      0.036      8.843      0.000      0.823
+    APC_05             0.924      0.027     34.036      0.000      0.276
+    APP_01             0.436      0.037     11.728      0.000      0.751
+    APP_02             0.637      0.035     18.249      0.000      0.602
+    APP_03             0.608      0.039     15.498      0.000      0.626
+    APP_04             0.477      0.037     12.928      0.000      0.723
+    APP_05             0.509      0.038     13.533      0.000      0.701
+
+Group T1_ONLY
+
+    Observed                                        Two-Tailed     Scale
+    Variable        Estimate       S.E.  Est./S.E.    P-Value     Factors
+
+    DIJ_01             0.776      0.025     30.985      0.000      0.474
+    DIJ_02             0.767      0.028     27.774      0.000      0.483
+    DIJ_03             0.809      0.023     34.947      0.000      0.437
+    DIJ_04             0.671      0.031     21.887      0.000      0.573
+    APC_01             0.569      0.040     14.282      0.000      0.657
+    APC_02             0.817      0.029     28.505      0.000      0.427
+    APC_03             0.582      0.039     15.059      0.000      0.647
+    APC_04             0.345      0.039      8.746      0.000      0.809
+    APC_05             0.931      0.026     36.026      0.000      0.263
+    APP_01             0.435      0.041     10.495      0.000      0.751
+    APP_02             0.636      0.039     16.393      0.000      0.603
+    APP_03             0.607      0.040     15.312      0.000      0.627
+    APP_04             0.476      0.042     11.397      0.000      0.724
+    APP_05             0.507      0.041     12.483      0.000      0.702
+
+
+QUALITY OF NUMERICAL RESULTS
+
+     Condition Number for the Information Matrix              0.243E-05
+       (ratio of smallest to largest eigenvalue)
+
+
+SAVEDATA INFORMATION
+
+
+  Difference testing
+
+  Save file
+    00_base.diff
+  Save format      Free
+
+     Beginning Time:  14:09:57
+        Ending Time:  14:09:58
+       Elapsed Time:  00:00:01
+
+
+
+MUTHEN & MUTHEN
+3463 Stoner Ave.
+Los Angeles, CA  90066
+
+Tel: (310) 391-9971
+Fax: (310) 391-8971
+Web: www.StatModel.com
+Support: Support@StatModel.com
+
+Copyright (c) 1998-2018 Muthen & Muthen

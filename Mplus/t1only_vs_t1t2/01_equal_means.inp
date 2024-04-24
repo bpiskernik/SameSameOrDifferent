@@ -1,0 +1,227 @@
+DATA: FILE = "../../data/transforms/mplus_incl_t1_only.dat";
+
+VARIABLE: 
+ 
+    NAMES = 
+    t1_only
+    group group_detail wh_group 
+    dij_01 dij_02 dij_03 dij_04
+    apc_01 apc_02 apc_03 apc_04 apc_05
+    app_01 app_02 app_03 app_04 app_05
+    res_01 res_02 res_03 !t2 only
+    exh_01 exh_04 exh_08 !t2 only
+    jsa_01 jsa_02 jsa_03 jsa_04 !t2 only
+    in_ex inc_ins
+    ; 
+
+    MISSING = .;
+
+    USEVARIABLES =
+        wh_group
+        dij_01-dij_04
+        apc_01-apc_05
+        app_01-app_05
+        in_ex inc_ins
+        ;
+
+
+    categorical =
+        dij_01-app_05;
+
+    grouping = t1_only (0 = all, 1 = t1_only)
+
+ANALYSIS:
+    estimator = WLSMV;
+    PARAMETERIZATION = THETA;
+    STARTS = 20;
+    DIFFTEST = 00_base.diff;
+    
+MODEL:
+
+    ! Factor loadings fixed
+        DIJ by
+            dij_01* (f_dij_01) 
+            dij_02* (f_dij_02)  
+            dij_03* (f_dij_03) 
+            dij_04* (f_dij_04)
+            ;
+
+        APC by
+            apc_01* (f_apc_01) 
+            apc_02* (f_apc_02) 
+            apc_03* (f_apc_03) 
+            apc_04* (f_apc_04) 
+            apc_05* (f_apc_05)
+            ;
+
+        APP by
+            app_01* (f_app_01) 
+            app_02* (f_app_02) 
+            app_03* (f_app_03) 
+            app_04* (f_app_04) 
+            app_05* (f_app_05)
+            ;
+        
+
+        ! Item thresholds are fix
+
+        !DIJ
+        [dij_01$1*] (t1dij_01);
+        [dij_01$2*] (t2dij_01);
+        [dij_01$3*] (t3dij_01);
+
+        [dij_02$1*] (t1dij_02);
+        [dij_02$2*] (t2dij_02);
+
+        [dij_03$1*] (t1dij_03);
+        [dij_03$2*] (t2dij_03);
+        [dij_03$3*] (t3dij_03);
+
+        [dij_04$1*] (t1dij_04);
+        [dij_04$2*] (t2dij_04);
+        [dij_04$3*] (t3dij_04);
+
+        !APC
+        [apc_01$1*] (t1apc_01);
+        [apc_01$2*] (t2apc_01);
+
+        [apc_02$1*] (t1apc_02);
+        [apc_02$2*] (t2apc_02);
+
+        [apc_03$1*] (t1apc_03);
+        [apc_03$2*] (t2apc_03);
+
+        [apc_04$1*] (t1apc_04);
+        [apc_04$2*] (t2apc_04);
+
+        [apc_05$1*] (t1apc_05);
+        [apc_05$2*] (t2apc_05);
+
+        !APP
+        [app_01$1*] (t1app_01);
+        [app_01$2*] (t2app_01);
+        [app_01$3*] (t3app_01);
+
+        [app_02$1*] (t1app_02);
+        [app_02$2*] (t2app_02);
+
+        [app_03$1*] (t1app_03);
+        [app_03$2*] (t2app_03);
+        [app_03$3*] (t3app_03);
+        [app_03$4*] (t4app_03);
+
+        [app_04$1*] (t1app_04);
+        [app_04$2*] (t2app_04);
+        [app_04$3*] (t3app_04);
+
+        [app_05$1*] (t1app_05);
+        [app_05$2*] (t2app_05);
+        [app_05$3*] (t3app_05);
+
+
+        ! Item residual variances all fixed=1
+        dij_01-app_05@1;
+
+
+        ! Factors mean=0 and variance=1 for identification
+
+        [DIJ@0];
+        [APC@0];
+        [APP@0];
+
+        DIJ@1;
+        APC@1;
+        APP@1;
+
+        ! estimate manifest vars
+        [wh_group*];
+        [inc_ins*];
+        [in_ex*];
+
+
+        wh_group*;
+        inc_ins*;
+        in_ex*;
+
+        ! correlations
+
+        wh_group with
+            inc_ins
+            in_ex
+            DIJ
+            APC
+            APP
+            ;
+
+        inc_ins with
+            in_ex 
+            DIJ
+            APC
+            APP
+            ;
+
+        in_ex with 
+            DIJ
+            APC
+            APP
+            ;
+
+MODEL t1_only:
+
+    ! Factor loadings and Item thresholds are fixed by default
+
+        ! Item residual variances all fixed=1
+        dij_01-app_05@1;
+
+
+        ! Factors mean free
+
+        ![DIJ*];
+        ![APC*];
+        ![APP*];
+
+        ! variance free 
+        DIJ*;
+        APC*;
+        APP*;
+
+        ! estimate manifest vars
+        ![wh_group*];
+        ![inc_ins*];
+        ![in_ex*];
+
+
+        wh_group*;
+        inc_ins*;
+        in_ex*;
+
+        ! correlations
+
+        wh_group with
+            inc_ins
+            in_ex
+            DIJ
+            APC
+            APP
+            ;
+
+        inc_ins with
+            in_ex 
+            DIJ
+            APC
+            APP
+            ;
+
+        in_ex with 
+            DIJ
+            APC
+            APP
+            ;
+
+
+OUTPUT:
+	stdyx
+	;
+
+
+SAVEDATA: DIFFTEST=01_equal_means.diff;
