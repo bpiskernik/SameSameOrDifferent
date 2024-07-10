@@ -35,7 +35,7 @@ lookup <- c(Referent = "param", b = "est", `EA group` = "Group")
 
 
 ```{r}
-df <- tibble(subfolder = c('h3_apc', 'h4_app', 'h5_res')) %>%
+df <- tibble(subfolder = c('h3_apc', 'h4_app', 'h2_res')) %>%
   mutate(
     param = map(subfolder, get_bs_on_inequity)
   ) %>%
@@ -43,8 +43,8 @@ df <- tibble(subfolder = c('h3_apc', 'h4_app', 'h5_res')) %>%
   rename(all_of(lookup)) %>%
   mutate(
     `EA group` = recode(`EA group`, PERM = 'staff', TEMP = 'temporary')
-    , Referent = recode(Referent, APC = "Colleagues'\nappreciation", APP = "Patients'\nappreciation", RES = "Outcome\nresponsibility")
-    , Referent = factor(Referent, levels=c( "Patients'\nappreciation", "Colleagues'\nappreciation", "Outcome\nresponsibility"))
+    , Referent = recode(Referent, APC = "Colleagues'\nappreciation", APP = "Patients'\nappreciation", RES = "Perceived\nresponsibility")
+    , Referent = factor(Referent, levels=c( "Patients'\nappreciation", "Colleagues'\nappreciation", "Perceived\nresponsibility"))
   )
 df
 ```
@@ -76,7 +76,7 @@ ggsave('fig_weight_on_inequity.png',
        width = 18,
   height = 9,
   units = "cm",
-  dpi = 300,
+  dpi = 600,
   bg = 'white')
 ```
 
@@ -106,7 +106,7 @@ ggsave('fig_weight_on_inequity_full_x_axis.png',
        width = 18,
   height = 9,
   units = "cm",
-  dpi = 300,
+  dpi = 600,
   bg = 'white')
 
 ```
